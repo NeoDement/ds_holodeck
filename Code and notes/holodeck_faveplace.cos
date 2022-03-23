@@ -1,0 +1,24 @@
+enum 1 1 64741
+	kill targ
+next
+
+*******SIMPLE BUTTON SO WE CAN EASILY GET TO THE HOLODECK************
+new: simp 1 1 64741 "ds gui" 0 42 5000
+
+attr 36
+
+
+
+flto 0 140
+*********************************************************************
+
+
+
+scrp 1 1 64741 1
+
+
+	cmrp 305 90363 0
+
+endm
+
+

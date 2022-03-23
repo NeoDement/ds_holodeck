@@ -1,0 +1,202 @@
+pencil cursor tool
+eraser tool
+bigger paint brush - you can do it by grabbing the pixel x y of the pixels around the pixel
+
+also instead of a pencil cursor maybe just highlight the pixels that will be recoloured
+
+colour dropper tool
+
+right click eraser tool
+
+
+
+
+
+
+SNAP cmd width/height will be changed too. to match sprite bounds.
+
+
+claer isnt clearing top left pixel.
+
+
+
+
+
+
+
+
+these probably aren't needed, cato only takes one number.
+
+
+OBJECT TYPE
+
+ov00
+
+
+*Invisible
+1 1
+
+(seed)
+
+*Good Plant (Plant)
+2 4
+
+*Bad Plant (Weed)
+2 5
+
+*Good Fruit
+2 8
+
+*Bad Fruit (Manky)
+2 10
+
+Detritus
+2 10
+
+Food
+2 11
+
+Button
+2 12
+
+Good Bug
+2 13
+
+Bad Bug (Pest)
+2 14
+
+Good Critter
+2 15
+
+Bad Critter (Beast)
+2 16
+
+Nest
+2 17
+
+Egg (Not for Creatures!)
+2 18
+
+Toy
+2 21
+
+Vendor
+2 22
+
+Potion
+2 25
+
+
+
+some outdated maths:
+(more up to date versions can be found in the _settings COS file)
+
+
+*Teleporter
+
+
+
+We will have enough OVs because timer and collision won't need chemicals.
+
+
+(11 vars per action)
+(9 valid actions)
+
+99 variables in use.
+
+HOWEVER.
+
+timer and collision won't need chemicals.
+so that's 5 variables (1 string and 4 floats) x2
+-10
+
+89 variables in use.
+
+
+this leaves us 10 variables which is almost enough for a script which moves OVs into temporary OVs.
+
+
+
+
+
+
+
+9000 SET UP VARIABLES
+
+[
+
+
+Perform PreDefined Action
+ov00
+
+PreDefined Action Params (all or none of these can be used by the chosen action)
+-Max X Velocity ov01 / Object to create
+-Min X Velocity ov02 / How many to create
+-Max Y Velocity ov03 
+-Min Y Velocity ov04
+
+Stim 4 Chemicals (can be null)
+(store in a 4 character string?)
+ov05 c1 c2 c3 c4
+
+how much?
+ov06 ov07 ov08 ov09
+
+Make this sound (can be null)
+ov10
+
+
+]
+
+
+
+
+1 ACTIVATE 1
+
+[
+
+
+
+Perform PreDefined Action
+ov11
+
+PreDefined Action Params (all or none of these can be used by the chosen action)
+-Max X Velocity ov12 / Object to create
+-Min X Velocity ov13 / How many to create
+-Max Y Velocity ov14 
+-Min Y Velocity ov15
+
+Stim 4 Chemicals (can be null)
+(store in a 4 character string?)
+ov16 c1 c2 c3 c4
+
+how much?
+ov17 ov18 ov19 ov20
+
+Make this sound (can be null)
+ov21
+
+
+
+
+
+]
+
+
+
+
+2 ACTIVATE 2
+
+3 HIT
+
+12 EAT
+
+4 PICKUP
+
+5 DROP
+
+9 TICK (tick is TICK, not an ov!)
+
+9 TIMER
+
+6 COLLISION

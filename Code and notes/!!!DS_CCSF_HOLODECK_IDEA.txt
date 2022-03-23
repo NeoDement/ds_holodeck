@@ -1,0 +1,32 @@
+if meta = 
+
+
+
+creatures DS toy maker... holodeck?
+
+you draw an object on a screen. at the top of the screen is a filename entry box.
+
+you click save and SNAP takes a screenshot of the area and saves it after your item name.
+
+you can choose whether it is a FOOD, SEED, VEG, TOY, CRITTER etc
+
+it will set the BHVR for you. but it will represent the attr as tickboxes and have options for all the diff values like accg etc.
+
+using ov values it will identify which type of object it is.
+
+which 4 chemicals in which amounts to inject.
+
+which type of toy it is: bouncy ball, spinning top or "jumper" (like the dalek or robot, uses mira 1)
+
+which type of food it is: single bite, multi bite, does it go moldy?
+mold will be represented by tinting the graphic more and more green until it becomes detritus, which quickly despawns.
+
+which collision sound to make
+
+sound to make when activated.#
+
+
+ports can have a pre-made icon lmao...
+
+
+you can also draw a background (and use some pre-made images) to make a background and foreground layer for a virtual room.

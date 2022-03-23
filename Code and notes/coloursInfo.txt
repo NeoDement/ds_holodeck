@@ -1,0 +1,39 @@
+*BLACK
+pat: butt 1001 "holodeck_frame" 0 0 2 2 1 [] 1001 0
+*LIGHT BLUE
+pat: butt 1001 "holodeck_frame" 0 0 2 18 1 [] 1002 0
+
+*DARK GREY
+pat: butt 1001 "holodeck_frame" 0 0 18 2 1 [] 1003 0
+*BLUE
+pat: butt 1001 "holodeck_frame" 0 0 18 18 1 [] 1004 0
+
+*LIGHT GREY
+pat: butt 1001 "holodeck_frame" 0 0 34 2 1 [] 1005 0
+*MAUVE
+pat: butt 1001 "holodeck_frame" 0 0 34 18 1 [] 1006 0
+
+*LIGHTEST GREY
+pat: butt 1001 "holodeck_frame" 0 0 50 2 1 [] 1007 0
+*MAGENTA
+pat: butt 1001 "holodeck_frame" 0 0 50 18 1 [] 1008 0
+
+*DULL ORANGE
+pat: butt 1001 "holodeck_frame" 0 0 66 2 1 [] 1009 0
+*SCARLET
+pat: butt 1001 "holodeck_frame" 0 0 66 18 1 [] 1010 0
+
+*BURGUNDY
+pat: butt 1001 "holodeck_frame" 0 0 82 2 1 [] 1011 0
+*BRIGHT ORANGE
+pat: butt 1001 "holodeck_frame" 0 0 82 18 1 [] 1012 0
+
+*DARK GREEN
+pat: butt 1001 "holodeck_frame" 0 0 98 2 1 [] 1013 0
+*YELLOW
+pat: butt 1001 "holodeck_frame" 0 0 98 18 1 [] 1014 0
+
+*LIME GREEN
+pat: butt 1001 "holodeck_frame" 0 0 114 2 1 [] 1015 0
+*WHITE
+pat: butt 1001 "holodeck_frame" 0 0 114 18 1 [] 1016 0

@@ -1,0 +1,6 @@
+what do i dispense?
+
+click to activate picker cursor and then click on a SIMPLE object. 
+
+you will either hear an error noise or a success noise. If you hear a success noise it will attempt to draw the sprite on the screen and write its classifier numbers
+(maybe eventually catalog numbers)

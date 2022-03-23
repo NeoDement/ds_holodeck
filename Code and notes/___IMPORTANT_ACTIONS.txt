@@ -1,0 +1,280 @@
+*PreDefined Action (not remapped in script 9000)
+sets OV10 "Apply Random Velocity"
+
+*Anim String
+sets OV11 "98765432100"
+
+*Action Params
+setv OV12 25
+setv OV13 25
+setv OV14 5
+setv OV15 20
+
+*Chems to stim and amounts to stim them (8 characters)
+setv OV16 "AAAAAAAA"
+
+*Sound to play
+sets OV17 "sax1"
+
+
+*7 variables per function
+*10 functions
+
+
+***********************************************
+*** SET UP VARIABLES FOR PREDEFINED ACTIONS ***
+******************** (9000) *******************
+***********************************************
+
+* OV00 - PreDefined Action
+
+* Moves per Script Number OVs to these static OVs so that any Script Number can call any PreDefined Action and get the correct OVs for that Script Number.
+
+* OV01 - Action Param 1
+* OV02 - Action Param 2
+* OV03 - Action Param 3
+* OV04 - Action Param 4
+
+* OV05 - 4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+
+* OV06 - sound to make
+* _OV06 2nd from Last char - sound play mode (not implemented)
+* __OV06 Last char - sound play delay (only SNDQ will listen for it)
+
+* OV07 - Anim String (represented as a string of X characters) (F1 F2 F3 F4 etc ...)
+
+**********************************************
+
+scrp 1 1 64730 9000
+
+**************
+* ACTIVATE 1 *
+**************
+doif _p1_ = 1
+
+*PreDefined Action
+setv OV00 OV11
+
+*PreDefined Action Params
+setv OV01 OV12
+setv OV02 OV13
+setv OV03 OV14
+setv OV04 OV15
+
+*4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+sets OV05 OV16
+
+*Amount To Stim
+setv OV06 OV17
+setv OV07 OV18
+setv OV08 OV19
+setv OV09 OV20
+
+*Make this Sound (can be null)
+sets OV10 OV21
+
+*Anim String (represented as a string of N characters) (F1 F2 F3 F4 etc ...)
+sets OV11 OV22
+
+
+**************
+* ACTIVATE 2 * (NOT IMPLEMENTED BUT JUST COPY THE FORMAT FROM THE ONE ABOVE)
+**************
+elif _p1_ = 2
+
+*PreDefined Action Params
+*setv OV01 OV12
+*setv OV02 OV13
+*setv OV03 OV14
+*setv OV04 OV15
+
+endi
+
+
+
+
+
+
+
+
+
+
+
+***********************************************
+************ PLAY ANIMATION STRING ************
+******************** (9001) *******************
+***********************************************
+
+* OV10 - Anim String (represented as a string of X characters) (F1 F2 F3 F4 etc ...)
+* _OV10 Last char - (int256) How many times to loop the anim
+* __OV10 Last char - (int256) Delay between frames
+
+**********************************************
+scrp 1 1 64730 9001
+
+
+*start counting reps at 1 so the string index isn't out of bounds.
+*	setv va00 1
+
+
+*va15 = get AnimString string length.
+	setv va15 strl ov88
+
+*va15 = the final character of the string, as a char.
+	setv va15 char ov88 va15
+
+*debug say amount of times you're going to repeat the anim.
+	targ norn
+	sezz vtos va15
+	targ ownr
+
+*run this loop as many times as the NumLoops character.
+	reps va15
+
+*run this loop as many times as the length of the anim string.
+		setv va10 strl ov88
+*-1 because of the NumLoops character.
+		subv va10 1
+
+		reps va10
+
+
+*"animframe"
+			sets va01 gall
+
+*remove the last character of the Gallery (sprite file) Name
+			setv va02 strl va01
+			subv va02 1
+			sets va03 subs va01 1 va02
+
+			targ norn
+*			sezz va01
+			targ ownr
+
+
+
+*add 1 to the iteration number before using it as a string index. because string indexes start at 1 not 0.
+			setv va77 va00
+			addv va77 1
+
+*put the character of the anim string we are currently looking at it in VA05
+			sets va05 subs ov88 va77 1
+
+
+*			setv va05 stoi va03
+
+*"animframeX"
+			adds va03 va05
+
+			gall va03 0
+
+*add 1 to Iteration Variable
+			addv va00 1
+
+
+			wait 5
+
+		repe
+
+*reset Iteration Variable in case you have to play again.
+		setv va00 0
+
+
+	repe
+
+endm
+
+
+
+
+
+
+
+
+***********************************************
+***************** PLAY SOUND! *****************
+******************** (9002) *******************
+***********************************************
+
+* OV10 - SoundToPlay
+* _OV10 Last char - sound play mode (not implemented)
+
+**********************************************
+
+scrp 1 1 64730 9002
+
+*todo: add support for sndc and sndl
+snde OV10
+
+endm
+
+
+
+
+
+
+***********************************************
+************** INJECT CHEMICALS ***************
+******************** (9003) *******************
+***********************************************
+
+* OV05 - 4 Chemicals To Stim (represented as a string of 4 characters) (C1 C2 C3 C4)
+
+* OV06 - Amount to stim C1
+* OV07 - Amount to stim C2
+* OV08 - Amount to stim C3
+* OV09 - Amount to stim C4
+
+* OV05 - 4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+
+***********************************************
+
+scrp 1 1 64730 9003
+
+
+*Convert the string into the 4 chemical numbers.
+	setv va00 char ov05 1
+	setv va01 char ov05 3
+	setv va02 char ov05 5
+	setv va03 char ov05 7
+
+
+*va01 is the loop number/iteration (starting at 1 because of string indexes)
+setv va00 1
+
+*Loop for every character in the chemicals string divided by 2 (8/2=4)
+reps 4
+
+*va01 is the loop number/iteration + 1
+setv va01
+addv va01 1
+
+*VA02 is the CHEMICAL NUMBER
+setv va02 char ov05 va00
+
+*VA03 is the CHEMICAL AMOUNT
+setv va03 char ov05 va01
+
+*VA03 is stored as a single byte, so needs some conversion:
+*IMPORTANT: When dividing by a number and needing the result to be a float, need .0 after the number!!
+subv va03 128.0
+divv va03 128.0
+
+*Inject the CHEMICAL (VA02) with the AMOUNT (VA03)
+chem VA02 VA03
+
+*increase loop number
+addv va00 1
+
+repe
+
+sets va99 "chem: "
+adds va99 vtos VA02
+adds va99 " amount: "
+adds va99 vtos VA03
+
+targ norn
+sezz va99
+
+
+endm

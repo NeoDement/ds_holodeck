@@ -1,0 +1,181 @@
+
+
+
+
+
+new: simp 1 1 63499 "animframe0" 0 0 5000
+tick 10
+mvto 202 90371
+
+
+
+
+
+
+
+
+
+
+
+
+*write anim string in a text box.
+
+*todo: another char could control frame delay.
+
+*va00 = "011100123" 
+*sets va00 "011100123"
+*sets va00 "0123456789"
+
+sets va00 "0432534530194"
+
+
+
+*make the string 1 character longer, the last character will be
+*replaced with a hexadecimal char telling it how many times to loop the anim.
+adds va00 "x"
+
+*va01 = get variable string length.
+setv va01 strl va00
+
+*va02 = ptxt of "how many times to loop" input box.
+sets va02 "3"
+
+*va02 = StringToInt va02
+setv va02 stoi va02
+
+***********************************************************************
+*If the amount of times to play anim is an invalid number, fix it now.*
+***********************************************************************
+
+doif va02 = 0
+	setv va02 1
+*ptxt = "0"
+elif va02 > 255
+	setv va02 255
+*ptxt = "255"
+elif va02 < 0
+*-1 is in fact represented as character 0 (NOT 255). keep this in mind when decoding the string later.
+	setv va02 0
+*ptxt = "-1"
+endi
+
+********************************************************************************************************
+*replace the last character of the anim string with the NumberOfLoopsAsChar variable you just generated*
+********************************************************************************************************
+
+char va00 va01 va02
+
+
+*debug say string
+
+*targ norn
+
+*sezz va00
+
+*targ ownr
+
+
+
+
+
+
+*temporarily storing the anim string in OV88
+sets ov88 va00
+
+
+
+
+
+scrp 1 1 63499 9
+	tick 0
+
+
+*placeholder variable
+	sets va66 ""
+
+
+*start counting reps at 1 so the string index isn't out of bounds.
+*	setv va00 1
+
+
+*va15 = get AnimString string length.
+	setv va15 strl ov88
+
+*va15 = the final character of the string, as a char.
+	setv va15 char ov88 va15
+
+*debug say amount of times you're going to repeat the anim.
+	targ norn
+	sezz vtos va15
+	targ ownr
+
+*run this loop as many times as the NumLoops character.
+	reps va15
+
+*run this loop as many times as the length of the anim string.
+		setv va10 strl ov88
+*-1 because of the NumLoops character.
+		subv va10 1
+
+		reps va10
+
+
+*"animframe"
+			sets va01 gall
+
+*remove the last character of the Gallery (sprite file) Name
+			setv va02 strl va01
+			subv va02 1
+			sets va03 subs va01 1 va02
+
+			targ norn
+*			sezz va01
+			targ ownr
+
+
+
+
+
+*set VA50 to be 1 more than VA00 so we can grab the current number from the string.
+*			setv va50 va00
+*			addv va50 1
+
+*			adds va66 vtos va00
+*			adds va66 ","
+*			adds va66 vtos va50
+*			adds va66 " "
+
+*			targ norn
+*			sezz vtos va50
+*			targ ownr
+
+*add 1 to the iteration number before using it as a string index. because string indexes start at 1 not 0.
+			setv va77 va00
+			addv va77 1
+
+*put the character of the anim string we are currently looking at it in VA05
+			sets va05 subs ov88 va77 1
+
+
+*			setv va05 stoi va03
+
+*"animframeX"
+			adds va03 va05
+
+			gall va03 0
+
+*add 1 to Iteration Variable
+			addv va00 1
+
+
+			wait 5
+
+		repe
+
+*reset Iteration Variable in case you have to play again.
+		setv va00 0
+
+
+	repe
+
+endm

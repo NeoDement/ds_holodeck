@@ -1,0 +1,1940 @@
+
+setv game "holodeck_activate1_SoundIndex" 0
+
+setv game "holodeck_dropdown_NumEntriesToDisplay" 14
+
+setv game "holodeck_dropdown_MenuSegmentHeight" 21
+
+setv game "holodeck_dropdown_MenuSegmentWidth" 192
+
+*todo: way too many game variables. see how much you can reduce this with some cleanup later.
+
+setv game "holodeck_dropdown_X" 0
+
+setv game "holodeck_dropdown_Y" 0
+
+
+
+*snap "test_agent2" 242 90318 128 128 100
+*loft "test_agent"
+
+*check the default camera page in the norn life applet to see how long you should wait to verify the photo was taken successfully.
+
+*wait 100
+
+*snap "test_agent5" 242 90318 128 128 100
+
+
+*Kill any existing holodeck settings screens.
+enum 1 1 64735
+	kill targ
+next
+
+*MAKE THE HOLODECK OBJECT SETTINGS PANEL!!
+
+new: comp 1 1 64735 "holodeck_settings" 0 0 1
+
+
+
+setv game "holodeck_dropdown_X" 200
+setv game "holodeck_dropdown_Y" -50
+
+*move this test elsewhere:
+pat: butt 8001 "holodeck_dropdown" 0 0 game "holodeck_dropdown_X" game "holodeck_dropdown_Y" 1 [] 8001 0
+
+
+*for now, each dropdown button needs to have a text part with an ID 1 higher than the dropdown button.
+*this is so anything that needs to write text to the button can just addv 1 without me having to write another bunch of coordinates down.
+*it also needs a blank backround (sprite frame 8)
+pat: fixd 8002 "holodeck_dropdown" 8 game "holodeck_dropdown_X" game "holodeck_dropdown_Y" 2 "whiteontransparentchars"
+
+
+*open dropdown menu
+
+
+
+
+
+
+**OBJECT TYPE SCREEN
+
+pat: butt 1001 "holodeck_objecttypes" 0 0 10 51 1 [] 1001 0
+*Food 10,51
+
+pat: butt 1002 "holodeck_objecttypes" 2 0 10 84 1 [] 1002 0
+*Seed 10,84
+
+pat: butt 1003 "holodeck_objecttypes" 4 0 10 117 1 [] 1003 0
+*Fruit 10, 117
+
+pat: butt 1004 "holodeck_objecttypes" 6 0 10 150 1 [] 1004 0
+*Toy: 10, 150
+
+
+**TOY TEMPLATE SCREEN
+
+
+pat: butt 2001 "holodeck_toytemplates" 0 0 278 51 1 [] 2001 0
+*Apply Random Velocity 278, 51
+
+pat: butt 2002 "holodeck_toytemplates" 2 0 278 84 1 [] 2002 0
+*Spinning Top: 278, 84
+
+pat: butt 2003 "holodeck_toytemplates" 4 0 278 117 1 [] 2003 0
+*Basic Robot: 278, 117
+
+pat: butt 2004 "holodeck_toytemplates" 6 0 278 150 1 [] 2004 0
+*Rocket: 278, 150
+
+
+**COLLISION SOUND SCREEN
+
+pat: butt 3001 "holodeck_sounds" 2 0 11 253 1 [] 3001 0
+*drp6: 11, 253
+
+pat: butt 3002 "holodeck_sounds" 4 0 11 282 1 [] 3002 0
+*dr10: 11, 282
+
+pat: butt 3003 "holodeck_sounds" 6 0 112 253 1 [] 3003 0
+*boi2: 112, 253
+
+pat: butt 3004 "holodeck_sounds" 8 0 112 282 1 [] 3004 0
+*boi3: 112, 282
+
+
+**SHARED BUTTONS
+
+pat: text 9000 "holodeck_settings" 3 283 381 1 9000 "whiteontransparentchars"
+* sprite name: 283, 381
+
+pat: butt 9001 "holodeck_settings" 1 0 54 349 1 [] 9001 0
+*Make it real:  54, 349
+
+
+mvto 343 90201
+
+cmrt 0
+
+
+part 1001
+pose 1
+part 1002
+pose 0
+part 1003
+pose 0
+part 1004
+pose 0
+
+sets ov00 "Food"
+
+part 2001
+pose 1
+part 2002
+pose 0
+part 2003
+pose 0
+part 2004
+pose 0
+
+sets ov01 "Apply Random Velocity"
+
+part 3001
+pose 0
+part 3002
+pose 0
+part 3003
+pose 1
+part 3004
+pose 0
+
+sets ov02 "boi2"
+
+snde ov02
+
+
+**OBJECT TYPE SCREEN SCRIPTS - SETS OV00, aka which type of object are we making?
+
+*Food
+
+scrp 1 1 64735 1001
+
+	part 1001
+	pose 1
+	part 1002
+	pose 0
+	part 1003
+	pose 0
+	part 1004
+	pose 0
+
+	sets ov00 "Food"
+
+endm
+
+
+*Seed
+
+scrp 1 1 64735 1002
+
+	part 1001
+	pose 0
+	part 1002
+	pose 1
+	part 1003
+	pose 0
+	part 1004
+	pose 0
+
+	sets ov00 "Seed"
+
+endm
+
+
+*Fruit
+
+scrp 1 1 64735 1003
+
+	part 1001
+	pose 0
+	part 1002
+	pose 0
+	part 1003
+	pose 1
+	part 1004
+	pose 0
+
+	sets ov00 "Fruit"
+
+endm
+
+
+*Toy
+
+scrp 1 1 64735 1004
+
+	part 1001
+	pose 0
+	part 1002
+	pose 0
+	part 1003
+	pose 0
+	part 1004
+	pose 1
+
+	sets ov00 "Toy"
+
+endm
+
+
+
+**TOY TEMPLATE SCREEN SCRIPTS - SETS OV01, aka which template are we using?
+
+*Apply Random Velocity
+
+scrp 1 1 64735 2001
+
+	part 2001
+	pose 1
+	part 2002
+	pose 0
+	part 2003
+	pose 0
+	part 2004
+	pose 0
+
+	sets ov01 "Apply Random Velocity"
+
+endm
+
+
+*Spinning Top
+
+scrp 1 1 64735 2002
+
+	part 2001
+	pose 0
+	part 2002
+	pose 1
+	part 2003
+	pose 0
+	part 2004
+	pose 0
+
+	sets ov01 "Spinning Top"
+
+endm
+
+
+*Basic Robot
+
+scrp 1 1 64735 2003
+
+	part 2001
+	pose 0
+	part 2002
+	pose 0
+	part 2003
+	pose 1
+	part 2004
+	pose 0
+
+	sets ov01 "Basic Robot"
+
+endm
+
+
+*Rocket
+
+scrp 1 1 64735 2004
+
+	part 2001
+	pose 0
+	part 2002
+	pose 0
+	part 2003
+	pose 0
+	part 2004
+	pose 1
+
+	sets ov01 "Rocket"
+
+endm
+
+
+
+**COLLISION SOUND SCREEN SCRIPTS - SETS OV02, aka which sound do we make when we hit a wall?
+
+*drp6
+
+scrp 1 1 64735 3001
+
+	part 3001
+	pose 1
+	part 3002
+	pose 0
+	part 3003
+	pose 0
+	part 3004
+	pose 0
+
+	sets ov02 "drp6"
+
+	snde ov02
+
+endm
+
+
+*dr10
+
+scrp 1 1 64735 3002
+
+	part 3001
+	pose 0
+	part 3002
+	pose 1
+	part 3003
+	pose 0
+	part 3004
+	pose 0
+
+	sets ov02 "dr10"
+
+	snde ov02
+
+endm
+
+
+*boi2
+
+scrp 1 1 64735 3003
+
+	part 3001
+	pose 0
+	part 3002
+	pose 0
+	part 3003
+	pose 1
+	part 3004
+	pose 0
+
+	sets ov02 "boi2"
+
+	snde ov02
+
+endm
+
+
+*boi3
+
+scrp 1 1 64735 3004
+
+	part 3001
+	pose 0
+	part 3002
+	pose 0
+	part 3003
+	pose 0
+	part 3004
+	pose 1
+
+	sets ov02 "boi3"
+
+	snde ov02
+
+endm
+
+
+**SHARED BUTTON SCRIPTS - these don't control a specific OV.
+
+*Sprite Name Enter Press
+
+scrp 1 1 64735 9000
+
+*just unset focus when enter is pressed
+	targ null
+	fcus
+
+endm
+
+
+*Pushed the button that makes it real!!!!!!!
+
+scrp 1 1 64735 9001
+
+*button push anim
+	part 9001
+	anim [1 1 1 0]
+
+*get object name (todo: this is so obsolete)
+	part 9000
+	sets va50 ptxt
+
+*get activate 1 sound
+
+	part 8002
+	sets va03 ptxt
+
+
+	snde "poyy"
+
+*target the drawing panel
+*	rtar 1 1 64731
+
+*target the mini pixel image
+	rtar 1 1 64743
+
+*find the center of the drawing panel
+*	setv va98 posx
+*	setv va99 posy
+
+*find the center of the mini pixel image
+	setv va98 posx
+	setv va99 posy
+
+*set to the width and height of the drawing panel
+*	setv va96 128
+*	setv va97 128
+
+*set to the width and height of the mini pixel image
+	setv va96 36
+	setv va97 36
+
+*if there's already an image with the specified name, throw an error.
+	doif snax va50 = 1
+		snde "no__"
+	else
+*unfortunately the scale parameter at the end doesnt seem to do anything
+		snap va50 va98 va99 va96 va97 100
+
+		targ ownr
+
+*grab necessary params for the new object
+		sets va00 ov00
+		sets va01 ov01
+		sets va02 ov02
+
+
+		new: simp 1 1 64730 va50 0 0 5000
+
+
+*set necessary params you just grabbed
+		sets ov00 va00
+		sets ov01 va01
+		sets ov02 va02
+
+
+
+
+
+
+
+
+*TODO: test code to classify the new object as a toy
+
+
+
+*	0 - <Invisible to Creatures>
+*	1 - Hand
+*	2 - Door
+*	3 - Seed
+*	4 - Plant
+*	5 - Weed
+*	6 - Leaf
+*	7 - Flower
+*	8 - Fruit
+*	9 - Manky
+*	10 - Detritus
+*	11 - Food
+*	12 - Button
+*	13 - Bug
+*	14 - Pest
+*	15 - Critter
+*	16 - Beast
+*	17 - Nest
+*	18 - Animal egg
+*	19 - Weather
+*	20 - Bad
+*	21 - Toy
+*	22 - Incubator
+*	23 - Dispenser
+*	24 - Tool
+*	25 - Potion
+*	26 - Elevator
+*	27 - Teleporter
+*	28 - Machinery
+*	29 - Creature egg
+*	30 - Norn home
+*	31 - Grendel home
+*	32 - Ettin home
+*	33 - Gadget
+*	34 - Portal
+*	35 - Vehicle
+*	36 - Norn
+*	37 - Grendel
+*	38 - Ettin
+*	39 - Something (Geat)
+
+*toy
+		cato 21
+*relevant toy bhvr according to Creatures Development Standards	
+		bhvr 43
+
+
+
+*ACTIVATE 1:
+
+*PreDefined ActionA
+		sets OV10 "Apply Random Velocity"
+
+*Action Params
+		setv OV11 -25
+		setv OV12 25
+		setv OV13 -70
+		setv OV14 -20
+
+
+*Chems to stim and amounts to stim them (8 characters)
+		sets OV15 "AAAAAAAA"
+
+*Sound to play
+		sets OV16 va03
+
+*Anim String
+		sets OV17 "98765432100"
+
+*7 variables per function
+*10 functions
+
+
+
+
+
+
+		mvsf 240 90322
+	endi
+
+
+
+endm
+
+*file jdel to delete photo later?
+
+
+
+
+* CUSTOM OBJECT CREATION SCRIPT
+* Fill in all those variables!
+
+scrp 1 1 64730 10
+
+* Carryable + Mouseable + Activateable + Suffer Collisions + Suffer Physics
+	attr 199
+
+*Activate 1 + 2
+*bhvr 3
+
+*	perm 100
+*	accg 3
+*	fric 70
+*	aero 1
+*	elas 10
+
+
+	aero 10
+	perm 60
+	accg 2
+	elas 90
+	fric 90
+
+
+
+endm
+
+
+
+scrp 1 1 64730 1
+
+
+*	sets ov00 "Apply Random Velocity"
+
+*set up variables
+*the first parameter _P1_ is the script number, in this case Activate 1
+	inst
+	call 9000 1 0
+
+*	sets ov01 "Anim"
+
+**********************************
+*********** PLAY ANIM ************
+**********************************
+
+	doif ov00 = "Anim"
+
+		call 5000 from 0
+
+
+***************************************************
+************* APPLY RANDOM VELOCITY ***************
+***************************************************
+
+	elif ov00 = "Apply Random Velocity"
+
+		call 5001 from 0
+
+**********************************
+********* SPINNING TOP ***********
+**********************************
+
+	elif ov00 = "Spinning Top"
+
+		call 5002 from 0
+
+	endi
+
+*play sound
+	call 9002 from 0
+	call 9003 from 0
+
+
+
+endm
+
+
+
+
+
+
+* HAPPY BALL ACTIVATE 2 SCRIPT
+
+scrp 1 1 64730 2
+
+*Stimulate the creature with "Played with toy"
+	stim writ from 97 1
+
+	inst
+
+	setv va00 posl
+	setv va01 posr
+	addv va00 va01
+	divv va00 2
+	targ from
+	setv va01 posl
+	targ ownr
+	doif va01 lt va00
+		setv va02 rand 15 25
+	else
+		setv va02 rand -25 -15
+	endi
+	velo va02 rand 20 70
+endm
+
+* HAPPY BALL HIT SCRIPT
+
+scrp 1 1 64730 3
+
+*Stimulate the creature with "Played with toy"
+	stim writ from 97 1
+
+*(randoms between activate 1 and activate 2)
+	mesg writ ownr rand 0 1
+endm
+
+
+* HAPPY BALL COLLISION SCRIPT
+
+scrp 1 1 64730 6
+	inst
+
+*Urge all creatures who can see OWNR to perform an action on OWNR.
+	urge sign 0.5 -1 0.0
+
+	setv va00 vely
+	doif va00 lt 0
+		negv va00
+	endi
+	doif va00 gt 1
+*play stored collision sound
+*		snde ov02
+	endi
+
+	setv va00 _p1_
+	setv va01 _p2_
+	doif va00 lt 0
+		negv va00
+	endi
+	doif va01 lt 0
+		negv va01
+	endi
+	doif va00 lt 3 and va01 lt 3
+	endi
+endm
+
+
+
+
+
+
+
+
+
+
+
+
+*****************************
+****** PLAY ANIMATION *******
+*****************************
+
+scrp 1 1 64730 5000
+
+
+*start counting reps at 1 so the string index isn't out of bounds.
+*	setv va00 1
+
+
+*va15 = get AnimString string length.
+	setv va15 strl ov88
+
+*va15 = the final character of the string, as a char.
+	setv va15 char ov88 va15
+
+*debug say amount of times you're going to repeat the anim.
+	targ norn
+	sezz vtos va15
+	targ ownr
+
+*run this loop as many times as the NumLoops character.
+	reps va15
+
+*run this loop as many times as the length of the anim string.
+		setv va10 strl ov88
+*-1 because of the NumLoops character.
+		subv va10 1
+
+		reps va10
+
+
+*"animframe"
+			sets va01 gall
+
+*remove the last character of the Gallery (sprite file) Name
+			setv va02 strl va01
+			subv va02 1
+			sets va03 subs va01 1 va02
+
+			targ norn
+*			sezz va01
+			targ ownr
+
+
+
+*add 1 to the iteration number before using it as a string index. because string indexes start at 1 not 0.
+			setv va77 va00
+			addv va77 1
+
+*put the character of the anim string we are currently looking at it in VA05
+			sets va05 subs ov88 va77 1
+
+
+*			setv va05 stoi va03
+
+*"animframeX"
+			adds va03 va05
+
+			gall va03 0
+
+*add 1 to Iteration Variable
+			addv va00 1
+
+
+			wait 5
+
+		repe
+
+*reset Iteration Variable in case you have to play again.
+		setv va00 0
+
+
+	repe
+
+endm
+
+
+
+
+
+*Stimulate the creature with "Played with toy"
+*	stim writ _p1_ 97 1
+
+
+
+
+***************************************************
+************* APPLY RANDOM VELOCITY ***************
+***************************************************
+
+scrp 1 1 64730 5001
+
+*inst
+
+*Random number between Minimum X Velocity and Maximum X Velocity
+	setv va00 rand OV01 OV02
+*Random number between Minimum Y Velocity and Maximum Y Velocity
+	setv va01 rand OV03 OV04
+
+*set velocity to the randomized numbers
+	velo va00 va01
+
+endm
+
+
+
+
+
+
+
+
+
+
+
+***************************
+****** SPINNING TOP *******
+***************************
+
+scrp 1 1 64730 5002
+
+*Stimulate the creature with "Played with toy"
+	stim writ _p1_ 97 1
+
+	lock
+
+*this variable is used to track if the spinning top was picked up while spinning.
+*pretty sure it sets itself to 0 whenever this script starts but just incase...
+	setv va99 0
+
+	setv ov00 0
+
+*temporarily make it unactivatable
+	clac -1
+	sndc "mtop"
+*		anim [1 2 3 4 5 6 7 8 9 255]
+	setv va00 rand 35 50
+
+	reps 20
+
+		doif va99 = 0
+			setv va01 rand -10 10
+
+*don't try and push yourself up if you're already moving up or down rapidly!
+*doif vely < 5 and vely > -5
+*setv vely -3
+*endi
+
+*		addv instead of setv prevents it from floating!
+			addv vely -3
+
+			setv velx va01
+
+			wait 1
+
+			doif carr = pntr
+*reset pose, stop the sound, make it activatable again
+				pose 0
+*				stpc
+				fade
+				clac 0
+*let the script know it doesnt have to do the rest of the stuff
+				setv va99 1
+			endi
+		endi
+
+	repe
+
+
+*having lock here means that picking it up overrides the anim most of the time, but doesn't break the end of the spin anim (removing lock entirely DOES break it)
+*lock
+
+
+	reps 8
+		doif va99 = 0
+			addv va02 1
+*				pose va02
+
+			doif va02 eq 9
+
+				setv va02 0
+
+			endi
+
+			setv va01 rand -5 5
+			setv velx va01
+			wait 1
+
+			doif carr = pntr
+*reset pose, stop the sound, make it activatable again
+				pose 0
+*			stpc
+				fade
+				clac 0
+*let the script know it doesnt have to do the rest of the stuff
+				setv va99 1
+			endi
+		endi
+	repe
+
+	doif carr = null
+
+*			anim [10 11 12]
+		over
+*	stpc
+		fade
+		setv velx 0
+		inst
+		setv vely -3
+*make it activatable again
+		clac 0
+		slow
+	endi
+
+*reset the variable so it knows the movement wasn't cancelled by being picked up
+	setv va99 0
+	unlk
+
+endm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*
+*
+*new: simp 1 1 64730 "test_agent5" 0 0 5000
+*
+*
+** Carryable + Mouseable + Activateable + Suffer Collisions + Suffer Physics
+*attr 199
+*
+**Activate 1 + 2
+**bhvr 3
+*
+*perm 100
+*accg 3
+*fric 70
+*aero 1
+*elas 10
+*
+*
+*mvsf 698 90610
+*
+*cmrt 0
+*
+*
+*
+*scrp 1 1 64730 1
+*
+*
+
+*endm
+
+
+
+
+
+
+*copy of this up above, delete this later
+
+**PreDefined Action
+*sets OV10 "Apply Random Velocity"
+*
+**Action Params
+*setv OV11 25
+*setv OV12 25
+*setv OV13 5
+*setv OV14 20
+*
+*
+**Chems to stim and amounts to stim them (8 characters)
+*sets OV15 "AAAAAAAA"
+*
+**Sound to play
+*sets OV16 "sax1"
+*
+**Anim String
+*sets OV17 "98765432100"
+*
+**7 variables per function
+**10 functions
+
+
+***********************************************
+*** SET UP VARIABLES FOR PREDEFINED ACTIONS ***
+******************** (9000) *******************
+***********************************************
+
+* OV00 - PreDefined Action
+
+* Moves per Script Number OVs to these static OVs so that any Script Number can call any PreDefined Action and get the correct OVs for that Script Number.
+
+* OV01 - Action Param 1
+* OV02 - Action Param 2
+* OV03 - Action Param 3
+* OV04 - Action Param 4
+
+* OV05 - 4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+
+* OV06 - sound to make
+* _OV06 2nd from Last char - sound play mode (not implemented)
+* __OV06 Last char - sound play delay (only SNDQ will listen for it)
+
+* OV07 - Anim String (represented as a string of X characters) (F1 F2 F3 F4 etc ...)
+
+**********************************************
+
+scrp 1 1 64730 9000
+
+**************
+* ACTIVATE 1 *
+**************
+	doif _p1_ = 1
+
+*PreDefined Action
+		sets OV00 OV10
+
+*PreDefined Action Params
+		setv OV01 OV11
+		setv OV02 OV12
+		setv OV03 OV13
+		setv OV04 OV14
+
+*4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+		sets OV05 OV15
+
+*Make this Sound (can be null)
+		sets OV06 OV16
+
+*Anim String (represented as a string of N characters) (F1 F2 F3 F4 etc ...)
+		sets OV07 OV17
+
+
+**************
+* ACTIVATE 2 * (NOT IMPLEMENTED BUT JUST COPY THE FORMAT FROM THE ONE ABOVE)
+**************
+	elif _p1_ = 2
+
+*PreDefined Action Params
+*setv OV01 OV12
+*setv OV02 OV13
+*setv OV03 OV14
+*setv OV04 OV15
+
+	endi
+
+endm
+
+
+
+
+
+
+
+
+
+***********************************************
+************ PLAY ANIMATION STRING ************
+******************** (9001) *******************
+***********************************************
+
+* OV07 - Anim String (represented as a string of X characters) (F1 F2 F3 F4 etc ...)
+* _OV07 Last char - (int256) How many times to loop the anim
+* __OV07 Last char - (int256) Delay between frames
+
+**********************************************
+
+scrp 1 1 64730 9001
+
+*start counting reps at 1 so the string index isn't out of bounds.
+*	setv va00 1
+
+
+*va15 = get AnimString string length.
+	setv va15 strl OV07
+
+*va15 = the final character of the string, as a char.
+	setv va15 char OV07 va15
+
+*debug say amount of times you're going to repeat the anim.
+	targ norn
+	sezz vtos va15
+	targ ownr
+
+*run this loop as many times as the NumLoops character.
+	reps va15
+
+*run this loop as many times as the length of the anim string.
+		setv va10 strl OV07
+*-1 because of the NumLoops character.
+		subv va10 1
+
+		reps va10
+
+
+*"animframe"
+			sets va01 gall
+
+*remove the last character of the Gallery (sprite file) Name
+			setv va02 strl va01
+			subv va02 1
+			sets va03 subs va01 1 va02
+
+			targ norn
+*			sezz va01
+			targ ownr
+
+
+
+*add 1 to the iteration number before using it as a string index. because string indexes start at 1 not 0.
+			setv va77 va00
+			addv va77 1
+
+*put the character of the anim string we are currently looking at it in VA05
+			sets va05 subs OV07 va77 1
+
+
+*			setv va05 stoi va03
+
+*"animframeX"
+			adds va03 va05
+
+			gall va03 0
+
+*add 1 to Iteration Variable
+			addv va00 1
+
+
+			wait 5
+
+		repe
+
+*reset Iteration Variable in case you have to play again.
+		setv va00 0
+
+
+	repe
+
+endm
+
+
+
+
+
+
+
+***********************************************
+***************** PLAY SOUND! *****************
+******************** (9002) *******************
+***********************************************
+
+* OV06 - sound to make
+* _OV06 2nd from Last char - sound play mode (not implemented)
+* __OV06 Last char - sound play delay (only SNDQ will listen for it)
+
+**********************************************
+
+scrp 1 1 64730 9002
+
+*todo: add support for sndc and sndl
+	snde OV06
+
+endm
+
+
+
+
+
+
+***********************************************
+************** INJECT CHEMICALS ***************
+******************** (9003) *******************
+***********************************************
+
+* OV05 - 4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+
+***********************************************
+
+scrp 1 1 64730 9003
+
+*get the 8 values out of the string
+
+
+*va01 is the loop number/iteration (starting at 1 because of string indexes)
+	setv va00 1
+
+*Loop for every character in the chemicals string divided by 2 (8/2=4)
+	reps 4
+
+*va01 is the loop number/iteration + 1
+		setv va01 va00
+		addv va01 1
+
+*VA02 is the CHEMICAL NUMBER
+		setv va02 char ov05 va00
+
+*VA03 is the CHEMICAL AMOUNT
+		setv va03 char ov05 va01
+
+*VA03 is stored as a single byte, so needs some conversion:
+*IMPORTANT: When dividing by a number and needing the result to be a FLOAT, need .0 after the number or result is an INT!!
+		subv va03 128.0
+		divv va03 128.0
+
+*Inject the CHEMICAL (VA02) with the AMOUNT (VA03)
+		chem VA02 VA03
+
+*increase loop number
+		addv va00 1
+
+	repe
+
+	sets va99 "chem: "
+	adds va99 vtos VA02
+	adds va99 " amount: "
+	adds va99 vtos VA03
+
+	targ norn
+	sezz va99
+
+
+endm
+
+
+
+
+
+
+
+
+
+*DROPDOWN TEST SCRIPT
+scrp 1 1 64735 8001
+
+*	call 9990 8001 "holodeck_sounds"
+*	call 9990 8001 "holodeck_actions"
+*	call 9990 8001 "holodeck_chemicals"
+	call 9990 8001 "holodeck_stimulus"
+
+endm
+
+
+
+
+
+
+*HOLODECK SETTINGS HIT SCRIPT
+*calls the open/CLOSE dropdown script:
+*This is a workaround so dropdowns can target the main board and tell it to run the Close Dropdowns script.
+*scrp 1 1 64735 3
+
+*	targ norn
+*	sezz "lol"
+*if _p1_.type = int and _p2_.type = string
+*(don't run if you got called with invalid settings)
+*	doif type _p1_ = 0 and type _p2_ = 2
+*		call 9990 _p1_ _p2_
+*	endi
+
+*endm
+
+
+
+
+
+
+
+
+
+*read file - slow and not needed, but could be an advanced option.
+*reaf
+
+
+
+
+
+
+
+
+
+
+
+*Create Dropdown Script!
+
+
+*WARNING/NOTE: This script is also called from the HIT script. This is a workaround so dropdowns can target the main board and tell it to run the Close Dropdowns script.
+*^ probaly deleting this. todo: delete this comment
+
+scrp 1 1 64735 9990
+
+	inst
+
+
+*get X/Y of part that called you (_p1)
+
+	targ ownr
+
+	part _p1_
+
+*depressed
+	pose 1
+*disable input
+	clac -1
+
+	setv va50 posl
+	setv va51 post
+
+*todo: adding these offsets makes it correct but isn't at all future proof.
+	addv va50 game "holodeck_dropdown_X"
+	addv va51 game "holodeck_dropdown_Y"
+
+	addv va51 game "holodeck_dropdown_MenuSegmentHeight"
+
+*	targ norn
+*	sezz "clicked it"
+
+	setv va20 0
+*kill any existing dropdowns, only one can be open at a time
+	enum 1 1 55555
+		kill targ
+		addv va20 1
+	next
+
+
+*only create a new popup if you didn't have to destroy any popups just now.
+	doif va20 = 0
+
+		new: comp 1 1 55555 "blnk" 0 0 10
+
+*store _p1_ (part that called you here) in OV50!!! click script in dropdown needs it later.
+*(todo: clean this up. ov50 should be used for both probably):
+		setv OV50 _P1_
+
+*init OV02 as a blank string. we will be storing the selected menu option string in here.
+		sets OV02 ""
+
+		tick 1
+
+*Listen for these events:
+* 8 Raw Mouse Down + 16 Raw Mouse Up
+		imsk 24
+* + 4 Raw Mouse Move (tick 1 script is a lot smoother)
+*		imsk 28
+
+* + 32 Raw Mouse Wheel
+		imsk 60
+
+*move to coords of part that called us.
+		mvto va50 va51
+
+
+*also also store the catalogue array name in OV42. So it can load data from it while scrolling.
+		sets OV42 _P2_
+
+
+*how many entries are there? stored in OV43 for later!
+*		setv va00 rean "holodeck_sounds"
+		setv OV43 rean _P2_
+
+*variable to keep track of what iteration of the loop we're on
+		setv va99 1
+
+
+
+*for (how many dropdown entries to display at a time)
+		reps game "holodeck_dropdown_NumEntriesToDisplay"
+
+
+*VA33 is the background sprite for the part of the menu we are drawing.
+*The first one has a shadow on the top, the last one has a highlight on the bottom.
+			doif va99 = 1
+
+				setv VA33 2
+
+			elif va99 = game "holodeck_dropdown_NumEntriesToDisplay"
+
+				setv VA33 6
+
+			else
+
+				setv VA33 4
+
+			endi
+
+
+
+*subtract 1 from loop iteration so we load the correct catalogue entry.
+			setv va70 va99
+			subv va70 1
+
+*load the current sound into VA01
+*			sets va01 read "holodeck_sounds" va70
+
+*load the current catalogue entry into VA01 (from OV42)
+			sets va01 read OV42 va70
+
+
+*convert it to uppercase  (never mind)
+
+*	sets va01 uppa va01
+
+*multiply the loop iteration by the height of the back-piece (-1) to get the position for the next one
+			setv va80 va99
+			subv va80 1
+*todo: must be a variable!!
+			mulv va80 game "holodeck_dropdown_PixelsBetweenMenuSegments"
+
+
+*VA33 is the background sprite for the part of the menu we are drawing.
+*The first one has a shadow on the top, the last one has a highlight on the bottom.
+
+*create the next item in the list
+			pat: fixd va99 "holodeck_dropdown" VA33 0 va80 1 "WhiteOnTransparentChars"
+
+			part va99
+
+*set the catalogue entry as the text for the new part.
+			ptxt va01
+
+*add 1 to iteration variable
+			addv va99 1
+
+		repe
+
+*endm
+
+*othewise, reset the pose of the dropdown 
+	else
+		part _p1_
+		pose 0
+	endi
+
+
+
+
+*change tickrate, set ideal interval in milliseconds between each tick. 
+*speed it up while a dropdown menu is open for smoother select cursor.
+	buzz 20
+
+
+
+
+*PAUSE the game when a dropdown is open, so that norn brains don't have to attempt to tick at the new faster BUZZ rate.
+
+
+	inst
+	wpau 1
+	enum 1 0 0
+		doif gnus eq 2 and spcs eq 12
+			paus 0
+		else
+			paus 1
+		endi
+	next
+	enum 2 0 0
+		doif gnus eq 1 and spcs eq 1
+			paus 0
+		else
+			paus 1
+		endi
+	next
+	enum 3 0 0
+*			doif gnus ne 3 and spcs ne 103
+		paus 1
+*			endi
+	next
+	enum 4 0 0
+		paus 1
+	next
+
+*yep, we even pause the pause gui
+*enum 1 2 6
+*	paus 0
+*next
+
+*but we DON'T pause the dropdown menu itself
+	enum 1 1 55555
+		paus 0
+	next
+
+
+
+endm
+
+
+
+
+
+
+
+
+
+***OLD UNFINISHED SNIPPET TO DELETE ALL LIST ENTRIES INDIVIDUALLY.
+
+*scrp
+*
+**delete all dropdown entries
+**	reps game "holodeck_dropdown_NumEntriesToDisplay"
+*
+**loop
+*
+**destroy the current part
+*pat: kill va00
+*
+**add 1 to loop iteration
+*addv va00 1
+*
+**keep looping until there is no Next Part!
+*untl pnxt va00 = 0
+*
+*endm
+
+
+
+
+*sets va00 vtos va00
+
+*adds va00 " sounds. first one is "
+*adds va00 va01
+
+*targ norn
+
+
+
+
+
+
+******CODE DOWN HERE IS FOR DROPDOWNS*****
+
+
+
+
+
+
+*TODO: IT SHOULD BE CHECKING IF IT'S IN THE BOUNDS OF THE CANVAS HERE TOO! (should it?)
+
+*RAW MOUSE DOWN SCRIPT
+
+*ov00 is set to 1 when the mouse is pressed down.
+
+scrp 1 1 55555 76
+
+*1 - left mouse button
+	doif _p1_ = 1
+
+		inst
+
+*target the part (MV50) on the main settings panel we're attached to and set it to the NORMAL (not depressed) state.
+		rtar 1 1 64735
+		part MV50
+		pose 0
+*re-enable click detection
+		clac 0
+
+*now add 1 to OV50 to find the part ID just above it, which contains a text box with the same dimensions as the button.
+		setv va00 mv50
+		addv va00 1
+
+		part va00
+
+*MV02 (OV02 of ownr, the open dropdown) is being used to store which string we'd set if the cursor was released. todo: can add more conds here to make it more/less responsive/accurate
+		doif mv02 <> ""
+			ptxt mv02
+
+*sound test
+*			snde mv02
+		endi
+
+
+
+
+
+*todo: move the pause code to 2 functions (pause and resume) and improve them.
+
+*change tickrate, set ideal interval in milliseconds between each tick. 
+
+*slow it back down to default while the cursor is over the pixelgrid for smoother drawing.
+*TODO: store this variable in memory instead of assuming it was 50 before you touched the grid.
+		buzz 50
+
+
+
+
+
+
+
+*UNPAUSE/RESUME the game when done drawing on the canvas.
+
+		inst
+		wpau 0
+		enum 1 0 0
+			paus 0
+		next
+		enum 2 0 0
+			paus 0
+		next
+		enum 3 0 0
+			paus 0
+		next
+		enum 4 0 0
+			paus 0
+		next
+
+
+
+
+*kill any existing dropdowns.
+		enum 1 1 55555
+			kill targ
+		next
+
+
+
+*
+*
+	endi
+
+
+endm
+
+*RAW MOUSE UP SCRIPT
+
+*ov00 is set to 0 when the mouse is NOT pressed down.
+*^ old comment!
+
+scrp 1 1 55555 77
+
+*	setv ov00 0
+
+*right mouse button (currently disabled)
+	doif _p1_ = 2
+
+
+		inst
+*		enum 1 1 64732
+*			kill targ
+*		next
+
+	endi
+
+endm
+
+
+
+
+*RAW MOUSE WHEEL SCRIPT
+
+scrp 1 1 55555 78
+
+*The delta value is sent in _P1_ - 120 units per 'click'.
+
+	inst
+
+*SCROLLED DOWN
+	doif _p1_ < -110
+
+*OV33 is the scrolling position
+
+*make sure it doesn't go out of bounds. OV43 stores how many entries the loaded catalogue has.
+*subtract the number of entries you show on screen at once to get the safest high number to set the offset to.
+
+		setv va00 OV43
+		subv va00 game "holodeck_dropdown_NumEntriesToDisplay"
+
+		doif OV33 < va00
+			addv OV33 1
+		endi
+
+*SCROLLED UP
+	elif _p1_ > 110
+
+*OV33 is the scrolling position
+
+*make sure it doesn't go out of bounds.
+		doif OV33 > 0
+			subv OV33 1
+		endi
+
+
+	endi
+
+
+
+
+*variable to keep track of what iteration of the loop we're on.
+	setv va99 1
+
+
+*for (how many dropdown entries to display at a time)
+	reps game "holodeck_dropdown_NumEntriesToDisplay"
+
+*add the scrolling position (OV33) to the loop iteration so we load the correct catalogue entry.
+		setv va70 va99
+		addv va70 OV33
+
+*subtract 1 to fix another base 0/1 issue
+		subv va70 1
+
+
+*load the current catalogue entry into VA01 (from OV42)
+		sets va01 read OV42 va70
+
+
+
+		part va99
+
+*set the catalogue entry as the text for the new part.
+		ptxt va01
+
+		addv va99 1
+
+	repe
+
+
+
+
+*	inst
+
+*	part 5
+*	ptxt vtos ov33
+*	ptxt vtos _p1_
+
+
+
+*endi
+
+endm
+
+
+
+
+
+*1 FRAME TIMER SCRIPT - goes off every frame but only while a dropdown is open sooo
+*(TODO: close these when you leave the room!)
+
+scrp 1 1 55555 9
+*scrp 1 1 55555 75
+
+*	inst
+
+*get X and Y of Hand and put them in VA44 and VA45
+	targ pntr
+
+	setv va44 posl
+	setv va45 post
+
+	targ ownr
+
+
+*****GET COORDS OF ALL 4 CORNERS OF DROPDOWN MENU
+
+*get top left corner of dropdown menu
+	setv va20 posl
+	setv va21 post
+
+
+	setv va22 game "holodeck_dropdown_MenuSegmentWidth"
+	addv va22 va20
+
+*so 15 * 21 = 630 pixels tall for example
+	setv va23 game "holodeck_dropdown_NumEntriesToDisplay"
+	mulv va23 game "holodeck_dropdown_MenuSegmentHeight"
+	addv va23 va21
+
+
+* game "holodeck_"
+
+
+*if the mouse cursor is inside the dropdown menu bounds
+	doif VA44 > va20 and VA44 < va22 and VA45 > va21 and VA45 < va23
+
+
+
+
+
+*set all parts to OFF and then set the correct part back to ON, all in 1 frame
+		inst
+
+*	count from 1 because part 0 doesn't exist
+		setv va01 1
+
+		reps game "holodeck_dropdown_NumEntriesToDisplay"
+*			reps 10
+			part va01
+			pose 0
+
+
+			addv va01 1
+		repe
+
+
+
+*see if there's a valid part under the cursor		hotp < 1000  <-- this bit is a quick fix for it targeting parts of the main machine   todo: do something better? maybe?
+		setv va00 hotp
+		doif va00 <> 0 and va00 <> -1 and hotp < 1000
+
+
+			part va00
+			pose 1
+
+
+*if mouse is clicked (on open menu):
+*			doif ov00 = 1
+
+*OV02 holds the text of the part we most recently hovered over.
+			sets OV02 ptxt
+
+*ELSE we aren't hovering over a valid part of the dropdown menu
+		else
+*set the text of the part to nothing
+			sets OV02 ""
+
+		endi
+
+	else
+
+
+*TODO: all this code is here twice? write a subr?
+
+*set the text of the part to nothing
+		sets OV02 ""
+
+
+*set all parts to OFF and then set the correct part back to ON, all in 1 frame
+		inst
+
+*	count from 1 because part 0 doesn't exist
+		setv va01 1
+
+		reps game "holodeck_dropdown_NumEntriesToDisplay"
+*			reps 10
+			part va01
+			pose 0
+
+
+			addv va01 1
+		repe
+
+	endi
+endm
+
+*to 11... so still 10.
+*	setv va01 game "holodeck_dropdown_NumEntriesToDisplay"
+*	subv va01 1
+
+**delete all dropdown entries
+*	inst
+*	reps game "holodeck_dropdown_NumEntriesToDisplay"
+*
+*		doif hotp = va00
+*			part va00
+*			pose 1
+*		else
+*			targ norn
+*			sezz "Fowo"
+*
+*			targ ownr
+*			part va00
+**	turn off every other part
+*			pose 0
+*
+*		endi
+*
+*		addv va00 1
+*	repe
+
+
+
+*highlight the part we are hovering over
+*
+**make sure there is a part under our cursor.
+**	doif hotp <> -1
+**		pose 1
+*
+**	loop
+*
+*repe 
+*
+**if the part under our cursor is the part we are iterating over
+*		doif hotp = part va00
+*			part va00
+*			pose 1
+*		else
+*			part va00
+**	turn off every other part
+*			pose 0
+*
+*		endi
+*
+**	add 1 to loop iteration
+*		subv va00 1
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+**targ hotp
+
+
+
+
+*sezz va00
