@@ -1,0 +1,45 @@
+enum 1 1 66650
+	kill targ
+next
+
+new: simp 1 1 66650 "holodeck_cursors" 0 0 9999
+
+*HOLODECK CURSOR MODES!
+*0 - none, default Hand
+*1 - Pencil Tool
+*2 - Colour Picker (unimplemented)
+*3 - Fill Can (unimplemented)
+
+setv game "holodeck_cursor_mode" 0
+
+*tick 100
+
+*floatable attribute, so it can follow the hand position in real time
+attr 32
+
+*move it outside the map
+mvto -50 -50
+
+
+
+
+
+*scrp 1 1 66650 9
+
+*	targ pntr
+
+*	setv va00 posl
+*	setv va01 post
+
+*drawing tool cursors are upside down compared to the Hand, so they need to be offset.
+*	subv va00 26
+
+*	targ ownr
+
+*	frel pntr
+
+*	flto 0 -26
+
+*	tick 0
+
+endm

@@ -1,0 +1,220 @@
+enum 1 1 64736
+	kill targ
+next
+
+
+new: comp 1 1 64736 "holodeck_frame" 0 3 5000
+
+
+*MAKE THE PALETTE PANEL!! (can delete this honestly)
+
+*pat: dull 3 "holodeck_frame" 0 0 0 1
+
+
+*BLACK
+pat: butt 1001 "holodeck_frame" 4 0 2 2 1 [] 1001 0
+*LIGHT BLUE
+pat: butt 1002 "holodeck_frame" 4 0 18 2 1 [] 1002 0
+
+*DARK GREY
+pat: butt 1003 "holodeck_frame" 4 0 2 18 1 [] 1003 0
+*BLUE
+pat: butt 1004 "holodeck_frame" 4 0 18 18 1 [] 1004 0
+
+*LIGHT GREY
+pat: butt 1005 "holodeck_frame" 4 0 2 34 1 [] 1005 0
+*MAUVE
+pat: butt 1006 "holodeck_frame" 4 0 18 34 1 [] 1006 0
+
+*LIGHTEST GREY
+pat: butt 1007 "holodeck_frame" 4 0 2 50 1 [] 1007 0
+*MAGENTA
+pat: butt 1008 "holodeck_frame" 4 0 18 50 1 [] 1008 0
+
+*DULL ORANGE
+pat: butt 1009 "holodeck_frame" 4 0 2 66 1 [] 1009 0
+*SCARLET
+pat: butt 1010 "holodeck_frame" 4 0 18 66 1 [] 1010 0
+
+*BURGUNDY
+pat: butt 1011 "holodeck_frame" 4 0 2 82 1 [] 1011 0
+*BRIGHT ORANGE
+pat: butt 1012 "holodeck_frame" 4 0 18 82 1 [] 1012 0
+
+*DARK GREEN
+pat: butt 1013 "holodeck_frame" 4 0 2 98 1 [] 1013 0
+*YELLOW
+pat: butt 1014 "holodeck_frame" 4 0 18 98 1 [] 1014 0
+
+*LIME GREEN
+pat: butt 1015 "holodeck_frame" 4 0 2 114 1 [] 1015 0
+*WHITE
+pat: butt 1016 "holodeck_frame" 4 0 18 114 1 [] 1016 0
+
+
+
+*CLEAR BUTTON
+pat: butt 2001 "holodeck_frame" 1 0 0 130 1 [] 2001 0
+
+
+mvto 101 90227
+
+
+
+*BLACK
+scrp 1 1 64736 1001
+
+	rtar 1 1 64731
+
+	setv ov01 0
+
+endm
+
+*LIGHT BLUE
+scrp 1 1 64736 1002
+
+	rtar 1 1 64731
+
+	setv ov01 1
+
+endm
+
+*DARK GREY
+scrp 1 1 64736 1003
+
+	rtar 1 1 64731
+
+	setv ov01 2
+
+endm
+
+*BLUE
+
+scrp 1 1 64736 1004
+
+	rtar 1 1 64731
+
+	setv ov01 3
+
+endm
+
+*LIGHT GREY
+scrp 1 1 64736 1005
+
+	rtar 1 1 64731
+
+	setv ov01 4
+
+endm
+
+*MAUVE
+scrp 1 1 64736 1006
+
+	rtar 1 1 64731
+
+	setv ov01 5
+
+endm
+
+*LIGHTEST GREY
+scrp 1 1 64736 1007
+
+	rtar 1 1 64731
+
+	setv ov01 6
+
+endm
+
+*MAGENTA
+scrp 1 1 64736 1008
+
+	rtar 1 1 64731
+
+	setv ov01 7
+
+endm
+
+*DULL ORANGE
+scrp 1 1 64736 1009
+
+	rtar 1 1 64731
+
+	setv ov01 8
+
+endm
+
+*SCARLET
+scrp 1 1 64736 1010
+
+	rtar 1 1 64731
+
+	setv ov01 9
+
+endm
+
+*BURGUNDY
+scrp 1 1 64736 1011
+
+	rtar 1 1 64731
+
+	setv ov01 10
+
+endm
+
+*BRIGHT ORANGE
+scrp 1 1 64736 1012
+
+	rtar 1 1 64731
+
+	setv ov01 11
+
+endm
+
+*DARK GREEN
+scrp 1 1 64736 1013
+
+	rtar 1 1 64731
+
+	setv ov01 12
+
+endm
+
+*YELLOW
+scrp 1 1 64736 1014
+
+	rtar 1 1 64731
+
+	setv ov01 13
+
+endm
+
+*LIME GREEN
+scrp 1 1 64736 1015
+
+	rtar 1 1 64731
+
+	setv ov01 14
+
+endm
+
+*WHITE
+scrp 1 1 64736 1016
+
+	rtar 1 1 64731
+
+	setv ov01 15
+
+endm
+
+
+
+
+*CLEAR BUTTON
+scrp 1 1 64736 2001
+
+	inst
+	enum 1 1 64732
+		kill targ
+	next
+
+endm

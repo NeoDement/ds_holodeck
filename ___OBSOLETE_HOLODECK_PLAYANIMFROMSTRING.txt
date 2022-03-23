@@ -1,0 +1,70 @@
+
+*va15 = get AnimString string length.
+	setv va15 strl OV07
+
+*va15 = the final character of the string, as a char.
+	setv va15 char OV07 va15
+
+*debug say amount of times you're going to repeat the anim.
+	targ norn
+	sezz vtos va15
+	targ ownr
+
+*run this loop as many times as the NumLoops character.
+	reps va15
+
+*run this loop as many times as the length of the anim string.
+		setv va10 strl OV07
+*-1 because of the NumLoops character.
+		subv va10 1
+
+		reps va10
+
+
+*"animframe"
+			sets va01 gall
+
+*remove the last character of the Gallery (sprite file) Name
+			setv va02 strl va01
+			subv va02 1
+			sets va03 subs va01 1 va02
+
+			targ norn
+*			sezz va01
+			targ ownr
+
+
+
+*add 1 to the iteration number before using it as a string index. because string indexes start at 1 not 0.
+			setv va77 va00
+			addv va77 1
+
+*put the character of the anim string we are currently looking at it in VA05
+			sets va05 subs OV07 va77 1
+
+
+*			setv va05 stoi va03
+
+*"animframeX"
+			adds va03 va05
+
+			gall va03 0
+
+*add 1 to Iteration Variable
+			addv va00 1
+
+
+			wait 5
+
+		repe
+
+*reset Iteration Variable in case you have to play again.
+		setv va00 0
+
+
+	repe
+
+endm
+
+
+
