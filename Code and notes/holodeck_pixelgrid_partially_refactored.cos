@@ -9,6 +9,9 @@ next
 
 
 
+*SELECTED FRAME THAT EDITS ARE BEING APPLIED TO
+setv game "Holodeck_SelectedFrame" 0
+
 *NUMBER OF PIXELS ON THE X (horizontal) AXIS
 setv game "Holodeck_NumPixelsX" 18
 
@@ -21,6 +24,7 @@ setv game "Holodeck_PixelSize" 8
 *PIXEL SIZE ON THE REAL SCALE PREVIEW IMAGE (Each pixel is represented by an X*X block)
 setv game "Holodeck_PixelSizeTiny" 2
 
+*DEFAULT BRUSH SIZE IS 1x1
 sets game "Holodeck_BrushSize" "C,"
 
 
@@ -73,17 +77,25 @@ repe
 
 mvto 64 90483
 
+
+*store main grid in a global variable so we can access it later
+seta game "Holodeck_PixelGrid" targ
+
+
 cmrt 0
 
 
 
-*create 10 tiny pixel grids for a test.
+*create 10 tiny pixel grids, one for each frame.
 
-setv va50 10
+setv va50 312
+setv va51 90267
+
+
+*set this to 0 and use it to count loop iterations.
+setv va03 0
 
 reps 10
-
-	addv va50 20
 
 	new: comp 1 1 64743 "holodeck_pixelgrid_tiny" 0 0 1
 
@@ -112,9 +124,44 @@ reps 10
 
 	repe
 
-	mvto va50 90640
+	doif va50 = 982
+		addv va51 150
+		setv va50 311
+	endi
 
+	mvto va50 va51
 
+	addv va50 134
+
+*store each frame in an object variable
+* OV50 - OV59
+	addv va03 1
+
+	doif va03 = 1
+		seta game "Holodeck_AnimFrame_0" targ
+
+*game "Holodeck_AnimFrame_Selected" is currently selected frame. Initialized as Frame 0.
+		seta game "Holodeck_AnimFrame_Selected" targ
+
+	elif va03 = 2
+		seta game "Holodeck_AnimFrame_1" targ
+	elif va03 = 3
+		seta game "Holodeck_AnimFrame_2" targ
+	elif va03 = 4
+		seta game "Holodeck_AnimFrame_3" targ
+	elif va03 = 5
+		seta game "Holodeck_AnimFrame_4" targ
+	elif va03 = 6
+		seta game "Holodeck_AnimFrame_5" targ
+	elif va03 = 7
+		seta game "Holodeck_AnimFrame_6" targ
+	elif va03 = 8
+		seta game "Holodeck_AnimFrame_7" targ
+	elif va03 = 9
+		seta game "Holodeck_AnimFrame_8" targ
+	elif va03 = 10
+		seta game "Holodeck_AnimFrame_9" targ
+	endi
 repe
 
 
@@ -783,11 +830,11 @@ scrp 1 1 64742 9010
 					part va10
 					pose va50
 
-*target the smaller pixel grid and add the same brush stroke
-					enum 1 1 64743
-						part va10
-						pose va50
-					next
+*target the currently selected smaller pixel grid and add the same brush stroke
+*todo: sanity check here?
+					targ game "Holodeck_AnimFrame_Selected"
+					part va10
+					pose va50
 
 				endi
 
@@ -899,12 +946,15 @@ scrp 1 1 64742 9010
 			next
 
 *		rtar 1 1 64743
-			enum 1 1 64743
-				doif pose = va04
-					part va01
-					pose va05
-				endi
-			next
+*		enum 1 1 64743
+
+*do the same changes on the currently selected anim frame/pixel grid.
+			targ game "Holodeck_AnimFrame_Selected"
+			doif pose = va04
+				part va01
+				pose va05
+			endi
+*next
 
 		repe
 
@@ -931,12 +981,13 @@ scrp 1 1 64742 9010
 
 		setv va10 ov69
 
-*target the smaller pixel grid and add the same brush stroke
+*target the currently selected smaller pixel grid and add the same brush stroke
 *		rtar 1 1 64743
-		enum 1 1 64743
-			part va10
-			pose 0
-		next
+*		enum 1 1 64743
+		targ game "Holodeck_AnimFrame_Selected"
+		part va10
+		pose 0
+*		next
 
 
 
@@ -1075,5 +1126,69 @@ scrp 1 1 64742 9998
 		next
 
 	endi
+
+endm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+****************************************************************
+****************************************************************
+**  MAIN PIXELGRID "HIT" SCRIPT IS USED TO LOAD CURRENT FRAME **
+******************************( 3 )*****************************
+****************************************************************
+
+scrp 1 1 64742 3
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target stored canvas and store pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		setv va03 pose
+
+*target main canvas and apply stored pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		pose va03
+
+
+	repe
+
+*	enum 1 1 64732
+*		kill targ
+*	next
 
 endm
