@@ -1,0 +1,23 @@
+*save and load objects created with the Holodeck
+
+file iope 1 "testfile.txt"
+
+sets va00 ""
+
+loop
+
+	adds va00 innl
+	adds va00 "x"
+
+	char va00 strl va00 13
+
+	subv va01 1
+
+untl inok = 0
+
+file iclo
+
+
+file oope 1 "testfile2.txt" 0
+outs va00
+file oclo
