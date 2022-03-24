@@ -5,10 +5,11 @@ next
 new: simp 1 1 66650 "holodeck_cursors" 0 0 9999
 
 *HOLODECK CURSOR MODES!
-*0 - none, default Hand
-*1 - Pencil Tool
-*2 - Colour Picker (unimplemented)
+*0 - none, default Pointer?
+*1 - Brush Tool
+*2 - Eraser Tool
 *3 - Fill Can (unimplemented)
+*4 - Colour Picker
 
 setv game "holodeck_cursor_mode" 0
 

@@ -1,6 +1,9 @@
+sets game "Holodeck_BrushSize" "C,"
+
 enum 1 1 64736
 	kill targ
 next
+
 
 
 new: comp 1 1 64736 "holodeck_frame" 0 3 5000
@@ -55,6 +58,47 @@ pat: butt 1016 "holodeck_frame" 4 0 18 114 1 [] 1016 0
 
 *CLEAR BUTTON
 pat: butt 2001 "holodeck_frame" 1 0 0 130 1 [] 2001 0
+
+****************
+* TOOL PANEL!! *
+****************
+
+pat: dull 3000 "holodeck_frame" 24 50 0 2
+
+*BRUSH TOOL
+pat: butt 3001 "holodeck_frame" 25 0 63 13 3 [] 3001 0
+
+*FILL TOOL
+pat: butt 3002 "holodeck_frame" 27 0 103 13 3 [] 3002 0
+
+*ERASER TOOL
+pat: butt 3003 "holodeck_frame" 29 0 63 53 3 [] 3003 0
+
+*PICKER TOOL
+pat: butt 3004 "holodeck_frame" 31 0 103 53 3 [] 3004 0
+
+
+
+
+**********************
+* BRUSH SIZE PANEL!! *
+**********************
+
+pat: dull 4000 "holodeck_frame" 33 -20 200 2
+
+
+pat: butt 4001 "holodeck_frame" 34 0 -20 200 3 [] 4001 0
+pat: butt 4002 "holodeck_frame" 34 0 0 200 3 [] 4002 0
+pat: butt 4003 "holodeck_frame" 34 0 20 200 3 [] 4003 0
+pat: butt 4004 "holodeck_frame" 34 0 40 200 3 [] 4004 0
+pat: butt 4005 "holodeck_frame" 34 0 60 200 3 [] 4005 0
+pat: butt 4006 "holodeck_frame" 34 0 80 200 3 [] 4006 0
+pat: butt 4007 "holodeck_frame" 34 0 -20 220 3 [] 4007 0
+pat: butt 4008 "holodeck_frame" 34 0 0 220 3 [] 4008 0
+pat: butt 4009 "holodeck_frame" 34 0 20 220 3 [] 4009 0
+pat: butt 4010 "holodeck_frame" 34 0 40 220 3 [] 4010 0
+pat: butt 4011 "holodeck_frame" 34 0 60 220 3 [] 4011 0
+pat: butt 4012 "holodeck_frame" 34 0 80 220 3 [] 4012 0
 
 
 mvto 101 90227
@@ -209,6 +253,285 @@ endm
 
 
 
+
+
+
+
+**************
+* TOOL MODES *
+**************
+
+*BRUSH TOOL
+scrp 1 1 64736 3001
+
+	setv game "Holodeck_CursorMode" 1
+
+*set this button to ON and all other buttons to OFF
+	part 3001
+	pose 1
+	part 3002
+	pose 0
+	part 3003
+	pose 0
+	part 3004
+	pose 0
+
+endm
+
+*FILL TOOL
+scrp 1 1 64736 3002
+
+	setv game "Holodeck_CursorMode" 2
+
+*set this button to ON and all other buttons to OFF
+	part 3001
+	pose 0
+	part 3002
+	pose 1
+	part 3003
+	pose 0
+	part 3004
+	pose 0
+endm
+
+*ERASER TOOL
+scrp 1 1 64736 3003
+
+	setv game "Holodeck_CursorMode" 3
+
+*set this button to ON and all other buttons to OFF
+	part 3001
+	pose 0
+	part 3002
+	pose 0
+	part 3003
+	pose 1
+	part 3004
+	pose 0
+
+endm
+
+*PICKER TOOL
+scrp 1 1 64736 3004
+
+	setv game "Holodeck_CursorMode" 4
+
+*set this button to ON and all other buttons to OFF
+	part 3001
+	pose 0
+	part 3002
+	pose 0
+	part 3003
+	pose 0
+	part 3004
+	pose 1
+
+endm
+
+
+
+
+
+
+
+
+
+***************
+* BRUSH SIZES *
+***************
+
+*note: It's recommended you use a square font such as "Inversions" when editing the brushes.
+*It will be much easier to see the shapes.
+
+*C represents the center of a brush shape. (unimplemented)
+
+
+
+*SCRP 4000 is a script to hide all brush size buttons except for _P1_ which is called in every 400X script except 4000 itself.
+
+scrp 1 1 64736 4000
+
+	inst
+
+	setv va00 4001
+
+	reps 12
+
+		part va00
+		pose 0
+
+		addv va00 1
+
+	repe
+
+	part _p1_
+	pose 1
+
+endm
+
+
+
+
+scrp 1 1 64736 4001
+
+	sets game "Holodeck_BrushSize" "C,"
+
+	call 4000 4001 0
+
+endm
+
+scrp 1 1 64736 4002
+
+	sets game "Holodeck_BrushSize" "CX,"
+	adds game "Holodeck_BrushSize" "XX,"
+
+	call 4000 4002 0
+
+endm
+
+scrp 1 1 64736 4003
+
+	sets game "Holodeck_BrushSize" " X ,"
+	adds game "Holodeck_BrushSize" "XCX,"
+	adds game "Holodeck_BrushSize" " X ,"
+
+	call 4000 4003 0
+
+endm
+
+scrp 1 1 64736 4004
+
+	sets game "Holodeck_BrushSize" "XXX,"
+	adds game "Holodeck_BrushSize" "XCX,"
+	adds game "Holodeck_BrushSize" "XXX,"
+
+	call 4000 4004 0
+
+endm
+
+scrp 1 1 64736 4005
+
+	sets game "Holodeck_BrushSize" " XX ,"
+	adds game "Holodeck_BrushSize" "XCXX,"
+	adds game "Holodeck_BrushSize" "XXXX,"
+	adds game "Holodeck_BrushSize" " XX ,"
+
+	call 4000 4005 0
+
+endm
+
+scrp 1 1 64736 4006
+
+	sets game "Holodeck_BrushSize" " XXX ,"
+	adds game "Holodeck_BrushSize" "XXXXX,"
+	adds game "Holodeck_BrushSize" "XXCXX,"
+	adds game "Holodeck_BrushSize" "XXXXX,"
+	adds game "Holodeck_BrushSize" " XXX ,"
+
+	call 4000 4006 0
+
+endm
+
+scrp 1 1 64736 4007
+
+	sets game "Holodeck_BrushSize" " XXXX ,"
+	adds game "Holodeck_BrushSize" "XXXXXX,"
+	adds game "Holodeck_BrushSize" "XXCXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXX,"
+	adds game "Holodeck_BrushSize" " XXXX ,"
+
+	call 4000 4007 0
+
+endm
+
+scrp 1 1 64736 4008
+
+	sets game "Holodeck_BrushSize" "  XXX  ,"
+	adds game "Holodeck_BrushSize" " XXXXX ,"
+	adds game "Holodeck_BrushSize" "XXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXCXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXX,"
+	adds game "Holodeck_BrushSize" " XXXXX ,"
+	adds game "Holodeck_BrushSize" "  XXX  ,"
+
+	call 4000 4008 0
+
+endm
+
+scrp 1 1 64736 4009
+
+	sets game "Holodeck_BrushSize" "  XXXX  ,"
+	adds game "Holodeck_BrushSize" " XXXXXX ,"
+	adds game "Holodeck_BrushSize" "XXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXCXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXX,"
+	adds game "Holodeck_BrushSize" " XXXXXX ,"
+	adds game "Holodeck_BrushSize" "  XXXX  ,"
+
+	call 4000 4009 0
+
+endm
+
+scrp 1 1 64736 4010
+
+	sets game "Holodeck_BrushSize" "  XXXXX  ,"
+	adds game "Holodeck_BrushSize" " XXXXXXX ,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXCXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
+	adds game "Holodeck_BrushSize" " XXXXXXX ,"
+	adds game "Holodeck_BrushSize" "  XXXXX  ,"
+
+	call 4000 4010 0
+
+endm
+
+scrp 1 1 64736 4011
+
+	sets game "Holodeck_BrushSize" "   XXXX   ,"
+	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
+	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXCXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXX,"
+	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
+	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
+	adds game "Holodeck_BrushSize" "   XXXX   ,"
+
+	call 4000 4011 0
+
+endm
+
+scrp 1 1 64736 4012
+
+	sets game "Holodeck_BrushSize" "     XXXXX     ,"
+	adds game "Holodeck_BrushSize" "   XXXXXXXXX   ,"
+	adds game "Holodeck_BrushSize" "  XXXXXXXXXXX  ,"
+	adds game "Holodeck_BrushSize" " XXXXXXXXXXXXX ,"
+	adds game "Holodeck_BrushSize" " XXXXXXXXXXXXX ,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXXXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXXXXXXX,"
+	adds game "Holodeck_BrushSize" " XXXXXXXXXXXXX ,"
+	adds game "Holodeck_BrushSize" " XXXXXXXXXXXXX ,"
+	adds game "Holodeck_BrushSize" "  XXXXXXXXXXX  ,"
+	adds game "Holodeck_BrushSize" "   XXXXXXXXX   ,"
+	adds game "Holodeck_BrushSize" "     XXXXX     ,"
+
+	call 4000 4012 0
+
+endm
+
+
+
+
 *CLEAR BUTTON (WIP)
 scrp 1 1 64736 2001
 
@@ -225,9 +548,11 @@ scrp 1 1 64736 2001
 
 		addv va01 1
 
-		rtar 1 1 64742
-		part va01
-		pose 0
+*target main canvas and set pose
+		enum 1 1 64742
+			part va01
+			pose 0
+		next
 
 *		rtar 1 1 64743
 		enum 1 1 64743

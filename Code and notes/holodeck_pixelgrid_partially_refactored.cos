@@ -21,7 +21,7 @@ setv game "Holodeck_PixelSize" 8
 *PIXEL SIZE ON THE REAL SCALE PREVIEW IMAGE (Each pixel is represented by an X*X block)
 setv game "Holodeck_PixelSizeTiny" 2
 
-
+sets game "Holodeck_BrushSize" "C,"
 
 
 
@@ -128,6 +128,7 @@ repe
 
 scrp 1 1 64742 76
 
+
 *1 - left mouse button
 	doif _p1_ = 1
 
@@ -215,29 +216,24 @@ scrp 1 1 64742 75
 
 		show 0
 
-*target fake cursor object and set it to the Pencil Tool.
+*target fake cursor object and set it to the current Tool.
 		rtar 1 1 66650
-
-*placeholder to set the cursor to mode 1
-*		setv game "Holodeck_CursorMode" 1
 
 		pose game "Holodeck_CursorMode"
 
 *HOLODECK CURSOR MODES!
-*0 - none, default Hand
-*1 - Pencil Tool
-*2 - Colour Picker (unimplemented)
+*0 - none, default Pointer?
+*1 - Brush Tool
+*2 - Eraser Tool
 *3 - Fill Can (unimplemented)
+*4 - Colour Picker
 
-*		setv game "Holodeck_CursorMode" 1
 
 *attach the fake cursor to the real cursor.
 
 		frel pntr
 
 		flto 0 -26
-
-*		slow
 
 ******************* END OF SET CURSOR BLOCK ***********************
 
@@ -650,12 +646,14 @@ endm
 
 
 
-
-*DRAW AT X/Y WITH SELECTED BRUSH _p1_ _p2_ mouse cursor again
-
+******************************************************************
+* DRAW AT X/Y WITH SELECTED BRUSH - _p1_ _p2_ mouse cursor again *
+******************************************************************
 
 scrp 1 1 64742 9010
 
+*OV01 = SELECTED COLOUR
+*VA50 = SELECTED COLOUR+1
 *temporarily? adding 1 to ov01 to line up with the new c16 file
 	setv va50 ov01
 	addv va50 1
@@ -665,57 +663,299 @@ scrp 1 1 64742 9010
 
 	inst
 
-	call 9008 _p1_ _p2_
+*todo: might be more efficient to target the cursor and return the pose
 
-	part ov69
-
-	pose va50
-
-	setv va10 ov69
-
-*target the smaller pixel grid and add the same brush stroke
-*		rtar 1 1 64743
-	enum 1 1 64743
-		part va10
-		pose va50
-	next
+*BRUSH TOOL
+	doif game "Holodeck_CursorMode" = 1
 
 
 
 
 
-
-
-*	setv va02 _p1_
+**convert X/Y to part number
+*		call 9008 _p1_ _p2_
 *
-*	reps 2
+**select part number of main pixel grid
+*		part ov69
 *
-**				addv _p1_ game "Holodeck_PixelSize"
+*		pose va50
 *
-*		reps 2
-*** 					CONVERT XY COORDINATE TO PART NUMBER **
-*			call 9008 _p1_ _p2_
-*
-*			pose va50
-*
-*			setv va10 ov69
+*		setv va10 ov69
 *
 **target the smaller pixel grid and add the same brush stroke
 **		rtar 1 1 64743
-*			enum 1 1 64743
-*				part va10
-*				pose va50
-*			next
-*
-*			addv _p1_ game "Holodeck_PixelSize"
-*
-*		repe
-*		setv _p1_ va02
-*		addv _p2_ game "Holodeck_PixelSize"
-*	repe
+*		enum 1 1 64743
+*			part va10
+*			pose va50
+*		next
 
+*		inst
+
+
+* -----> OV09 STORES CURRENT BRUSH <-----
+
+*		sets OV09 " X ,"
+*		adds OV09 "XXX,"
+*		adds OV09 " X ,"
+
+
+		sets va70 game "Holodeck_BrushSize"
+
+*third column is ignored
+*2nd column is ignored
+
+*		inst
+
+*warning: these comments have errors in them, but it does work...
+
+*load in the brush to VA70
+*		sets va70 ov09
+
+*position of comma is how many entries to skip in the string to get to the next line: 4	
+		setv va25 sins va70 1 ","
+
+*position of comma-1 is brush hw/ in pixels: 3	
+		setv va24 va25
+		subv va24 1
+
+*store initial position of mouse cursor in VA02
+		setv VA02 _p1_
+
+*VA40 tracks the index in the brush string. string indexes start at 1.
+		setv VA40 1
+
+*run the loop VA24 (3) times in the Y axis.
+		reps va24
+
+*BEFORE START OF NEW ROW, PREPARE STRING...
+
+*Store the position of the first "," in the 
+*			setv va60 sins va70 va40 ","
+
+
+*store VA40 (1) + VA24 (3) in VA41 (4). Subtract 1 to skip the "," after each line.
+			setv va41 va40
+			addv va41 va25
+*			subv va41 1
+
+*store the string from VA40 (1) to VA41 (4) in VA65
+			sets va65 subs va70 va40 va24
+
+
+
+			addv va40 va25
+
+
+
+*			subv va60 1
+
+*			addv va65 va24
+
+*			sets va70 subs va70 va40 va65
+
+*			addv va60 1
+
+*			setv va40 va60
+
+
+*loop iteration
+			setv va05 1
+
+			reps va24
+
+*		START OF NEW ROW
+				sets va49 subs va65 va05 1
+
+				doif va49 <> " "
+
+					sets va49 "bib"
+
+** 			CONVERT XY COORDINATE TO PART NUMBER **
+					call 9008 _p1_ _p2_
+
+*			addv _p1_ game "Holodeck_PixelSize"
+
+
+*				pose va50
+
+					setv va10 ov69
+
+					part va10
+					pose va50
+
+*target the smaller pixel grid and add the same brush stroke
+					enum 1 1 64743
+						part va10
+						pose va50
+					next
+
+				endi
+
+				targ ownr
+
+
+				addv va05 1
+
+*	add pixel size to cursor _X_ position
+				addv _p1_ game "Holodeck_PixelSize"
+			repe
+
+			setv _p1_ va02
+			addv _p2_ game "Holodeck_PixelSize"
+
+		repe
+
+
+
+*		targ norn
+*		sezz va70
+*		targ ownr
+
+		targ norn
+		sezz va49
+*		sezz vtos va40
+		targ ownr
 
 *		call 9008 _p1_ _p2_
+
+
+
+
+
+
+*		reps 2
+*
+*			reps 2
+*
+*				addv va00 1
+*
+*				part va00
+*
+*				pose 5
+*				addv va01 game "Holodeck_PixelSize"
+*
+*				setv va01 1
+*
+*			repe
+*
+*
+*
+*			addv va02 game "Holodeck_PixelSize"
+*
+*		repe
+
+
+
+
+
+
+*FILL TOOL - todo: CURRENTLY NOT CONTIGUOUS!
+
+	elif game "Holodeck_CursorMode" = 2
+
+
+
+*convert X/Y to part number
+		call 9008 _p1_ _p2_
+
+*select that part
+		part ov69
+
+
+		setv va04 pose
+
+
+*add 1 to the palette index to get the correct pose (for now)	
+		setv va05 OV01
+		addv va05 1
+
+
+*		setv OV01 va00
+
+
+*		targ norn
+*		sezz vtos va00
+
+
+		inst
+
+*pixel grid is 18x18
+		setv va00 game "Holodeck_NumPixelsX"
+		mulv va00 game "Holodeck_NumPixelsY"
+
+
+		setv va01 0
+
+		reps va00
+
+			addv va01 1
+
+*target main canvas and set pose
+			enum 1 1 64742
+				part va01
+				doif pose = va04
+					pose va05
+				endi
+			next
+
+*		rtar 1 1 64743
+			enum 1 1 64743
+				doif pose = va04
+					part va01
+					pose va05
+				endi
+			next
+
+		repe
+
+*	enum 1 1 64732
+*		kill targ
+*	next
+
+
+
+
+
+
+
+*ERASER TOOL
+	elif game "Holodeck_CursorMode" = 3
+
+*convert X/Y to part number
+		call 9008 _p1_ _p2_
+
+*select part number of main pixel grid
+		part ov69
+
+		pose 0
+
+		setv va10 ov69
+
+*target the smaller pixel grid and add the same brush stroke
+*		rtar 1 1 64743
+		enum 1 1 64743
+			part va10
+			pose 0
+		next
+
+
+
+*PICKER TOOL
+	elif game "Holodeck_CursorMode" = 4
+
+*convert X/Y to part number
+		call 9008 _p1_ _p2_
+
+		part ov69
+
+*subtract 1 from the pose to get the correct palette index (for now)		
+		setv va00 pose
+		subv va00 1
+
+		setv OV01 va00
+
+	endi
+
 
 
 endm
