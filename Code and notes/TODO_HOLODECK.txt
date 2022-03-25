@@ -1,22 +1,38 @@
-pencil cursor tool
-eraser tool
-bigger paint brush - you can do it by grabbing the pixel x y of the pixels around the pixel
+IMPROVE PAUSE FUNCTION:
+-dont freeze caos command line...!
+-or xy profiler!
+
+
+
+
+CLEAN UP THE FUNCTIONS SUCH AS CUT, CLEAR, (move newly selected frame into PixelGrid, etc), PASTE, etc:
+(use a function to copy poses from one specified agent to another specified agent)
+(Currently it's a mess of very similar functions, some of which are called from a separate agent from the others)
+(This could also possibly let us discard the SelectedFrame variable? possibly not)
+
+
+all the buttons at the bottom of holodeck_canvas_controls_hologrid.cos can probably be a single function that takes 2 parameters. where to take the data from and where to put the data. if no source is specified it could blank it (clear/cut function)
+
+
+
+
+
+eraser tool needs parity with pencil tool
 
 also instead of a pencil cursor maybe just highlight the pixels that will be recoloured
 
-colour dropper tool
-
 right click eraser tool
 
+right click with fill can is erase
 
 
 
 
 
-SNAP cmd width/height will be changed too. to match sprite bounds.
 
 
-claer isnt clearing top left pixel.
+
+SNAP cmd width/height will be changed too. to match sprite bounds. (do a calculation using Holodeck_PixelWidth)
 
 
 

@@ -95,7 +95,9 @@ setv va51 90267
 *set this to 0 and use it to count loop iterations.
 setv va03 0
 
-reps 10
+*reps 10
+*10 anim frames, 1 clipboard, 1 anim preview window and 1 Transformation Buffer.
+reps 13
 
 	new: comp 1 1 64743 "holodeck_pixelgrid_tiny" 0 0 1
 
@@ -161,7 +163,23 @@ reps 10
 		seta game "Holodeck_AnimFrame_8" targ
 	elif va03 = 10
 		seta game "Holodeck_AnimFrame_9" targ
+
+*Special case for the clipboard frame
+	elif va03 = 11
+		seta game "Holodeck_AnimFrame_Clipboard" targ
+		mvto -50 -50
+
+*Special case for the animation preview frame
+	elif va03 = 12
+		seta game "Holodeck_AnimPreview" targ
+		mvto -50 -50
+
+*Special case for the Transformation Buffer frame
+	elif va03 = 13
+		seta game "Holodeck_TransformationBuffer" targ
+		mvto -50 -50
 	endi
+
 repe
 
 
@@ -761,9 +779,46 @@ scrp 1 1 64742 9010
 *position of comma is how many entries to skip in the string to get to the next line: 4	
 		setv va25 sins va70 1 ","
 
+		setv va26 va25
+		divv va26 2.0
+		subv va26 1
+		mulv va26 game "Holodeck_PixelSize"
+
+
+
+
+**round to the nearest int (problem: cant control if it rounds up or down)
+*		setv va26 ftoi va26
+*		setv va99 ftoi va99
+
+*round them DOWN to the nearest int. by cutting off everything after the decimal point.		
+		sets va26 vtos va26
+
+
+*find the decimal point
+		setv va27 sins va26 1 "."
+
+		subv va27 1
+
+*cut off everything else
+		sets va26 subs va26 1 va27
+
+*convert the strings back to integers
+		setv va26 stoi va26
+
+
+
+
+
+
+
+		subv _p1_ va26
+		subv _p2_ va26
+
 *position of comma-1 is brush hw/ in pixels: 3	
 		setv va24 va25
 		subv va24 1
+
 
 *store initial position of mouse cursor in VA02
 		setv VA02 _p1_
@@ -815,8 +870,6 @@ scrp 1 1 64742 9010
 
 				doif va49 <> " "
 
-					sets va49 "bib"
-
 ** 			CONVERT XY COORDINATE TO PART NUMBER **
 					call 9008 _p1_ _p2_
 
@@ -858,8 +911,8 @@ scrp 1 1 64742 9010
 *		sezz va70
 *		targ ownr
 
-		targ norn
-		sezz va49
+*		targ norn
+*		sezz va49
 *		sezz vtos va40
 		targ ownr
 
@@ -1150,6 +1203,41 @@ endm
 
 
 
+*****************************************************************
+*****************************************************************
+**  MAIN PIXELGRID "EAT" SCRIPT IS USED TO CLEAR CURRENT FRAME **
+******************************( 12 )*****************************
+*****************************************************************
+
+scrp 1 1 64742 12
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target stored canvas and store pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		pose 0
+
+*target main canvas and apply stored pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		pose 0
+
+
+	repe
+
+endm
 
 
 
@@ -1187,8 +1275,85 @@ scrp 1 1 64742 3
 
 	repe
 
-*	enum 1 1 64732
-*		kill targ
-*	next
+endm
 
+
+
+
+***********************************************************************
+***********************************************************************
+**  MAIN PIXELGRID "ACTIVATE 2" SCRIPT IS USED TO SAVE CURRENT FRAME **
+******************************( 2 )************************************
+***********************************************************************
+
+scrp 1 1 64742 2
+	targ norn
+	sezz "bumba"
+	targ ownr
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and store pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		setv va03 pose
+
+*target stored canvas and apply stored pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		pose va03
+
+
+	repe
+
+endm
+
+
+
+
+
+
+*****************************************************************************************
+*****************************************************************************************
+**  MAIN PIXELGRID "ACTIVATE 1" SCRIPT IS USED TO STORE CURRENT FRAME IN THE CLIPBOARD **
+*************************************( 1 )***********************************************
+*****************************************************************************************
+
+scrp 1 1 64742 1
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and store pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		setv va03 pose
+
+*target clipboard and apply stored pose for each pixel
+		targ game "Holodeck_AnimFrame_Clipboard"
+		part va01
+		pose va03
+
+
+	repe
 endm

@@ -1,4 +1,4 @@
-sets game "Holodeck_BrushSize" "C,"
+sets game "Holodeck_BrushSize" "X,"
 
 enum 1 1 64736
 	kill targ
@@ -56,8 +56,42 @@ pat: butt 1016 "holodeck_frame" 4 0 18 114 1 [] 1016 0
 
 
 
+
 *CLEAR BUTTON
 pat: butt 2001 "holodeck_frame" 1 0 0 130 1 [] 2001 0
+
+*CLEAR ALL BUTTON
+pat: butt 2011 "holodeck_frame" 36 0 120 170 1 [] 2011 0
+
+*COPY BUTTON
+pat: butt 2002 "holodeck_frame" 6 0 0 150 1 [] 2002 0
+
+*CUT BUTTON
+pat: butt 2003 "holodeck_frame" 8 0 0 170 1 [] 2003 0
+
+*PASTE BUTTON
+pat: butt 2004 "holodeck_frame" 10 0 40 130 1 [] 2004 0
+
+*FLIP X BUTTON
+pat: butt 2005 "holodeck_frame" 12 0 40 150 1 [] 2005 0
+
+*FLIP Y BUTTON
+pat: butt 2006 "holodeck_frame" 14 0 40 170 1 [] 2006 0
+
+*ROTATE 90 CLOCKWISE BUTTON
+pat: butt 2007 "holodeck_frame" 16 0 80 130 1 [] 2007 0
+
+*ROTATE 90 COUNTER-CLOCKWISE BUTTON
+pat: butt 2008 "holodeck_frame" 18 0 80 150 1 [] 2008 0
+
+*ROTATE 180 DEGREES BUTTON
+pat: butt 2009 "holodeck_frame" 20 0 80 170 1 [] 2009 0
+
+*INVERT COLOURS BUTTON
+pat: butt 2010 "holodeck_frame" 22 0 120 190 1 [] 2010 0
+
+
+
 
 ****************
 * TOOL PANEL!! *
@@ -343,8 +377,11 @@ endm
 *note: It's recommended you use a square font such as "Inversions" when editing the brushes.
 *It will be much easier to see the shapes.
 
-*C represents the center of a brush shape. (unimplemented)
+*Brush Width and Height are determined by the position of the first comma.
 
+*It will crash if you make a brush that isn't the same Height as Width!!!
+
+*the center of the brush is automatically calculated as Brush Width / 2 (rounded down) - 1 * PixelWidth (8)
 
 
 *SCRP 4000 is a script to hide all brush size buttons except for _P1_ which is called in every 400X script except 4000 itself.
@@ -374,7 +411,7 @@ endm
 
 scrp 1 1 64736 4001
 
-	sets game "Holodeck_BrushSize" "C,"
+	sets game "Holodeck_BrushSize" "X,"
 
 	call 4000 4001 0
 
@@ -382,7 +419,7 @@ endm
 
 scrp 1 1 64736 4002
 
-	sets game "Holodeck_BrushSize" "CX,"
+	sets game "Holodeck_BrushSize" "XX,"
 	adds game "Holodeck_BrushSize" "XX,"
 
 	call 4000 4002 0
@@ -392,7 +429,7 @@ endm
 scrp 1 1 64736 4003
 
 	sets game "Holodeck_BrushSize" " X ,"
-	adds game "Holodeck_BrushSize" "XCX,"
+	adds game "Holodeck_BrushSize" "XXX,"
 	adds game "Holodeck_BrushSize" " X ,"
 
 	call 4000 4003 0
@@ -402,7 +439,7 @@ endm
 scrp 1 1 64736 4004
 
 	sets game "Holodeck_BrushSize" "XXX,"
-	adds game "Holodeck_BrushSize" "XCX,"
+	adds game "Holodeck_BrushSize" "XXX,"
 	adds game "Holodeck_BrushSize" "XXX,"
 
 	call 4000 4004 0
@@ -412,7 +449,7 @@ endm
 scrp 1 1 64736 4005
 
 	sets game "Holodeck_BrushSize" " XX ,"
-	adds game "Holodeck_BrushSize" "XCXX,"
+	adds game "Holodeck_BrushSize" "XXXX,"
 	adds game "Holodeck_BrushSize" "XXXX,"
 	adds game "Holodeck_BrushSize" " XX ,"
 
@@ -424,7 +461,7 @@ scrp 1 1 64736 4006
 
 	sets game "Holodeck_BrushSize" " XXX ,"
 	adds game "Holodeck_BrushSize" "XXXXX,"
-	adds game "Holodeck_BrushSize" "XXCXX,"
+	adds game "Holodeck_BrushSize" "XXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXX,"
 	adds game "Holodeck_BrushSize" " XXX ,"
 
@@ -436,7 +473,7 @@ scrp 1 1 64736 4007
 
 	sets game "Holodeck_BrushSize" " XXXX ,"
 	adds game "Holodeck_BrushSize" "XXXXXX,"
-	adds game "Holodeck_BrushSize" "XXCXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXX,"
 	adds game "Holodeck_BrushSize" " XXXX ,"
@@ -450,7 +487,7 @@ scrp 1 1 64736 4008
 	sets game "Holodeck_BrushSize" "  XXX  ,"
 	adds game "Holodeck_BrushSize" " XXXXX ,"
 	adds game "Holodeck_BrushSize" "XXXXXXX,"
-	adds game "Holodeck_BrushSize" "XXXCXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXXX,"
 	adds game "Holodeck_BrushSize" " XXXXX ,"
 	adds game "Holodeck_BrushSize" "  XXX  ,"
@@ -464,7 +501,7 @@ scrp 1 1 64736 4009
 	sets game "Holodeck_BrushSize" "  XXXX  ,"
 	adds game "Holodeck_BrushSize" " XXXXXX ,"
 	adds game "Holodeck_BrushSize" "XXXXXXXX,"
-	adds game "Holodeck_BrushSize" "XXXCXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXXXX,"
 	adds game "Holodeck_BrushSize" " XXXXXX ,"
@@ -480,7 +517,7 @@ scrp 1 1 64736 4010
 	adds game "Holodeck_BrushSize" " XXXXXXX ,"
 	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
-	adds game "Holodeck_BrushSize" "XXXXCXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXXXXX,"
 	adds game "Holodeck_BrushSize" " XXXXXXX ,"
@@ -496,7 +533,7 @@ scrp 1 1 64736 4011
 	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
 	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
 	adds game "Holodeck_BrushSize" "XXXXXXXXXX,"
-	adds game "Holodeck_BrushSize" "XXXXCXXXXX,"
+	adds game "Holodeck_BrushSize" "XXXXXXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXXXXXX,"
 	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
@@ -531,9 +568,170 @@ endm
 
 
 
-
-*CLEAR BUTTON (WIP)
+*CLEAR BUTTON
 scrp 1 1 64736 2001
+
+*target and animate button (pre-action)
+	part 2001
+	pose 1
+
+*SCRIPT 12 (EAT) ON THE MAIN PIXELGRID IS USED TO CLEAR CURRENT FRAME
+	mesg writ game "Holodeck_PixelGrid" 12
+
+*target and animate button (post-action)
+	wait 2
+	part 2001
+	pose 0
+
+endm
+
+
+
+*CLEAR ALL BUTTON
+scrp 1 1 64736 2011
+
+*target and animate button (pre-action)
+	part 2011
+	pose 1
+
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and set pose 0
+		enum 1 1 64742
+			part va01
+			pose 0
+		next
+
+*target ALL frames and set pose 0
+		enum 1 1 64743
+			part va01
+			pose 0
+		next
+
+	repe
+
+
+*target and animate button (post-action)
+	wait 2
+	part 2011
+	pose 0
+
+endm
+
+
+
+*COPY BUTTON (WIP)
+scrp 1 1 64736 2002
+
+*target and animate button (pre-action)
+	part 2002
+	pose 1
+
+*SCRIPT 1 (ACTIVATE 1) (event number 0) ON THE MAIN PIXELGRID IS USED TO COPY PIXELGRID TO THE CLIPBOARD
+	mesg writ game "Holodeck_PixelGrid" 0
+
+*target and animate button (post-action)
+	wait 2
+	part 2002
+	pose 0
+
+endm
+
+
+
+*CUT BUTTON (WIP)
+scrp 1 1 64736 2003
+
+*target and animate button (pre-action)
+	part 2003
+	pose 1
+
+
+*SCRIPT 1 (ACTIVATE 1) (event number 0) ON THE MAIN PIXELGRID IS USED TO COPY PIXELGRID TO THE CLIPBOARD
+	mesg writ game "Holodeck_PixelGrid" 0
+
+*SCRIPT 12 (EAT) ON THE MAIN PIXELGRID IS USED TO CLEAR CURRENT FRAME
+	mesg writ game "Holodeck_PixelGrid" 12
+
+*target and animate button (post-action)
+	wait 2
+	part 2003
+	pose 0
+
+endm
+
+
+
+*PASTE BUTTON
+scrp 1 1 64736 2004
+
+*target and animate button (pre-action)
+	part 2004
+	pose 1
+
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target clipboard and store pose for each pixel
+		targ game "Holodeck_AnimFrame_Clipboard"
+		part va01
+		setv va03 pose
+
+*target main canvas and apply stored pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		pose va03
+
+*target main canvas and apply stored pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		pose va03
+
+
+	repe
+
+
+	targ ownr
+
+*target and animate button (post-action)
+	wait 2
+	part 2004
+	pose 0
+
+endm
+
+
+
+*FLIP X BUTTON (WIP)
+scrp 1 1 64736 2005
+
+*target and animate button (pre-action)
+	part 2005
+	pose 1
+
 
 	inst
 
@@ -554,7 +752,6 @@ scrp 1 1 64736 2001
 			pose 0
 		next
 
-*		rtar 1 1 64743
 		enum 1 1 64743
 			part va01
 			pose 0
@@ -562,8 +759,417 @@ scrp 1 1 64736 2001
 
 	repe
 
-*	enum 1 1 64732
-*		kill targ
-*	next
+
+*target and animate button (post-action)
+	wait 2
+	part 2005
+	pose 0
+
+endm
+
+
+
+*FLIP Y BUTTON (WIP)
+scrp 1 1 64736 2006
+
+*target and animate button (pre-action)
+	part 2006
+	pose 1
+
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and set pose
+		enum 1 1 64742
+			part va01
+			pose 0
+		next
+
+		enum 1 1 64743
+			part va01
+			pose 0
+		next
+
+	repe
+
+
+*target and animate button (post-action)
+	wait 6
+	part 2006
+	pose 0
+
+endm
+
+
+
+*ROTATE 90 CLOCKWISE BUTTON (WIP)
+scrp 1 1 64736 2007
+
+*target and animate button (pre-action)
+	part 2007
+	pose 1
+
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and set pose
+		enum 1 1 64742
+			part va01
+			pose 0
+		next
+
+		enum 1 1 64743
+			part va01
+			pose 0
+		next
+
+	repe
+
+
+*target and animate button (post-action)
+	wait 6
+	part 2007
+	pose 0
+
+endm
+
+
+
+*ROTATE 90 COUNTER-CLOCKWISE BUTTON (WIP)
+scrp 1 1 64736 2008
+
+*target and animate button (pre-action)
+	part 2008
+	pose 1
+
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and set pose
+		enum 1 1 64742
+			part va01
+			pose 0
+		next
+
+		enum 1 1 64743
+			part va01
+			pose 0
+		next
+
+	repe
+
+
+*target and animate button (post-action)
+	wait 2
+	part 2008
+	pose 0
+
+endm
+
+
+
+**ROTATE 180 DEGREES BUTTON (OLD BROKEN WIP) (might be useful for implementing symmetry)
+*scrp 1 1 64736 2009
+*
+**target and animate button (pre-action)
+*	part 2009
+*	pose 1
+*
+*
+*	inst
+*
+**pixel grid is 18x18
+*	setv va00 game "Holodeck_NumPixelsX"
+*	mulv va00 game "Holodeck_NumPixelsY"
+*
+*
+*	setv va01 0
+*	setv va02 va00
+*	addv va02 1
+*
+*	reps va00
+*
+*		addv va01 1
+*		subv va02 1
+*
+**target main canvas and set pose
+*		targ game "Holodeck_PixelGrid"
+*		part va01
+*		setv va03 pose
+*		part va02
+*		setv va04 pose
+*
+**		part va01
+**		pose va03
+*		part va02
+*		pose va03
+*
+*	repe
+*
+*	targ ownr
+*
+**target and animate button (post-action)
+*	wait 2
+*	part 2009
+*	pose 0
+*
+*endm
+
+
+*ROTATE 180 DEGREES BUTTON (WIP)
+scrp 1 1 64736 2009
+
+*target and animate button (pre-action)
+	part 2009
+	pose 1
+
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+*this number will run down from the max loops instead of up from 0.
+*this means it will be the opposite pixel, effectively rotating the image 180 degrees.
+	setv va02 va00
+	addv va02 1
+
+	reps va00
+
+		addv va01 1
+		subv va02 1
+
+*target main canvas and store pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		setv va03 pose
+
+*target Transformation Buffer and apply stored pose for each pixel
+		targ game "Holodeck_TransformationBuffer"
+		part va02
+		pose va03
+
+	repe
+
+
+*RUN THE WHOLE LOOP AGAIN BUT WITH SWAPPED TARGETS (BUFFER > PIXELGRID) AND WITHOUT REVERSING THE PIXEL ORDER
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and store pose for each pixel
+		targ game "Holodeck_TransformationBuffer"
+		part va01
+		setv va03 pose
+
+*target Transformation Buffer and apply stored pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		pose va03
+
+	repe
+
+
+
+
+
+
+*SCRIPT 2 (ACTIVATE 2) (event number 1) ON THE MAIN PIXELGRID IS USED TO COPY PIXELGRID TO THE SELECTED FRAME
+*(not working and making me think it will be good to move all the commands from the other .cos (holodeck_pixelgrid_partially_refactored) into this one.)
+*	mesg writ game "Holodeck_PixelGrid" 1
+
+
+*	wait 1
+
+*	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and store pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		setv va03 pose
+
+*target stored canvas and apply stored pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		pose va03
+
+
+
+	repe
+
+
+	targ ownr
+
+*target and animate button (post-action)
+	wait 2
+	part 2009
+	pose 0
+
+endm
+
+
+*INVERT COLOURS BUTTON (WIP)
+scrp 1 1 64736 2010
+
+*target and animate button (pre-action)
+	part 2010
+	pose 1
+
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and set pose
+		enum 1 1 64742
+			part va01
+
+
+*for each pixel...
+
+*count a number up from one, and count another down to zero from the max amount of colours.
+
+*starting at 1 skips the transparent colour.
+			setv va03 1
+*			setv va04 255
+
+*16 and not 17 or Black > White flip doesn't make sense
+
+			setv va04 16
+
+*set va05 to 1 when a pixel is already inverted. otherwise it will try to invert itself again and the colour won't appear to change.
+			setv va05 0
+
+*			reps 255
+			reps 16
+
+*if at any point the palette index of the pixel matches the iteration of the loop we're on
+				doif pose = va03 and va05 = 0
+*then set the palette index of the pixel to the opposing loop we're on (so 254 would become 1, 0 would become 255, etc)
+					pose va04
+*and mark the pixel as already inverted.
+					setv va05 1
+				endi
+
+				addv va03 1
+				subv va04 1
+
+			repe
+
+		next
+
+*		enum 1 1 64743
+*			part va01
+*			pose 0
+*		next
+
+	repe
+
+*	inst
+
+
+*SCRIPT 2 (ACTIVATE 2) (event number 1) ON THE MAIN PIXELGRID IS USED TO COPY PIXELGRID TO THE SELECTED FRAME
+*(not working and making me think it will be good to move all the commands from the other .cos (holodeck_pixelgrid_partially_refactored) into this one.)
+*	mesg writ game "Holodeck_PixelGrid" 1
+
+
+*	wait 1
+
+*	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and store pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		setv va03 pose
+
+*target stored canvas and apply stored pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		pose va03
+
+
+
+	repe
+
+
+	targ ownr
+
+
+
+*target and animate button (post-action)
+	wait 2
+	part 2010
+	pose 0
 
 endm

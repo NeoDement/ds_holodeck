@@ -73,7 +73,7 @@ scrp 1 1 31234 1002
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_1"
 	mesg writ game "Holodeck_PixelGrid" 3
-	
+
 endm
 
 scrp 1 1 31234 1003
@@ -82,7 +82,7 @@ scrp 1 1 31234 1003
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_2"
 	mesg writ game "Holodeck_PixelGrid" 3
-	
+
 endm
 
 scrp 1 1 31234 1004
@@ -91,7 +91,7 @@ scrp 1 1 31234 1004
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_3"
 	mesg writ game "Holodeck_PixelGrid" 3
-	
+
 endm
 
 scrp 1 1 31234 1005
@@ -100,7 +100,7 @@ scrp 1 1 31234 1005
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_4"
 	mesg writ game "Holodeck_PixelGrid" 3
-	
+
 endm
 
 scrp 1 1 31234 1006
@@ -109,7 +109,7 @@ scrp 1 1 31234 1006
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_5"
 	mesg writ game "Holodeck_PixelGrid" 3
-	
+
 endm
 
 scrp 1 1 31234 1007
@@ -127,7 +127,7 @@ scrp 1 1 31234 1008
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_7"
 	mesg writ game "Holodeck_PixelGrid" 3
-	
+
 endm
 
 scrp 1 1 31234 1009
@@ -135,8 +135,8 @@ scrp 1 1 31234 1009
 	call 1000 1009 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_8"
-	mesg writ game "Holodeck_PixelGrid" 3
-	
+*	mesg writ game "Holodeck_PixelGrid" 3
+
 endm
 
 scrp 1 1 31234 1010
@@ -144,6 +144,6 @@ scrp 1 1 31234 1010
 	call 1000 1010 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_9"
-	mesg writ game "Holodeck_PixelGrid" 3
-	
+*	mesg writ game "Holodeck_PixelGrid" 3
+
 endm
