@@ -1,0 +1,56 @@
+<Main>
+Light Blue
+0 0 0 0 6 10 8 1 128 12 1 0 0
+</Main>
+<OptIcons>
+own
+0 5 492 0
+med
+0 6 522 0
+sci
+0 7 552 0
+inj
+0 8 620 0
+hat
+0 18 462 0
+grv
+0 19 582 0
+help
+1 27 0 390
+</OptIcons>
+<Icons>
+alert
+415 0
+fav
+385 0
+eco
+650 0
+cre
+344 0
+wld
+314 0
+</Icons>
+<OtherXY>
+226 0 0 22 700 0 0 0
+</OtherXY>
+<Keys>
+2
+skins
+2
+load
+0
+0
+0
+0
+0
+0
+0
+0
+0
+</Keys>
+<Alerts>
+3
+7
+8
+11
+</Alerts>

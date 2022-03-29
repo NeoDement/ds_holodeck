@@ -24,7 +24,7 @@ setv game "Holodeck_PixelSize" 8
 *PIXEL SIZE ON THE REAL SCALE PREVIEW IMAGE (Each pixel is represented by an X*X block)
 setv game "Holodeck_PixelSizeTiny" 2
 
-*DEFAULT BRUSH SIZE IS 1x1
+*DEFAULT BRUSH SIZE IS 1x1 //todo: this is defined in multiple places
 sets game "Holodeck_BrushSize" "X,"
 
 
@@ -435,7 +435,7 @@ endm
 
 *******************************************************************************************
 *******************************************************************************************
-**  CONVERT XY COORDINATE TO PART NUMBER (NON MULTIPLIED!!!) (_P1_ should be mouseX, _P2_ should be mouseY_) **
+**  CONVERT XY COORDINATE TO PART NUMBER (NOT MULTIPLIED!!!!) (_P1_ should be mouseX, _P2_ should be mouseY_) **
 ***********************(9009)**************************************************************
 *******************************************************************************************
 
@@ -525,8 +525,6 @@ scrp 1 1 64742 9009
 	doif va99 < 0
 		setv va99 0
 	endi
-
-
 *end of clamp operation
 
 
@@ -550,7 +548,7 @@ scrp 1 1 64742 9009
 	addv va98 va99
 
 *add 1 to the final value so we're base 1 instead of base 0
-	addv va98 1
+*	addv va98 1
 
 
 	targ ownr
@@ -622,33 +620,33 @@ scrp 1 1 64742 9008
 	divv va98 game "Holodeck_PixelSize"
 	divv va99 game "Holodeck_PixelSize"
 
-*round to the nearest int (cant control if it rounds up or down)
-	setv va98 ftoi va98
-	setv va99 ftoi va99
+**round to the nearest int (cant control if it rounds up or down)
+*	setv va98 ftoi va98
+*	setv va99 ftoi va99
 
 
 
 *no longer needed but keeping it here just in case/as reference
 
-**round them DOWN to the nearest int. by cutting off everything after the decimal point.		
-*	sets va98 vtos va98
-*	sets va99 vtos va99
-*
-*
-**find the decimal point
-*	setv va50 sins va98 1 "."
-*	setv va51 sins va99 1 "."
-*
-*	subv va50 1
-*	subv va51 1
-*
-**cut off everything else
-*	sets va98 subs va98 1 va50
-*	sets va99 subs va99 1 va51
-*
-**convert the strings back to integers
-*	setv va98 stoi va98
-*	setv va99 stoi va99
+*round them DOWN to the nearest int. by cutting off everything after the decimal point.		
+	sets va98 vtos va98
+	sets va99 vtos va99
+
+
+*find the decimal point
+	setv va50 sins va98 1 "."
+	setv va51 sins va99 1 "."
+
+	subv va50 1
+	subv va51 1
+
+*cut off everything else
+	sets va98 subs va98 1 va50
+	sets va99 subs va99 1 va51
+
+*convert the strings back to integers
+	setv va98 stoi va98
+	setv va99 stoi va99
 
 
 
@@ -682,8 +680,6 @@ scrp 1 1 64742 9008
 	doif va99 < 0
 		setv va99 0
 	endi
-
-
 *end of clamp operation
 
 
@@ -946,16 +942,13 @@ scrp 1 1 64742 9010
 *position of comma is how many entries to skip in the string to get to the next line: 4	
 		setv va25 sins va70 1 ","
 
-
-
-************************
-**FIND CENTRE OF BRUSH**
-************************
-
 		setv va26 va25
 		divv va26 2.0
 		subv va26 1
 		mulv va26 game "Holodeck_PixelSize"
+
+
+
 
 **round to the nearest int (problem: cant control if it rounds up or down)
 *		setv va26 ftoi va26
@@ -976,13 +969,14 @@ scrp 1 1 64742 9010
 *convert the strings back to integers
 		setv va26 stoi va26
 
+
+
+
+
+
+
 		subv _p1_ va26
 		subv _p2_ va26
-
-*******************************
-**END OF FIND CENTRE OF BRUSH**
-*******************************	
-
 
 *position of comma-1 is brush hw/ in pixels: 3	
 		setv va24 va25
@@ -1040,7 +1034,7 @@ scrp 1 1 64742 9010
 				doif va49 <> " "
 
 ** 			CONVERT XY COORDINATE TO PART NUMBER **
-*					call 9009 _p1_ _p2_
+*NOT MULTIPLIED By PIXELSIZE ANYMORE!
 					call 9008 _p1_ _p2_
 
 *			addv _p1_ game "Holodeck_PixelSize"
@@ -1051,8 +1045,6 @@ scrp 1 1 64742 9010
 					setv va10 ov69
 
 					part va10
-
-
 					pose va50
 
 *target the currently selected smaller pixel grid and add the same brush stroke
@@ -1069,7 +1061,7 @@ scrp 1 1 64742 9010
 				addv va05 1
 
 *	add pixel size to cursor _X_ position
-*				addv _p1_ game "Holodeck_PixelSize"
+				addv _p1_ game "Holodeck_PixelSize"
 			repe
 
 			setv _p1_ va02

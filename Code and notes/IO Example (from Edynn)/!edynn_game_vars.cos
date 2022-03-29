@@ -1,0 +1,201 @@
+
+
+*all worlds offline for now
+setv game "edynn_offline_world" 1
+**metarooms to install
+setv eame "mroom_syla_corridor" 1
+setv eame "mroom_syla_playroom" 1
+setv eame "mroom_syla_tomb" 1
+
+**docking check moved to !!map.cos
+
+**carried over from DS
+setv game "engine_debug_keys" 0
+setv game "engine_mute" 0
+sets game "edynn_birth_track" ""
+sets game "engine_near_death_track_name" ""
+setv game "engine_creature_template_size_in_mb" 2
+setv game "Grettin" 1
+setv game "engine_creature_pickup_status" 2
+setv game "c3_meta_transition" 1
+setv game "engine_zlib_compression" 5
+setv game "engine_plane_for_lines" 8500
+setv eame "engine_clone_upon_import" 0
+seta game "c3_default_focus" null
+sets game "user_of_this_world" "someuser"
+
+*make the port lines longer (grah, this doesn't actually work :( )
+*setv game "engine_distance_before_port_line_warns" 1000
+*setv game "engine_distance_before_port_line_snaps" 1400
+
+*seasons only have 3 days now
+setv game "engine_LengthOfDayInMinutes" 20
+setv game "engine_LengthOfSeasonInDays" 3
+setv game "engine_NumberOfSeasons" 4
+
+*creature var's
+setv game "c3_creature_accg" 5
+setv game "c3_creature_bhvr" 15
+setv game "c3_creature_attr" 198
+setv game "c3_creature_perm" 90
+
+setv game "engine_dumb_creatures" 0
+setv game "engine_synchronous_learning" 0
+
+*setv game "breeding_limit" 6
+*setv game "warp_limit" 10
+*setv game "total_population" 10
+*setv game "extra_eggs_allowed" 2
+*setv game "egg_limit" 8
+
+setv game "engine_multiple_birth_first_chance" 0.08
+setv game "engine_multiple_birth_subsequent_chance" 0.04
+setv game "engine_multiple_birth_maximum" 6
+setv game "engine_multiple_birth_identical_chance" 0.5
+
+
+*no_pause var's
+targ pntr
+setv name "edynn_no_pause" 1
+setv name "edynn_no_unpause" 1
+
+*********************************************
+*misc. stuff needed for gui
+setv game "norn_egg_types" 17
+seta game "edynn_message_maker" null
+seta game "edynn_quit_message" null
+seta game "edynn_kit_monitor" null
+seta game "edynn_autosaver" null
+*setv game "pntr_Red" 128
+*setv game "pntr_Green" 128
+*setv game "pntr_Blue" 128
+
+
+**************************************
+**begin parsing profile
+file iope 1 "PROFILES"
+sets va00 "PROFILE--"
+adds va00 innl
+file iope 1 va00
+doif inok = 0
+*no profile! panic!
+	dbg: asrt "profile is missing!!" = ""
+endi
+*now, begin to parse
+loop
+	sets va00 innl
+untl va00 = "<Main>"
+*main section. skin, volume, population, hand tint, gui snap etc.
+sets game "edynn_current_skin" innl
+volm 0 inni
+volm 2 inni
+outv mute 3 inni
+setv game "engine_dumb_creatures" inni
+setv game "breeding_limit" inni
+setv game "warp_limit" inni
+setv game "egg_limit" inni
+setv game "pntr_Red" inni
+setv game "pntr_Green" inni
+setv game "pntr_Blue" inni
+setv game "edynn_gui_snap" inni
+setv game "edynn_gui_lock" inni
+setv game "edynn_autosave_time" inni
+
+loop
+	sets va00 innl
+untl va00 = "<OptIcons>"
+sets va00 innl
+setv va01 1
+loop
+*set icon vars- base, x & y
+	sets va02 "edynn_gui_opticon_"
+	adds va02 vtos va01
+	sets game va02 va00
+	sets va02 "edynn_gui_"
+	adds va02 va00
+	sets va03 va02
+	adds va03 "_unused"
+	setv game va03 inni
+	sets va03 va02
+	adds va03 "_base"
+	setv game va03 inni
+	sets va03 va02
+	adds va03 "_x"
+	setv game va03 inni
+	adds va02 "_y"
+	setv game va02 inni
+	*throw away the endline
+	outs innl
+	*on to the next one
+	sets va00 innl
+	addv va01 1
+untl va00 = "</OptIcons>" or inok = 0
+
+loop
+	sets va00 innl
+untl va00 = "<Alerts>" or inok = 0
+doif inok = 1
+*get each number (string really), turn on that alert
+	sets va01 innl
+	doif va01 ne "</Alerts>"
+loop
+	sets va02 "edynn_alert_hist_"
+	adds va02 va01
+	setv game va02 1
+	sets va01 innl
+untl va01 = "</Alerts>" or inok = 0
+	endi
+endi
+
+file iclo
+
+***gui var's
+*setv game "edynn_gui_snap" 1
+*setv game "edynn_gui_lock" 0
+
+*** create skin vars
+sets game "edynn_skin_texttint" pray agts game "edynn_current_skin" "Skin Text Tint" "<tint 0 0 0>"
+file iope 1 "SKINS"
+doif inok = 0
+	dbg: asrt "SKINS file is missing!!" = ""
+endi
+loop
+	sets va01 innl
+	sets va02 "edynn_gui_skin_"
+*get var name
+	adds va02 va01
+	adds va01 "_"
+	sets va03 va01 
+	adds va03 lowa game "edynn_current_skin"
+	*make sure file exists
+	doif snax va03 = 0
+		sets va03 va01
+		adds va03 "default"
+	endi 
+	sets game va02 va03
+untl inok = 0
+file iclo
+
+*save volume vars
+setv game "edynn_music_vol0" volm 0
+setv game "edynn_music_vol2" volm 2
+setv game "edynn_music_mute" mute 3 0
+
+
+*pose 0 for 90x15 button
+setv game "edynn_gui_butt-90x15" 0
+setv game "edynn_gui_text-90x15" 6
+setv game "edynn_gui_uparr-90x15" 0
+setv game "edynn_gui_dnarr-90x15" 2
+*pose 7 for 120x15 button
+setv game "edynn_gui_butt-120x15" 2
+setv game "edynn_gui_text-120x15" 7
+setv game "edynn_gui_uparr-120x15" 4
+setv game "edynn_gui_dnarr-120x15" 6
+*start of gui icons
+*setv game "edynn_gui_icons" 1
+*start of ok/cancel buttons
+*setv game "edynn_gui_ok" 45
+
+*******************************************
+

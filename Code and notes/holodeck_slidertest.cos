@@ -1,0 +1,481 @@
+enum 1 1 64769
+	kill targ
+next
+
+enum 1 1 62000
+	kill targ
+next
+
+
+
+new: comp 1 1 64769 "holodeck_slider" 0 0 4
+
+*scrp 1001 runs when enter is pressed
+pat: text 1 "holodeck_slider" 3 148 -1 1 1001 "WhiteOnTransparentChars"
+
+
+
+scrp 1 1 64769 10
+
+	new: simp 1 1 62000 "holodeck_slider" 0 2 5
+
+	seta va99 targ
+
+
+	targ ownr
+
+*Listen for these events:
+* 8 Raw Mouse Down + 16 Raw Mouse Up
+*imsk 24
+* + 4 Raw Mouse Move
+	imsk 28
+
+*va00 - inital x pos
+	setv va00 343
+
+*va01 - initial y pos
+	setv va01 90589
+
+*va02 - slider width
+	setv va02 142
+
+*va03 - slider height
+	setv va03 23
+
+*store slider head in an easily accessible variable
+	seta ov02 va99
+
+*store initial value of slider
+
+*TODO: DON'T ASSUME IT'S 0.5 WHEN LOADING FROM A FILE?
+
+	setv ov99 0.5
+
+	mvto va00 va01
+
+*target the slider head and run the function to position the slider
+*targ ov02
+*call 1000 ov99 0
+
+*call 2000 ov99 0
+
+*mvto va00 va01
+
+
+
+
+*target the slider head and run the function to position the slider
+
+	call 2000 ov99 0
+
+	call 1002 vtos 0 1
+
+endm
+
+
+
+
+*
+**_P1_ is value to set slider to, used when loading from file or initializing
+*
+*scrp 1 1 62000 1000
+*
+*targ ownr
+*
+*	inst
+*
+*
+**clamp slider to values inside the bar
+*
+*		doif va00 < posl
+*			setv va00 posl
+*		endi
+*
+*
+*		setv va03 posl
+*		addv va03 wdth
+*
+*
+*		doif va00 > va03
+*			setv va00 va03
+*		endi
+*
+**todo: maybe check if the slider head is null and create it here if it is.
+*		targ ov02
+*
+*
+**subtract half the width of the playhead sprite to get the offset correct.
+*		subv va00 5
+*
+*
+*		mvto va00 va02
+*
+*
+*
+*endm
+
+
+
+
+*PAUSE the game when drawing on the canvas and change tickrate to 20ms. this allows much smoother update rate for guis and drawing surfaces.
+*call 9999 ownr 0
+
+
+
+
+
+
+
+
+
+*UNPAUSE/RESUME the game when done drawing on the canvas.
+
+*call 9998 0 0
+
+
+
+
+
+
+*****************************************
+** MOVE SLIDER HEAD TO CORRECT POSITION *
+***************** 2000 ******************
+*****************************************
+*
+**_p1_ is the value to set the slider to
+*
+*
+*scrp 1 1 64769 2000
+*
+**********************************************
+** CONVERT SLIDER POSITION INTO A PERCENTAGE *
+**********************************************
+*
+**Get the position on the slider
+*setv VA00 _P1_
+*mulv VA00 1.0
+*
+**Get the MAXIMUM position on the slider
+*setv VA01 WDTH
+*mulv VA01 1.0
+*
+**Divide (chem amount) by (MAX chem amount)
+*divv VA00 VA01
+*
+**Multiply the result by 100 to get out percentage
+*mulv VA00 100.0
+*
+*endm
+
+
+
+
+
+
+
+
+
+
+*press enter in text box!
+
+scrp 1 1 64769 1001
+
+	part 1
+
+	call 1002 ptxt 1
+
+endm
+
+
+
+
+
+
+*set textbox text from _p1_ into a number between -1.0 and +1.0 (including the + sign)
+*and then put the result into part number _p2_.
+
+scrp 1 1 64769 1002
+
+
+
+	part _p2_
+
+	setv va00 stof _p1_
+
+	doif va00 < -1.0
+		setv va00 -1.0
+	endi
+
+	doif va00 > 1.0
+		setv va00 1.0
+	endi
+
+
+	mulv va00 1.0
+
+
+	doif va00 > 0.1
+		sets va01 "+"
+		adds va01 vtos va00
+	elif va00 < -0.1
+		sets va01 vtos va00
+	else
+		sets va01 "0.0"
+	endi
+
+
+
+	doif strl va01 > 3
+		sets va01 subs va01 1 4
+	endi
+
+
+	ptxt va01
+
+	targ null
+
+	fcus
+
+
+endm
+
+
+
+
+
+
+
+
+****************************************
+* MOVE SLIDER HEAD TO CORRECT POSITION *
+**************** 2000 ******************
+****************************************
+
+*_p1_ is the value to set the slider to
+
+
+scrp 1 1 64769 2000
+
+*********************************************
+* CALCULATE PERCENTAGE *
+*********************************************
+
+	setv va02 post
+
+*Get the value to set the slider to from _P1_
+	setv VA00 _P1_
+	mulv VA00 1.0
+
+*Divide the result by 100 to get the fraction
+*(THIS IS NOT NEEDED BECAUSE WE ARE STORING VALUES AS FRACTIONS ANYWAY)
+*divv VA00 100.0
+
+*multiply the value by the max value of the slider to get the position to put it in.
+	mulv VA00 wdth
+
+*add the position of the control to the value, so that it appears in the correct place.
+	addv Va00 posl
+
+*put final value in ov98.
+*	setv ov98 va00
+
+
+*	targ ov00
+
+
+
+**todo: maybe check if the slider head is null and create it here if it is.
+	targ ov02
+
+
+**subtract half the width of the playhead sprite to get the offset correct.
+	subv va00 5
+
+
+	mvto va00 va02
+
+endm
+
+
+
+
+
+
+
+
+*TODO: IT SHOULD BE CHECKING IF IT'S IN THE BOUNDS OF THE CANVAS HERE TOO!
+
+*RAW MOUSE DOWN SCRIPT
+
+*ov00 is set to 1 when the mouse is pressed down.
+
+scrp 1 1 64769 76
+
+*get pointer coords
+	targ pntr
+
+	setv va00 posl
+	setv va01 post
+
+	targ ownr
+
+	call 9007 va00 va01
+
+*1 - left mouse button
+	doif ov03 = 1 and _p1_ = 1
+
+*set ov00 to 1 so the mouse move script knows to keep drawing when the mouse moves.
+		setv ov00 1
+
+*		inst
+
+*DRAW AT X/Y WITH CURRENTLY SELECTED BRUSH
+		call 9010 va00 va01
+
+
+	endi
+endm
+
+
+
+
+*RAW MOUSE UP SCRIPT
+
+*ov00 is set to 0 when the mouse is NOT pressed down.
+
+scrp 1 1 64769 77
+
+	setv ov00 0
+
+*right mouse button (currently disabled)
+*	doif _p1_ = 2
+
+
+*		inst
+*		enum 1 1 64732
+*			kill targ
+*		next
+
+*	endi
+
+endm
+
+
+
+
+
+*RAW MOUSE MOVE SCRIPT
+
+scrp 1 1 64769 75
+
+
+	setv va02 post
+
+*get pointer coords
+	targ pntr
+
+	setv va00 posl
+	setv va01 post
+
+
+	targ ownr
+
+	inst
+
+*CHECK IF THE POINTER IS OVER THE DRAWING SURFACE (OV03 STORES IF WE'RE OVER THE DRAWING SURFACE OR NOT)
+	call 9007 va00 va01
+	doif ov00 = 1
+
+
+
+*clamp slider to values inside the bar
+
+		doif va00 < posl
+			setv va00 posl
+		endi
+
+		setv va03 posl
+		addv va03 wdth
+
+
+		doif va00 > va03
+			setv va00 va03
+		endi
+
+		part 1
+
+*
+
+*crappy temp maths
+*gets the right values but very wasteful to calculate all this crapola
+		subv va00 posl
+		subv va00 70
+		mulv va00 2
+		divv va00 wdth
+		ptxt vtos va00
+		call 1002 vtos va00 1
+		mulv va00 wdth
+		divv va00 2
+		addv va00 70
+		addv va00 posl
+
+
+*todo: maybe check if the slider head is null and create it here if it is.
+		targ ov02
+
+
+*subtract half the width of the playhead sprite to get the offset correct.
+		subv va00 5
+
+
+		mvto va00 va02
+
+
+	endi
+
+endm
+
+
+
+
+
+
+
+*****************************************************************************************************
+*****************************************************************************************************
+**  CHECK IF THE POINTER IS OVER THE DRAWING PANEL (_P1_ should be mouseX, _P2_ should be mouseY_) **
+***********************(9007)************************************************************************
+*****************************************************************************************************
+
+************************************************
+* RETURNS 1 (TRUE) TO OV03 IF WE ARE IN BOUNDS *
+************************************************
+
+scrp 1 1 64769 9007
+
+*get control bounds and store them in va00, va01, va02 and va03
+
+	inst
+
+	setv va00 posl
+	setv va01 post
+
+	setv va02 posl
+	addv va02 wdth
+
+	setv va03 post
+	addv va03 hght
+
+
+*if the mouse cursor is inside the control bounds
+	doif _p1_ > va00 and _p1_ < va02 and _p2_ > va01 and _p2_ < va03
+
+		setv OV03 1
+
+	else
+
+		setv OV03 0
+
+	endi
+
+endm
