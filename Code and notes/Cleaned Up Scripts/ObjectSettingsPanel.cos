@@ -1,0 +1,635 @@
+enum 1 1 64714
+	kill targ
+next
+
+
+
+setv game "Holodeck_MaxImageNameAttempts" 100
+
+
+new: comp 1 1 64714 "holodeck_options" 0 0 1
+*new: comp 1 1 64714 "holodeck_options_template" 0 0 1
+
+*OV97 - inital x pos
+*setv OV97 333
+*OV98 - initial y pos
+*setv OV98 90589
+*OV99 - initial value
+*setv OV99 0.0
+
+*the Create Agent(!!) button
+*pat: butt 1 "small_useful_screen" 2 2 50 50 2 [] 1000 0
+
+
+**SHARED BUTTONS
+
+*pat: text 9000 "holodeck_settings" 3 283 381 1 9000 "whiteontransparentchars"
+* sprite name: 283, 381
+
+pat: butt 9001 "holodeck_settings" 1 0 50 50 1 [] 9001 0
+*Make it real:  54, 349
+
+
+pat: fixd 1 "holodeck_textboxes" 3 25 390 1 "whiteontransparentchars"
+part 1
+ptxt "Specify a list of animation frames such as 123 to animate the current object."
+
+pat: fixd 2 "holodeck_textboxes" 3 25 435 1 "whiteontransparentchars"
+part 2
+ptxt "Animation String:"
+
+pat: text 3 "holodeck_textboxes" 0 152 435 1 1001 "whiteontransparentchars"
+part 3
+ptxt "0123456789"
+
+pat: fixd 4 "holodeck_textboxes" 3 25 463 1 "whiteontransparentchars"
+part 4
+ptxt "Number of times to play:"
+
+pat: text 5 "holodeck_textboxes" 1 206 463 1 1001 "whiteontransparentchars"
+part 5
+ptxt "1"
+
+*pat: fixd 6 "holodeck_textboxes" 3 108 491 1 "whiteontransparentchars"
+pat: fixd 6 "holodeck_textboxes" 3 25 491 1 "whiteontransparentchars"
+part 6
+ptxt "Frame delay:"
+
+pat: text 7 "holodeck_textboxes" 1 206 491 1 1001 "whiteontransparentchars"
+part 7
+ptxt "5"
+
+
+
+mvto 530 90468
+
+
+
+
+*enum 1 1 64769
+*	kill targ
+*next
+*
+*enum 1 1 62000
+*	kill targ
+*next
+*
+*
+*
+*
+*
+*		
+*		
+*		
+*		
+*		
+*		
+*		
+*
+*
+**new: comp 1 1 64769 "holodeck_slider" 0 0 4
+*
+*pat: butt 1001 "holodeck_slider" 0 0 VA00 VA01 2 [] 1001 0
+*
+**OV97 - inital x pos
+**setv OV97 53
+**OV98 - initial y pos
+**setv OV98 268
+**OV99 - initial value
+**setv OV99 0.0
+*
+*seta va50 targ
+*
+**new: comp 1 1 64769 "holodeck_slider" 0 0 4
+**OV97 - inital x pos
+*setv OV97 320
+**OV98 - initial y pos
+*setv OV98 268
+**OV99 - initial value
+*setv OV99 0.0
+*
+*seta va51 targ
+*
+*
+*new: comp 1 1 64769 "holodeck_slider" 0 0 4
+**OV97 - inital x pos
+*setv OV97 53
+**OV98 - initial y pos
+*setv OV98 268
+**OV99 - initial value
+*setv OV99 0.0
+*
+*seta va52 targ
+*
+*
+*new: comp 1 1 64769 "holodeck_slider" 0 0 4
+**OV97 - inital x pos
+*setv OV97 799
+**OV98 - initial y pos
+*setv OV98 268
+**OV99 - initial value
+*setv OV99 0.0
+*
+*seta va53 targ
+
+
+
+
+
+
+scrp 1 1 64714 1001
+
+	targ null
+
+	fcus
+
+endm
+
+
+
+
+
+*Pushed the button that makes it real!!!!!!!
+
+scrp 1 1 64714 9001
+
+	lock
+
+*button push anim
+	part 9001
+	anim [1 1 1 0]
+
+*get object name (todo: this is so obsolete)
+*	part 9000
+*	sets va50 ptxt
+
+	snde "poyy"
+
+	inst
+
+
+
+
+
+	setv va03 0
+
+	reps 10
+
+
+
+		doif va03 = 0
+			targ game "Holodeck_AnimFrame_0"
+		elif va03 = 1
+			targ game "Holodeck_AnimFrame_1"
+		elif va03 = 2
+			targ game "Holodeck_AnimFrame_2"
+		elif va03 = 3
+			targ game "Holodeck_AnimFrame_3"
+		elif va03 = 4
+			targ game "Holodeck_AnimFrame_4"
+		elif va03 = 5
+			targ game "Holodeck_AnimFrame_5"
+		elif va03 = 6
+			targ game "Holodeck_AnimFrame_6"
+		elif va03 = 7
+			targ game "Holodeck_AnimFrame_7"
+		elif va03 = 8
+			targ game "Holodeck_AnimFrame_8"
+		elif va03 = 9
+			targ game "Holodeck_AnimFrame_9"
+		endi
+
+
+
+*todo: put each frame in use into the buffer one by one and capture them
+*	targ game "Holodeck_AnimFrame_Selected"
+
+
+*find the center of the mini pixel image
+		setv va98 posx
+		setv va99 posy
+
+*set to the width and height of the mini pixel image
+		setv va96 36
+		setv va97 36
+
+		targ ownr
+
+
+
+
+
+*todo: get object name
+		sets VA00 "NewAnimTest"
+
+*todo: get frame number
+*	setv VA03 0
+
+*variable to keep track of loop iterations
+		setv VA02 0
+
+*try and find a filename that isn't in use
+		loop
+
+			sets VA01 VA00
+
+			doif VA02 > 1
+				adds VA01 vtos VA02
+			endi
+
+			adds VA01 "_"
+
+			adds VA01 vtos VA03
+
+*make sure the filename is guaranteed-safe
+			sets VA01 fvwm VA01
+
+			addv VA02 1
+
+*todo: need to do a fix here. EXAMPLE: MyCoolAnim_0 might exist but not MyCoolAnim_1.
+*Then you attempt to add an extra frame and press "Create Object" and it will detect MyCoolAnim_0 and create MyCoolAnim2_0,
+*but because MyCoolAnim_1 didn't exist it will get confused and create MyCoolAnim_1.
+*This will create big errors in the play anim function.
+
+		untl snax VA01 = 0 or VA02 = game "Holodeck_MaxImageNameAttempts"
+
+
+*cancel creating the object entirely if we hit the max attempts
+		doif VA02 = game "Holodeck_MaxImageNameAttempts"
+			snde "no__"
+*todo: pop up a msgbox error here
+			stop
+		endi
+
+
+
+*take the photo!
+*(unfortunately the scale parameter at the end doesnt seem to do anything)
+		snap va01 va98 va99 va96 va97 100
+
+*		wait 1
+
+*if the image doesn't exist after you created it
+		doif snax VA01 = 0
+			snde "no__"
+*todo: pop up a msgbox error here
+			stop
+		endi
+
+
+*increment frame number count
+		addv va03 1
+
+	repe
+
+*PreDefined Actions
+* 0 - Nothing
+* 1 - Apply Velocity
+* 2 - Do Action on Creature
+
+	setv VA10 1
+
+	setv VA11 -25
+	setv VA12 25
+	setv VA13 -25
+	setv VA14 -40
+
+*todo: construct a chem/stim string using a function
+	sets VA15 "ZZZZZZZZ"
+
+	sets VA16 "dr10"
+
+
+	part 3
+	sets VA17 ptxt
+	adds VA17 "xx"
+
+
+
+*va99 = get AnimString string length.
+	setv va99 strl VA17
+
+	part 7
+
+*va16 = the final character of the string, as a char. (FrameDelay)
+	char VA17 va99 stoi ptxt
+
+	subv va99 1
+
+	part 5
+
+*va17 = the 2nd from final character of the string, as a char. (NumLoops)
+	char VA17 va99 stoi ptxt
+
+
+
+*Initial Gallery Name
+	sets VA90 VA01
+*Plane
+	setv VA91 5000
+
+	new: simp 1 1 64730 VA90 0 0 VA91
+
+
+
+
+*TODO: test code to classify the new object as a toy
+
+
+
+*	0 - <Invisible to Creatures>
+*	1 - Hand
+*	2 - Door
+*	3 - Seed
+*	4 - Plant
+*	5 - Weed
+*	6 - Leaf
+*	7 - Flower
+*	8 - Fruit
+*	9 - Manky
+*	10 - Detritus
+*	11 - Food
+*	12 - Button
+*	13 - Bug
+*	14 - Pest
+*	15 - Critter
+*	16 - Beast
+*	17 - Nest
+*	18 - Animal egg
+*	19 - Weather
+*	20 - Bad
+*	21 - Toy
+*	22 - Incubator
+*	23 - Dispenser
+*	24 - Tool
+*	25 - Potion
+*	26 - Elevator
+*	27 - Teleporter
+*	28 - Machinery
+*	29 - Creature egg
+*	30 - Norn home
+*	31 - Grendel home
+*	32 - Ettin home
+*	33 - Gadget
+*	34 - Portal
+*	35 - Vehicle
+*	36 - Norn
+*	37 - Grendel
+*	38 - Ettin
+*	39 - Something (Geat)
+
+*toy
+	cato 21
+*relevant toy bhvr according to Creatures Development Standards	
+	bhvr 43
+
+
+
+
+
+
+* Carryable + Mouseable + Activateable + Suffer Collisions + Suffer Physics
+	attr 199
+
+*Activate 1 + 2
+*bhvr 3
+
+*	perm 100
+*	accg 3
+*	fric 70
+*	aero 1
+*	elas 10
+
+
+	aero 10
+	perm 60
+	accg 2
+	elas 90
+	fric 90
+
+
+
+
+	mvsf 394 90610
+
+
+****************************************************
+*                  ACTIVATE 1                      *
+****************************************************
+
+*PreDefined Action (integer):
+	setv OV10 VA10
+
+*Action Params (any):
+	setv OV11 VA11
+	setv OV12 VA12
+	setv OV13 VA13
+	setv OV14 VA14
+
+*Chems to stim and amounts to stim them (string)
+	sets OV15 VA15
+
+*Sound to play (string):
+	sets OV16 VA16
+
+*Anim String (string):
+	sets OV17 VA17
+
+*****************************************************
+**                  ACTIVATE 2                      *
+*****************************************************
+*
+**PreDefined Action (integer):
+*	setv OV20 VA20
+*
+**Action Params (any):
+*	setv OV21 VA21
+*	setv OV22 VA22
+*	setv OV23 VA23
+*	setv OV24 VA24
+*
+**Chems to stim and amounts to stim them (string)
+*	sets OV25 VA25
+*
+**Sound to play (string):
+*	sets OV26 VA26
+*
+**Anim String (string):
+*	sets OV27 VA27
+*
+*****************************************************
+**                     HIT                          *
+*****************************************************
+*
+**PreDefined Action (integer):
+*	setv OV30 VA30
+*
+**Action Params (any):
+*	setv OV31 VA31
+*	setv OV32 VA32
+*	setv OV33 VA33
+*	setv OV34 VA34
+*
+**Chems to stim and amounts to stim them (string)
+*	sets OV35 VA35
+*
+**Sound to play (string):
+*	sets OV36 VA36
+*
+**Anim String (string):
+*	sets OV37 VA37
+*
+*****************************************************
+**                     EAT                          *
+*****************************************************
+*
+**PreDefined Action (integer):
+*	setv OV40 VA40
+*
+**Action Params (any):
+*	setv OV41 VA41
+*	setv OV42 VA42
+*	setv OV43 VA43
+*	setv OV44 VA44
+*
+**Chems to stim and amounts to stim them (string)
+*	sets OV45 VA45
+*
+**Sound to play (string):
+*	sets OV46 VA46
+*
+**Anim String (string):
+*	sets OV47 VA47
+*
+*****************************************************
+**                    PICKUP                        *
+*****************************************************
+*
+**PreDefined Action (integer):
+*	setv OV50 VA50
+*
+**Action Params (any):
+*	setv OV51 VA51
+*	setv OV52 VA52
+*	setv OV53 VA53
+*	setv OV54 VA54
+*
+**Chems to stim and amounts to stim them (string)
+*	sets OV55 VA55
+*
+**Sound to play (string):
+*	sets OV56 VA56
+*
+**Anim String (string):
+*	sets OV57 VA57
+*
+*****************************************************
+**                     DROP                         *
+*****************************************************
+*
+**PreDefined Action (integer):
+*	setv OV60 VA60
+*
+**Action Params (any):
+*	setv OV61 VA61
+*	setv OV62 VA62
+*	setv OV63 VA63
+*	setv OV64 VA64
+*
+**Chems to stim and amounts to stim them (string)
+*	sets OV65 VA65
+*
+**Sound to play (string):
+*	sets OV66 VA66
+*
+**Anim String (string):
+*	sets OV67 VA67
+*
+*****************************************************
+**                     TIMER                        *
+*****************************************************
+*
+**PreDefined Action (integer):
+*	setv OV70 VA70
+*
+**Action Params (any):
+*	setv OV71 VA71
+*	setv OV72 VA72
+*	setv OV73 VA73
+*	setv OV74 VA74
+*
+**Chems to stim and amounts to stim them (string)
+*	sets OV75 VA75
+*
+**Sound to play (string):
+*	sets OV76 VA76
+*
+**Anim String (string):
+*	sets OV77 VA77
+*
+**Tick (not an Object Variable!):
+*	tick VA79
+*
+*****************************************************
+**                   COLLISION                      *
+*****************************************************
+*
+**PreDefined Action (integer):
+*	setv OV80 VA80
+*
+**Action Params (any):
+*	setv OV81 VA81
+*	setv OV82 VA82
+*	setv OV83 VA83
+*	setv OV84 VA84
+*
+**Chems to stim and amounts to stim them (string)
+*	sets OV85 VA85
+*
+**Sound to play (string):
+*	sets OV86 VA86
+*
+**Anim String (string):
+*	sets OV87 VA87
+
+endm
+
+
+
+
+*snippet for MSGBOX style popups
+
+*
+*new: comp 1 2 64128 "small_useful_screen" 1 0 9075
+*attr 304
+**the don't save button
+*pat: butt 1 "small_useful_screen" 3 2 200 106 2 [0 1 255] 1000 0
+*part 1
+*anim [0]
+**the save button
+*pat: butt 2 "small_useful_screen" 1 2 58 106 2 [0 1 255] 1001 0
+*part 2
+*anim [0]
+*
+**the text box
+*pat: fixd 3 "small_useful_screen" 5 25 59 1 "WhiteOnTransparentChars"
+*
+*
+*part 3
+*frmt 5 0 5 0 8 0 2
+*ptxt "Would you like to save?"
+*
+*setv va90 wndw
+*divv va90 2
+*setv va91 wndh
+*divv va91 2
+*setv va92 wdth
+*divv va92 2
+*setv va93 hght
+*divv va93 2
+*
+*subv va90 va92
+*subv va91 va93
+*
+*flto va90 va91
+*endm

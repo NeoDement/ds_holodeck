@@ -1,0 +1,673 @@
+
+setv game "holodeck_activate1_SoundIndex" 0
+
+setv game "holodeck_dropdown_NumEntriesToDisplay" 14
+
+setv game "holodeck_dropdown_MenuSegmentHeight" 21
+
+setv game "holodeck_dropdown_MenuSegmentWidth" 192
+
+*todo: way too many game variables. see how much you can reduce this with some cleanup later.
+
+setv game "holodeck_dropdown_X" 0
+
+setv game "holodeck_dropdown_Y" 0
+
+
+
+
+setv game "holodeck_dropdown_X" 200
+setv game "holodeck_dropdown_Y" -50
+
+*move this test elsewhere:
+pat: butt 8001 "holodeck_dropdown" 0 0 game "holodeck_dropdown_X" game "holodeck_dropdown_Y" 1 [] 8001 0
+
+
+*for now, each dropdown button needs to have a text part with an ID 1 higher than the dropdown button.
+*this is so anything that needs to write text to the button can just addv 1 without me having to write another bunch of coordinates down.
+*it also needs a blank backround (sprite frame 8)
+pat: fixd 8002 "holodeck_dropdown" 8 game "holodeck_dropdown_X" game "holodeck_dropdown_Y" 2 "whiteontransparentchars"
+
+
+*open dropdown menu
+
+
+
+*DROPDOWN TEST SCRIPT
+scrp 1 1 64735 8001
+
+*	call 9990 8001 "holodeck_sounds"
+*	call 9990 8001 "holodeck_actions"
+*	call 9990 8001 "holodeck_chemicals"
+	call 9990 8001 "holodeck_stimulus"
+
+endm
+
+
+
+
+
+
+*Create Dropdown Script!
+
+
+
+scrp 1 1 64735 9990
+
+	inst
+
+
+*get X/Y of part that called you (_p1)
+
+	targ ownr
+
+	part _p1_
+
+*depressed
+	pose 1
+*disable input
+	clac -1
+
+	setv va50 posl
+	setv va51 post
+
+*todo: adding these offsets makes it correct but isn't at all future proof.
+	addv va50 game "holodeck_dropdown_X"
+	addv va51 game "holodeck_dropdown_Y"
+
+	addv va51 game "holodeck_dropdown_MenuSegmentHeight"
+
+*	targ norn
+*	sezz "clicked it"
+
+	setv va20 0
+*kill any existing dropdowns, only one can be open at a time
+	enum 1 1 55555
+		kill targ
+		addv va20 1
+	next
+
+
+*only create a new popup if you didn't have to destroy any popups just now.
+	doif va20 = 0
+
+		new: comp 1 1 55555 "blnk" 0 0 10
+
+*store _p1_ (part that called you here) in OV50!!! click script in dropdown needs it later.
+*(todo: clean this up. ov50 should be used for both probably):
+		setv OV50 _P1_
+
+*init OV02 as a blank string. we will be storing the selected menu option string in here.
+		sets OV02 ""
+
+		tick 1
+
+*Listen for these events:
+* 8 Raw Mouse Down + 16 Raw Mouse Up
+		imsk 24
+* + 4 Raw Mouse Move (tick 1 script is a lot smoother)
+*		imsk 28
+
+* + 32 Raw Mouse Wheel
+		imsk 60
+
+*move to coords of part that called us.
+		mvto va50 va51
+
+
+*also also store the catalogue array name in OV42. So it can load data from it while scrolling.
+		sets OV42 _P2_
+
+
+*how many entries are there? stored in OV43 for later!
+*		setv va00 rean "holodeck_sounds"
+		setv OV43 rean _P2_
+
+*variable to keep track of what iteration of the loop we're on
+		setv va99 1
+
+
+
+*for (how many dropdown entries to display at a time)
+		reps game "holodeck_dropdown_NumEntriesToDisplay"
+
+
+*VA33 is the background sprite for the part of the menu we are drawing.
+*The first one has a shadow on the top, the last one has a highlight on the bottom.
+			doif va99 = 1
+
+				setv VA33 2
+
+			elif va99 = game "holodeck_dropdown_NumEntriesToDisplay"
+
+				setv VA33 6
+
+			else
+
+				setv VA33 4
+
+			endi
+
+
+
+*subtract 1 from loop iteration so we load the correct catalogue entry.
+			setv va70 va99
+			subv va70 1
+
+*load the current sound into VA01
+*			sets va01 read "holodeck_sounds" va70
+
+*load the current catalogue entry into VA01 (from OV42)
+			sets va01 read OV42 va70
+
+
+*convert it to uppercase  (never mind)
+
+*	sets va01 uppa va01
+
+*multiply the loop iteration by the height of the back-piece (-1) to get the position for the next one
+			setv va80 va99
+			subv va80 1
+*todo: must be a variable!!
+			mulv va80 game "holodeck_dropdown_PixelsBetweenMenuSegments"
+
+
+*VA33 is the background sprite for the part of the menu we are drawing.
+*The first one has a shadow on the top, the last one has a highlight on the bottom.
+
+*create the next item in the list
+			pat: fixd va99 "holodeck_dropdown" VA33 0 va80 1 "WhiteOnTransparentChars"
+
+			part va99
+
+*set the catalogue entry as the text for the new part.
+			ptxt va01
+
+*add 1 to iteration variable
+			addv va99 1
+
+		repe
+
+*endm
+
+*othewise, reset the pose of the dropdown 
+	else
+		part _p1_
+		pose 0
+	endi
+
+
+
+
+*change tickrate, set ideal interval in milliseconds between each tick. 
+*speed it up while a dropdown menu is open for smoother select cursor.
+	buzz 20
+
+
+
+
+*PAUSE the game when a dropdown is open, so that norn brains don't have to attempt to tick at the new faster BUZZ rate.
+
+
+	inst
+	wpau 1
+	enum 1 0 0
+		doif gnus eq 2 and spcs eq 12
+			paus 0
+		else
+			paus 1
+		endi
+	next
+	enum 2 0 0
+		doif gnus eq 1 and spcs eq 1
+			paus 0
+		else
+			paus 1
+		endi
+	next
+	enum 3 0 0
+*			doif gnus ne 3 and spcs ne 103
+		paus 1
+*			endi
+	next
+	enum 4 0 0
+		paus 1
+	next
+
+*yep, we even pause the pause gui
+*enum 1 2 6
+*	paus 0
+*next
+
+*but we DON'T pause the dropdown menu itself
+	enum 1 1 55555
+		paus 0
+	next
+
+
+
+endm
+
+
+
+
+
+
+
+
+
+***OLD UNFINISHED SNIPPET TO DELETE ALL LIST ENTRIES INDIVIDUALLY.
+
+*scrp
+*
+**delete all dropdown entries
+**	reps game "holodeck_dropdown_NumEntriesToDisplay"
+*
+**loop
+*
+**destroy the current part
+*pat: kill va00
+*
+**add 1 to loop iteration
+*addv va00 1
+*
+**keep looping until there is no Next Part!
+*untl pnxt va00 = 0
+*
+*endm
+
+
+
+
+*sets va00 vtos va00
+
+*adds va00 " sounds. first one is "
+*adds va00 va01
+
+*targ norn
+
+
+
+
+
+
+******CODE DOWN HERE IS FOR DROPDOWNS*****
+
+
+
+
+
+
+*TODO: IT SHOULD BE CHECKING IF IT'S IN THE BOUNDS OF THE CANVAS HERE TOO! (should it?)
+
+*RAW MOUSE DOWN SCRIPT
+
+*ov00 is set to 1 when the mouse is pressed down.
+
+scrp 1 1 55555 76
+
+*1 - left mouse button
+	doif _p1_ = 1
+
+		inst
+
+*target the part (MV50) on the main settings panel we're attached to and set it to the NORMAL (not depressed) state.
+		rtar 1 1 64735
+		part MV50
+		pose 0
+*re-enable click detection
+		clac 0
+
+*now add 1 to OV50 to find the part ID just above it, which contains a text box with the same dimensions as the button.
+		setv va00 mv50
+		addv va00 1
+
+		part va00
+
+*MV02 (OV02 of ownr, the open dropdown) is being used to store which string we'd set if the cursor was released. todo: can add more conds here to make it more/less responsive/accurate
+		doif mv02 <> ""
+			ptxt mv02
+
+*sound test
+*			snde mv02
+		endi
+
+
+
+
+
+*todo: move the pause code to 2 functions (pause and resume) and improve them.
+
+*change tickrate, set ideal interval in milliseconds between each tick. 
+
+*slow it back down to default while the cursor is over the pixelgrid for smoother drawing.
+*TODO: store this variable in memory instead of assuming it was 50 before you touched the grid.
+		buzz 50
+
+
+
+
+
+
+
+*UNPAUSE/RESUME the game when done drawing on the canvas.
+
+		inst
+		wpau 0
+		enum 1 0 0
+			paus 0
+		next
+		enum 2 0 0
+			paus 0
+		next
+		enum 3 0 0
+			paus 0
+		next
+		enum 4 0 0
+			paus 0
+		next
+
+
+
+
+*kill any existing dropdowns.
+		enum 1 1 55555
+			kill targ
+		next
+
+
+
+*
+*
+	endi
+
+
+endm
+
+*RAW MOUSE UP SCRIPT
+
+*ov00 is set to 0 when the mouse is NOT pressed down.
+*^ old comment!
+
+scrp 1 1 55555 77
+
+*	setv ov00 0
+
+*right mouse button (currently disabled)
+	doif _p1_ = 2
+
+
+		inst
+*		enum 1 1 64732
+*			kill targ
+*		next
+
+	endi
+
+endm
+
+
+
+
+*RAW MOUSE WHEEL SCRIPT
+
+scrp 1 1 55555 78
+
+*The delta value is sent in _P1_ - 120 units per 'click'.
+
+	inst
+
+*SCROLLED DOWN
+	doif _p1_ < -110
+
+*OV33 is the scrolling position
+
+*make sure it doesn't go out of bounds. OV43 stores how many entries the loaded catalogue has.
+*subtract the number of entries you show on screen at once to get the safest high number to set the offset to.
+
+		setv va00 OV43
+		subv va00 game "holodeck_dropdown_NumEntriesToDisplay"
+
+		doif OV33 < va00
+			addv OV33 1
+		endi
+
+*SCROLLED UP
+	elif _p1_ > 110
+
+*OV33 is the scrolling position
+
+*make sure it doesn't go out of bounds.
+		doif OV33 > 0
+			subv OV33 1
+		endi
+
+
+	endi
+
+
+
+
+*variable to keep track of what iteration of the loop we're on.
+	setv va99 1
+
+
+*for (how many dropdown entries to display at a time)
+	reps game "holodeck_dropdown_NumEntriesToDisplay"
+
+*add the scrolling position (OV33) to the loop iteration so we load the correct catalogue entry.
+		setv va70 va99
+		addv va70 OV33
+
+*subtract 1 to fix another base 0/1 issue
+		subv va70 1
+
+
+*load the current catalogue entry into VA01 (from OV42)
+		sets va01 read OV42 va70
+
+
+
+		part va99
+
+*set the catalogue entry as the text for the new part.
+		ptxt va01
+
+		addv va99 1
+
+	repe
+
+
+
+
+*	inst
+
+*	part 5
+*	ptxt vtos ov33
+*	ptxt vtos _p1_
+
+
+
+*endi
+
+endm
+
+
+
+
+
+*1 FRAME TIMER SCRIPT - goes off every frame but only while a dropdown is open sooo
+*(TODO: close these when you leave the room!)
+
+scrp 1 1 55555 9
+*scrp 1 1 55555 75
+
+*	inst
+
+*get X and Y of Hand and put them in VA44 and VA45
+	targ pntr
+
+	setv va44 posl
+	setv va45 post
+
+	targ ownr
+
+
+*****GET COORDS OF ALL 4 CORNERS OF DROPDOWN MENU
+
+*get top left corner of dropdown menu
+	setv va20 posl
+	setv va21 post
+
+
+	setv va22 game "holodeck_dropdown_MenuSegmentWidth"
+	addv va22 va20
+
+*so 15 * 21 = 630 pixels tall for example
+	setv va23 game "holodeck_dropdown_NumEntriesToDisplay"
+	mulv va23 game "holodeck_dropdown_MenuSegmentHeight"
+	addv va23 va21
+
+
+* game "holodeck_"
+
+
+*if the mouse cursor is inside the dropdown menu bounds
+	doif VA44 > va20 and VA44 < va22 and VA45 > va21 and VA45 < va23
+
+
+
+
+
+*set all parts to OFF and then set the correct part back to ON, all in 1 frame
+		inst
+
+*	count from 1 because part 0 doesn't exist
+		setv va01 1
+
+		reps game "holodeck_dropdown_NumEntriesToDisplay"
+*			reps 10
+			part va01
+			pose 0
+
+
+			addv va01 1
+		repe
+
+
+
+*see if there's a valid part under the cursor		hotp < 1000  <-- this bit is a quick fix for it targeting parts of the main machine   todo: do something better? maybe?
+		setv va00 hotp
+		doif va00 <> 0 and va00 <> -1 and hotp < 1000
+
+
+			part va00
+			pose 1
+
+
+*if mouse is clicked (on open menu):
+*			doif ov00 = 1
+
+*OV02 holds the text of the part we most recently hovered over.
+			sets OV02 ptxt
+
+*ELSE we aren't hovering over a valid part of the dropdown menu
+		else
+*set the text of the part to nothing
+			sets OV02 ""
+
+		endi
+
+	else
+
+
+*TODO: all this code is here twice? write a subr?
+
+*set the text of the part to nothing
+		sets OV02 ""
+
+
+*set all parts to OFF and then set the correct part back to ON, all in 1 frame
+		inst
+
+*	count from 1 because part 0 doesn't exist
+		setv va01 1
+
+		reps game "holodeck_dropdown_NumEntriesToDisplay"
+*			reps 10
+			part va01
+			pose 0
+
+
+			addv va01 1
+		repe
+
+	endi
+endm
+
+*to 11... so still 10.
+*	setv va01 game "holodeck_dropdown_NumEntriesToDisplay"
+*	subv va01 1
+
+**delete all dropdown entries
+*	inst
+*	reps game "holodeck_dropdown_NumEntriesToDisplay"
+*
+*		doif hotp = va00
+*			part va00
+*			pose 1
+*		else
+*			targ norn
+*			sezz "Fowo"
+*
+*			targ ownr
+*			part va00
+**	turn off every other part
+*			pose 0
+*
+*		endi
+*
+*		addv va00 1
+*	repe
+
+
+
+*highlight the part we are hovering over
+*
+**make sure there is a part under our cursor.
+**	doif hotp <> -1
+**		pose 1
+*
+**	loop
+*
+*repe 
+*
+**if the part under our cursor is the part we are iterating over
+*		doif hotp = part va00
+*			part va00
+*			pose 1
+*		else
+*			part va00
+**	turn off every other part
+*			pose 0
+*
+*		endi
+*
+**	add 1 to loop iteration
+*		subv va00 1
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+**targ hotp
+
+
+
+
+*sezz va00

@@ -1,0 +1,578 @@
+
+
+
+
+
+
+
+
+
+
+
+
+* CUSTOM OBJECT CREATION SCRIPT
+* Fill in all those variables!
+
+scrp 1 1 64730 10
+
+*do nothing (for now?)
+
+endm
+
+
+
+scrp 1 1 64730 1
+
+
+*	sets ov00 "Apply Random Velocity"
+
+*set up variables
+*the first parameter _P1_ is the script number, in this case Activate 1
+	inst
+	call 9000 1 0
+
+*play anim test todo:
+	call 9001 1 0
+
+*	sets ov01 "Anim"
+
+**********************************
+*********** PLAY ANIM ************
+**********************************
+
+	doif ov00 = 0
+
+*todo: this
+		call 9001 from 0
+
+
+***************************************************
+************* APPLY RANDOM VELOCITY ***************
+***************************************************
+
+	elif ov00 = 1
+
+		call 5001 from 0
+
+**********************************
+********* SPINNING TOP ***********
+**********************************
+
+	elif ov00 = 2
+
+*todo: this
+		call 5002 from 0
+
+	endi
+
+*play sound
+	call 9002 from 0
+
+*inject relevant chemicals
+	call 9003 from 0
+
+
+
+endm
+
+
+
+
+
+
+* HAPPY BALL ACTIVATE 2 SCRIPT
+
+scrp 1 1 64730 2
+
+*Stimulate the creature with "Played with toy"
+	stim writ from 97 1
+
+	inst
+
+	setv va00 posl
+	setv va01 posr
+	addv va00 va01
+	divv va00 2
+	targ from
+	setv va01 posl
+	targ ownr
+	doif va01 lt va00
+		setv va02 rand 15 25
+	else
+		setv va02 rand -25 -15
+	endi
+	velo va02 rand 20 70
+endm
+
+* HAPPY BALL HIT SCRIPT
+
+scrp 1 1 64730 3
+
+*Stimulate the creature with "Played with toy"
+	stim writ from 97 1
+
+*(randoms between activate 1 and activate 2)
+	mesg writ ownr rand 0 1
+endm
+
+
+* HAPPY BALL COLLISION SCRIPT
+
+scrp 1 1 64730 6
+	inst
+
+*Urge all creatures who can see OWNR to perform an action on OWNR.
+	urge sign 0.5 -1 0.0
+
+	setv va00 vely
+	doif va00 lt 0
+		negv va00
+	endi
+	doif va00 gt 1
+*play stored collision sound
+*		snde ov02
+	endi
+
+	setv va00 _p1_
+	setv va01 _p2_
+	doif va00 lt 0
+		negv va00
+	endi
+	doif va01 lt 0
+		negv va01
+	endi
+	doif va00 lt 3 and va01 lt 3
+	endi
+endm
+
+
+
+
+
+
+
+
+
+
+
+*Stimulate the creature with "Played with toy"
+*	stim writ _p1_ 97 1
+
+
+
+
+***************************************************
+************* APPLY RANDOM VELOCITY ***************
+***************************************************
+
+scrp 1 1 64730 5001
+
+*inst
+
+*Random number between Minimum X Velocity and Maximum X Velocity
+	setv va00 rand OV01 OV02
+*Random number between Minimum Y Velocity and Maximum Y Velocity
+	setv va01 rand OV03 OV04
+
+*set velocity to the randomized numbers
+	velo va00 va01
+
+endm
+
+
+
+
+
+
+
+
+
+
+
+***************************
+****** SPINNING TOP *******
+***************************
+
+scrp 1 1 64730 5002
+
+*Stimulate the creature with "Played with toy"
+	stim writ _p1_ 97 1
+
+	lock
+
+*this variable is used to track if the spinning top was picked up while spinning.
+*pretty sure it sets itself to 0 whenever this script starts but just incase...
+	setv va99 0
+
+	setv ov00 0
+
+*temporarily make it unactivatable
+	clac -1
+	sndc "mtop"
+*		anim [1 2 3 4 5 6 7 8 9 255]
+	setv va00 rand 35 50
+
+	reps 20
+
+		doif va99 = 0
+			setv va01 rand -10 10
+
+*don't try and push yourself up if you're already moving up or down rapidly!
+*doif vely < 5 and vely > -5
+*setv vely -3
+*endi
+
+*		addv instead of setv prevents it from floating!
+			addv vely -3
+
+			setv velx va01
+
+			wait 1
+
+			doif carr = pntr
+*reset pose, stop the sound, make it activatable again
+				pose 0
+*				stpc
+				fade
+				clac 0
+*let the script know it doesnt have to do the rest of the stuff
+				setv va99 1
+			endi
+		endi
+
+	repe
+
+
+*having lock here means that picking it up overrides the anim most of the time, but doesn't break the end of the spin anim (removing lock entirely DOES break it)
+*lock
+
+
+	reps 8
+		doif va99 = 0
+			addv va02 1
+*				pose va02
+
+			doif va02 eq 9
+
+				setv va02 0
+
+			endi
+
+			setv va01 rand -5 5
+			setv velx va01
+			wait 1
+
+			doif carr = pntr
+*reset pose, stop the sound, make it activatable again
+				pose 0
+*			stpc
+				fade
+				clac 0
+*let the script know it doesnt have to do the rest of the stuff
+				setv va99 1
+			endi
+		endi
+	repe
+
+	doif carr = null
+
+*			anim [10 11 12]
+		over
+*	stpc
+		fade
+		setv velx 0
+		inst
+		setv vely -3
+*make it activatable again
+		clac 0
+		slow
+	endi
+
+*reset the variable so it knows the movement wasn't cancelled by being picked up
+	setv va99 0
+	unlk
+
+endm
+
+
+
+
+
+
+
+
+
+**PreDefined Action
+*sets OV10 "Apply Random Velocity"
+*
+**Action Params
+*setv OV11 25
+*setv OV12 25
+*setv OV13 5
+*setv OV14 20
+*
+*
+**Chems to stim and amounts to stim them (8 characters)
+*sets OV15 "AAAAAAAA"
+*
+**Sound to play
+*sets OV16 "sax1"
+*
+**Anim String
+*sets OV17 "98765432100"
+*
+**7 variables per function
+**10 functions
+
+
+***********************************************
+*** SET UP VARIABLES FOR PREDEFINED ACTIONS ***
+******************** (9000) *******************
+***********************************************
+
+* OV00 - PreDefined Action
+
+* Moves per Script Number OVs to these static OVs so that any Script Number can call any PreDefined Action and get the correct OVs for that Script Number.
+
+* OV01 - Action Param 1
+* OV02 - Action Param 2
+* OV03 - Action Param 3
+* OV04 - Action Param 4
+
+* OV05 - 4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+
+* OV06 - sound to make
+* _OV06 2nd from Last char - sound play mode (not implemented)
+* __OV06 Last char - sound play delay (only SNDQ will listen for it)
+
+* OV07 - Anim String (represented as a string of X characters) (F1 F2 F3 F4 etc ...)
+
+**********************************************
+
+scrp 1 1 64730 9000
+
+**************
+* ACTIVATE 1 *
+**************
+	doif _p1_ = 1
+
+*PreDefined Action
+		setv OV00 OV10
+
+*PreDefined Action Params
+		setv OV01 OV11
+		setv OV02 OV12
+		setv OV03 OV13
+		setv OV04 OV14
+
+*4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+		sets OV05 OV15
+
+*Make this Sound (can be null)
+		sets OV06 OV16
+
+*Anim String (represented as a string of N characters) (F1 F2 F3 F4 etc ...)
+		sets OV07 OV17
+
+
+**************
+* ACTIVATE 2 * (NOT IMPLEMENTED BUT JUST COPY THE FORMAT FROM THE ONE ABOVE)
+**************
+	elif _p1_ = 2
+
+*PreDefined Action Params
+*setv OV01 OV12
+*setv OV02 OV13
+*setv OV03 OV14
+*setv OV04 OV15
+
+	endi
+
+endm
+
+
+
+
+
+
+
+
+
+***********************************************
+************ PLAY ANIMATION STRING ************
+******************** (9001) *******************
+***********************************************
+
+* OV07 - Anim String (represented as a string of X characters) (F1 F2 F3 F4 etc ...)
+* _OV07 2nd from Last char - (int256) How many times to loop the anim
+* __OV07 Last char - (int256) Delay between frames
+
+**********************************************
+
+scrp 1 1 64730 9001
+
+	lock
+
+*start counting reps at 1 so the string index isn't out of bounds.
+*	setv va00 1
+
+
+*va15 = get AnimString string length.
+	setv va15 strl OV07
+
+*va16 = the final character of the string, as a char. (FrameDelay)
+	setv va16 char OV07 va15
+
+	subv va15 1
+
+*va17 = the 2nd from final character of the string, as a char. (NumLoops)
+	setv va17 char OV07 va15
+
+*debug say amount of times you're going to repeat the anim. 
+	targ norn
+	sezz vtos va17
+	targ ownr
+
+
+	slow
+
+*run this loop as many times as the NumLoops character.
+	reps va17
+
+*run this loop as many times as the length of the anim string.
+		setv va10 strl OV07
+*-1 because of the NumLoops character.
+*-2 actually because of the FrameDelay character.
+		subv va10 2
+
+		reps va10
+
+
+*"animframe"
+			sets va01 gall
+
+*remove the last character of the Gallery (sprite file) Name
+			setv va02 strl va01
+			subv va02 1
+			sets va03 subs va01 1 va02
+
+*			targ norn
+*			sezz va01
+			targ ownr
+
+
+
+*add 1 to the iteration number before using it as a string index. because string indexes start at 1 not 0.
+			setv va77 va00
+			addv va77 1
+
+*put the character of the anim string we are currently looking at it in VA05
+			sets va05 subs OV07 va77 1
+
+
+*			setv va05 stoi va03
+
+*"animframeX"
+			adds va03 va05
+
+			gall va03 0
+
+*add 1 to Iteration Variable
+			addv va00 1
+
+
+*wait FrameDelay ticks before changing pose again.
+			wait va16
+
+		repe
+
+*reset Iteration Variable in case you have to play again.
+		setv va00 0
+
+
+	repe
+
+endm
+
+
+
+
+
+
+
+***********************************************
+***************** PLAY SOUND! *****************
+******************** (9002) *******************
+***********************************************
+
+* OV06 - sound to make
+* _OV06 2nd from Last char - sound play mode (not implemented)
+* __OV06 Last char - sound play delay (only SNDQ will listen for it)
+
+**********************************************
+
+scrp 1 1 4 9002
+
+*todo: add support for sndc and sndl
+	snde OV06
+
+endm
+
+
+
+
+
+
+***********************************************
+************** INJECT CHEMICALS ***************
+******************** (9003) *******************
+***********************************************
+
+* OV05 - 4 Chemicals To Stim and their Amounts to stim (represented as a string of 8 characters) (C1 A1 C2 A2 C3 A3 C4 A4)
+
+***********************************************
+
+scrp 1 1 64730 9003
+
+*get the 8 values out of the string
+
+
+*va01 is the loop number/iteration (starting at 1 because of string indexes)
+	setv va00 1
+
+*Loop for every character in the chemicals string divided by 2 (8/2=4)
+	reps 4
+
+*va01 is the loop number/iteration + 1
+		setv va01 va00
+		addv va01 1
+
+*VA02 is the CHEMICAL NUMBER
+		setv va02 char ov05 va00
+
+*VA03 is the CHEMICAL AMOUNT
+		setv va03 char ov05 va01
+
+*VA03 is stored as a single byte, so needs some conversion:
+*IMPORTANT: When dividing by a number and needing the result to be a FLOAT, need .0 after the number or result is an INT!!
+		subv va03 128.0
+		divv va03 128.0
+
+*Inject the CHEMICAL (VA02) with the AMOUNT (VA03)
+		chem VA02 VA03
+
+*increase loop number
+		addv va00 1
+
+	repe
+
+	sets va99 "chem: "
+	adds va99 vtos VA02
+	adds va99 " amount: "
+	adds va99 vtos VA03
+
+	targ norn
+	sezz va99
+
+
+endm

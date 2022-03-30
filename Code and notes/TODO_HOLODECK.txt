@@ -5,6 +5,12 @@ IMPROVE PAUSE FUNCTION:
 
 
 
+Just found out pat: move exists! don't need a separate agent for sliders!
+
+
+
+
+
 CLEAN UP THE FUNCTIONS SUCH AS CUT, CLEAR, (move newly selected frame into PixelGrid, etc), PASTE, etc:
 (use a function to copy poses from one specified agent to another specified agent)
 (Currently it's a mess of very similar functions, some of which are called from a separate agent from the others)

@@ -1,0 +1,201 @@
+
+*PreDefined Actions
+* 0 - Nothing
+* 1 - Apply Velocity
+* 2 - Do Action on Creature
+
+setv VA10 1
+
+setv VA11 -25
+setv VA12 25
+setv VA13 -25
+setv VA14 -40
+
+*todo: construct a chem/stim string using a function
+sets VA15 "AAAAAAAA"
+
+sets VA16 "dr10"
+
+sets VA17 "todo: construct an anim string using a function"
+
+
+****************************************************
+*                  ACTIVATE 1                      *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV10 VA10
+
+*Action Params (any):
+		setv OV11 VA11
+		setv OV12 VA12
+		setv OV13 VA13
+		setv OV14 VA14
+
+*Chems to stim and amounts to stim them (string)
+		sets OV15 VA15
+
+*Sound to play (string):
+		sets OV16 VA16
+
+*Anim String (string):
+		sets OV17 VA17
+		
+****************************************************
+*                  ACTIVATE 2                      *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV20 VA20
+
+*Action Params (any):
+		setv OV21 VA21
+		setv OV22 VA22
+		setv OV23 VA23
+		setv OV24 VA24
+
+*Chems to stim and amounts to stim them (string)
+		sets OV25 VA25
+
+*Sound to play (string):
+		sets OV26 VA26
+
+*Anim String (string):
+		sets OV27 VA27
+		
+****************************************************
+*                     HIT                          *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV30 VA30
+
+*Action Params (any):
+		setv OV31 VA31
+		setv OV32 VA32
+		setv OV33 VA33
+		setv OV34 VA34
+
+*Chems to stim and amounts to stim them (string)
+		sets OV35 VA35
+
+*Sound to play (string):
+		sets OV36 VA36
+
+*Anim String (string):
+		sets OV37 VA37
+		
+****************************************************
+*                     EAT                          *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV40 VA40
+
+*Action Params (any):
+		setv OV41 VA41
+		setv OV42 VA42
+		setv OV43 VA43
+		setv OV44 VA44
+
+*Chems to stim and amounts to stim them (string)
+		sets OV45 VA45
+
+*Sound to play (string):
+		sets OV46 VA46
+
+*Anim String (string):
+		sets OV47 VA47
+		
+****************************************************
+*                    PICKUP                        *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV50 VA50
+
+*Action Params (any):
+		setv OV51 VA51
+		setv OV52 VA52
+		setv OV53 VA53
+		setv OV54 VA54
+
+*Chems to stim and amounts to stim them (string)
+		sets OV55 VA55
+
+*Sound to play (string):
+		sets OV56 VA56
+
+*Anim String (string):
+		sets OV57 VA57
+		
+****************************************************
+*                     DROP                         *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV60 VA60
+
+*Action Params (any):
+		setv OV61 VA61
+		setv OV62 VA62
+		setv OV63 VA63
+		setv OV64 VA64
+
+*Chems to stim and amounts to stim them (string)
+		sets OV65 VA65
+
+*Sound to play (string):
+		sets OV66 VA66
+
+*Anim String (string):
+		sets OV67 VA67
+		
+****************************************************
+*                     TIMER                        *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV70 VA70
+
+*Action Params (any):
+		setv OV71 VA71
+		setv OV72 VA72
+		setv OV73 VA73
+		setv OV74 VA74
+
+*Chems to stim and amounts to stim them (string)
+		sets OV75 VA75
+
+*Sound to play (string):
+		sets OV76 VA76
+
+*Anim String (string):
+		sets OV77 VA77
+		
+*Tick (not an Object Variable!):
+		tick VA79
+		
+****************************************************
+*                   COLLISION                      *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV80 VA80
+
+*Action Params (any):
+		setv OV81 VA81
+		setv OV82 VA82
+		setv OV83 VA83
+		setv OV84 VA84
+
+*Chems to stim and amounts to stim them (string)
+		sets OV85 VA85
+
+*Sound to play (string):
+		sets OV86 VA86
+
+*Anim String (string):
+		sets OV87 VA87
+		
+		

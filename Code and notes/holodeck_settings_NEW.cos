@@ -1,0 +1,309 @@
+enum 1 1 64714
+	kill targ
+next
+
+
+new: comp 1 1 64714 "holodeck_options" 0 0 1
+*OV97 - inital x pos
+*setv OV97 333
+*OV98 - initial y pos
+*setv OV98 90589
+*OV99 - initial value
+*setv OV99 0.0
+
+mvto 530 90568
+
+
+
+
+enum 1 1 64769
+	kill targ
+next
+
+enum 1 1 62000
+	kill targ
+next
+
+
+
+
+
+
+
+
+
+****************************************************
+*                  ACTIVATE 1                      *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV10 VA10
+
+*Action Params (any):
+		setv OV11 VA11
+		setv OV12 VA12
+		setv OV13 VA13
+		setv OV14 VA14
+
+*Chems to stim and amounts to stim them (string)
+		sets OV15 VA15
+
+*Sound to play (string):
+		sets OV16 VA16
+
+*Anim String (string):
+		sets OV17 VA17
+		
+****************************************************
+*                  ACTIVATE 2                      *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV20 VA20
+
+*Action Params (any):
+		setv OV21 VA21
+		setv OV22 VA22
+		setv OV23 VA23
+		setv OV24 VA24
+
+*Chems to stim and amounts to stim them (string)
+		sets OV25 VA25
+
+*Sound to play (string):
+		sets OV26 VA26
+
+*Anim String (string):
+		sets OV27 VA27
+		
+****************************************************
+*                     HIT                          *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV30 VA30
+
+*Action Params (any):
+		setv OV31 VA31
+		setv OV32 VA32
+		setv OV33 VA33
+		setv OV34 VA34
+
+*Chems to stim and amounts to stim them (string)
+		sets OV35 VA35
+
+*Sound to play (string):
+		sets OV36 VA36
+
+*Anim String (string):
+		sets OV37 VA37
+		
+****************************************************
+*                     EAT                          *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV40 VA40
+
+*Action Params (any):
+		setv OV41 VA41
+		setv OV42 VA42
+		setv OV43 VA43
+		setv OV44 VA44
+
+*Chems to stim and amounts to stim them (string)
+		sets OV45 VA45
+
+*Sound to play (string):
+		sets OV46 VA46
+
+*Anim String (string):
+		sets OV47 VA47
+		
+****************************************************
+*                    PICKUP                        *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV50 VA50
+
+*Action Params (any):
+		setv OV51 VA51
+		setv OV52 VA52
+		setv OV53 VA53
+		setv OV54 VA54
+
+*Chems to stim and amounts to stim them (string)
+		sets OV55 VA55
+
+*Sound to play (string):
+		sets OV56 VA56
+
+*Anim String (string):
+		sets OV57 VA57
+		
+****************************************************
+*                     DROP                         *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV60 VA60
+
+*Action Params (any):
+		setv OV61 VA61
+		setv OV62 VA62
+		setv OV63 VA63
+		setv OV64 VA64
+
+*Chems to stim and amounts to stim them (string)
+		sets OV65 VA65
+
+*Sound to play (string):
+		sets OV66 VA66
+
+*Anim String (string):
+		sets OV67 VA67
+		
+****************************************************
+*                     TIMER                        *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV70 VA70
+
+*Action Params (any):
+		setv OV71 VA71
+		setv OV72 VA72
+		setv OV73 VA73
+		setv OV74 VA74
+
+*Chems to stim and amounts to stim them (string)
+		sets OV75 VA75
+
+*Sound to play (string):
+		sets OV76 VA76
+
+*Anim String (string):
+		sets OV77 VA77
+		
+*Tick (not an Object Variable!):
+		tick VA79
+		
+****************************************************
+*                   COLLISION                      *
+****************************************************
+
+*PreDefined Action (integer):
+		setv OV80 VA80
+
+*Action Params (any):
+		setv OV81 VA81
+		setv OV82 VA82
+		setv OV83 VA83
+		setv OV84 VA84
+
+*Chems to stim and amounts to stim them (string)
+		sets OV85 VA85
+
+*Sound to play (string):
+		sets OV86 VA86
+
+*Anim String (string):
+		sets OV87 VA87
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
+
+*new: comp 1 1 64769 "holodeck_slider" 0 0 4
+
+pat: butt 1001 "holodeck_slider" 0 0 VA00 VA01 2 [] 1001 0
+
+*OV97 - inital x pos
+*setv OV97 53
+*OV98 - initial y pos
+*setv OV98 268
+*OV99 - initial value
+*setv OV99 0.0
+
+seta va50 targ
+
+*new: comp 1 1 64769 "holodeck_slider" 0 0 4
+*OV97 - inital x pos
+setv OV97 320
+*OV98 - initial y pos
+setv OV98 268
+*OV99 - initial value
+setv OV99 0.0
+
+seta va51 targ
+
+
+new: comp 1 1 64769 "holodeck_slider" 0 0 4
+*OV97 - inital x pos
+setv OV97 53
+*OV98 - initial y pos
+setv OV98 268
+*OV99 - initial value
+setv OV99 0.0
+
+seta va52 targ
+
+
+new: comp 1 1 64769 "holodeck_slider" 0 0 4
+*OV97 - inital x pos
+setv OV97 799
+*OV98 - initial y pos
+setv OV98 268
+*OV99 - initial value
+setv OV99 0.0
+
+seta va53 targ
+
+
+
+
+
+
+
+
+
+new: comp 1 2 64728 "small_useful_screen" 1 0 9075
+attr 304
+*the don't save button
+pat: butt 1 "small_useful_screen" 3 2 200 106 2 [0 1 255] 1000 0
+part 1
+anim [0]
+*the save button
+pat: butt 2 "small_useful_screen" 1 2 58 106 2 [0 1 255] 1001 0
+part 2
+anim [0]
+
+*the text box
+pat: fixd 3 "small_useful_screen" 5 25 59 1 "WhiteOnTransparentChars"
+
+
+part 3
+frmt 5 0 5 0 8 0 2
+ptxt "Would you like to save?"
+
+setv va90 wndw
+divv va90 2
+setv va91 wndh
+divv va91 2
+setv va92 wdth
+divv va92 2
+setv va93 hght
+divv va93 2
+
+subv va90 va92
+subv va91 va93
+
+flto va90 va91
+endm

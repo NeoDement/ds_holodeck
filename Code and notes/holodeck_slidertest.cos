@@ -8,14 +8,42 @@ next
 
 
 
-new: comp 1 1 64769 "holodeck_slider" 0 0 4
 
-*scrp 1001 runs when enter is pressed
-pat: text 1 "holodeck_slider" 3 148 -1 1 1001 "WhiteOnTransparentChars"
+***********************************
+********* OBJECT VARIABLES *********
+***********************************
+
+*OV00 - set to 1 when mouse is pressed down while over the panel
+*OV01 - unused
+*OV02 - points to the slider head which is a separate agent
+*OV03 - set to 1 after running 9007 to check if we're inside the panel
+*
+*OV97 - initial x position
+*OV98 - initial y position
+*OV99 - initial value
 
 
+
+
+
+*slider creation script - wait 1 tick before you attempt to load in the values
 
 scrp 1 1 64769 10
+
+*scrp 1001 runs when enter is pressed
+	pat: text 1 "holodeck_slider" 3 148 -1 1 1001 "WhiteOnTransparentChars"
+
+	tick 1
+
+endm
+
+
+
+*slider timer script - essentially a 1 tick delayed creation script
+
+scrp 1 1 64769 9
+
+	tick 0
 
 	new: simp 1 1 62000 "holodeck_slider" 0 2 5
 
@@ -24,17 +52,14 @@ scrp 1 1 64769 10
 
 	targ ownr
 
+	inst
+
 *Listen for these events:
 * 8 Raw Mouse Down + 16 Raw Mouse Up
 *imsk 24
 * + 4 Raw Mouse Move
 	imsk 28
 
-*va00 - inital x pos
-	setv va00 343
-
-*va01 - initial y pos
-	setv va01 90589
 
 *va02 - slider width
 	setv va02 142
@@ -49,9 +74,9 @@ scrp 1 1 64769 10
 
 *TODO: DON'T ASSUME IT'S 0.5 WHEN LOADING FROM A FILE?
 
-	setv ov99 0.5
+*	setv ov99 0.5
 
-	mvto va00 va01
+	mvto OV97 OV98
 
 *target the slider head and run the function to position the slider
 *targ ov02
@@ -68,10 +93,30 @@ scrp 1 1 64769 10
 
 	call 2000 ov99 0
 
-	call 1002 vtos 0 1
+	targ ov02
+
+	setv va00 posx
+
+	targ ownr
+
+	part 1
+
+*crappy temp maths
+*gets the right values but very wasteful to calculate all this crapola
+	subv va00 posl
+	subv va00 70
+	mulv va00 2
+	divv va00 wdth
+	ptxt vtos va00
+	call 1002 vtos va00 1
+	mulv va00 wdth
+	divv va00 2
+	addv va00 70
+	addv va00 posl
+
+*	call 1002 vtos ov99 1
 
 endm
-
 
 
 
@@ -266,6 +311,10 @@ scrp 1 1 64769 2000
 	setv VA00 _P1_
 	mulv VA00 1.0
 
+*remap slider range from -1.0 to +1.0 space to 0.0 to 1.0 space so it gets set correctly.
+	addv va00 1.0
+	divv va00 2.0
+
 *Divide the result by 100 to get the fraction
 *(THIS IS NOT NEEDED BECAUSE WE ARE STORING VALUES AS FRACTIONS ANYWAY)
 *divv VA00 100.0
@@ -311,6 +360,10 @@ endm
 
 scrp 1 1 64769 76
 
+	inst
+
+	setv va02 post
+
 *get pointer coords
 	targ pntr
 
@@ -327,10 +380,55 @@ scrp 1 1 64769 76
 *set ov00 to 1 so the mouse move script knows to keep drawing when the mouse moves.
 		setv ov00 1
 
-*		inst
 
-*DRAW AT X/Y WITH CURRENTLY SELECTED BRUSH
-		call 9010 va00 va01
+
+
+*TODO: move this to a function and clean up.
+
+
+*clamp slider to values inside the bar
+
+		doif va00 < posl
+			setv va00 posl
+		endi
+
+		setv va03 posl
+		addv va03 wdth
+
+
+		doif va00 > va03
+			setv va00 va03
+		endi
+
+		part 1
+
+*
+
+*crappy temp maths
+*gets the right values but very wasteful to calculate all this crapola
+		subv va00 posl
+		subv va00 70
+		mulv va00 2
+		divv va00 wdth
+		ptxt vtos va00
+		call 1002 vtos va00 1
+		mulv va00 wdth
+		divv va00 2
+		addv va00 70
+		addv va00 posl
+
+
+*todo: maybe check if the slider head is null and create it here if it is.
+		targ ov02
+
+
+*subtract half the width of the playhead sprite to get the offset correct.
+		subv va00 5
+
+
+		mvto va00 va02
+
+
 
 
 	endi
