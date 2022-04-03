@@ -31,8 +31,7 @@ scrp 1 1 64730 1
 	inst
 	call 9000 1 0
 
-*play anim test todo:
-	call 9001 1 0
+
 
 *	sets ov01 "Anim"
 
@@ -67,6 +66,9 @@ scrp 1 1 64730 1
 
 *play sound
 	call 9002 from 0
+
+*play anim test todo:
+	call 9001 1 0
 
 *inject relevant chemicals
 	call 9003 from 0
@@ -429,9 +431,9 @@ scrp 1 1 64730 9001
 	setv va17 char OV07 va15
 
 *debug say amount of times you're going to repeat the anim. 
-	targ norn
-	sezz vtos va17
-	targ ownr
+*	targ norn
+*	sezz vtos va17
+*	targ ownr
 
 
 	slow

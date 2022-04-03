@@ -1,0 +1,211 @@
+enum 1 1 31234
+	kill targ
+next
+
+
+new: comp 1 1 31234 "holodeck_animframes" 0 0 1
+
+
+pat: butt 1 "holodeck_animframes" 3 0 18 12 1 [] 2000 0
+
+pat: butt 1001 "holodeck_animframes" 1 0 27 68 1 [] 1001 0
+
+pat: butt 1002 "holodeck_animframes" 1 0 161 68 1 [] 1002 0
+
+pat: butt 1003 "holodeck_animframes" 1 0 295 68 1 [] 1003 0
+
+pat: butt 1004 "holodeck_animframes" 1 0 429 68 1 [] 1004 0
+
+pat: butt 1005 "holodeck_animframes" 1 0 563 68 1 [] 1005 0
+
+pat: butt 1006 "holodeck_animframes" 1 0 27 218 1 [] 1006 0
+
+pat: butt 1007 "holodeck_animframes" 1 0 161 218 1 [] 1007 0
+
+pat: butt 1008 "holodeck_animframes" 1 0 295 218 1 [] 1008 0
+
+pat: butt 1009 "holodeck_animframes" 1 0 429 218 1 [] 1009 0
+
+pat: butt 1010 "holodeck_animframes" 1 0 563 218 1 [] 1010 0
+
+seta game "holodeck_animationpanel" targ
+
+
+
+mvto 285 90200
+
+
+
+
+
+
+
+
+*clicked window title
+scrp 1 1 31234 2000
+
+*get the pointer position
+	targ pntr
+
+	setv va00 posl
+	setv va01 post
+
+*subtract the position of the window to get screen coords
+	targ ownr
+
+	subv va00 posl
+	subv va01 post
+
+*invert the values to get values flto can make use of
+	negv va00
+	negv va01
+
+*set window to float under cursor
+	frel pntr
+
+	flto va00 va01
+
+	attr 32
+
+*listen for mouse up/unpress events
+	imsk 16
+
+endm
+
+
+
+scrp 1 1 31234 77
+
+*if left mouse button is unpressed
+	doif _p1_ = 1
+
+		attr 0
+
+		frel null
+
+	endi
+
+endm
+
+
+
+
+
+
+
+*SCRP 1000 is a script to hide all anim frame buttons except for _P1_ which is called in every 100X script except 1000 itself.
+
+scrp 1 1 31234 1000
+
+	inst
+
+	setv va00 1001
+
+	reps 10
+
+		part va00
+		pose 0
+
+		addv va00 1
+
+	repe
+
+	part _p1_
+	pose 1
+
+endm
+
+
+
+
+*SCRP 3 (HIT) ON MAIN PIXELGRID "HIT" SCRIPT IS USED TO LOAD CURRENT FRAME INTO THE EDITOR
+
+scrp 1 1 31234 1001
+
+	call 1000 1001 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_0"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1002
+
+	call 1000 1002 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_1"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1003
+
+	call 1000 1003 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_2"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1004
+
+	call 1000 1004 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_3"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1005
+
+	call 1000 1005 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_4"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1006
+
+	call 1000 1006 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_5"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1007
+
+	call 1000 1007 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_6"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1008
+
+	call 1000 1008 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_7"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1009
+
+	call 1000 1009 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_8"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm
+
+scrp 1 1 31234 1010
+
+	call 1000 1010 0
+
+	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_9"
+	mesg writ game "Holodeck_PixelGrid" 3
+
+endm

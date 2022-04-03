@@ -1,0 +1,88 @@
+scrp 1 1 64741 1000
+	doif ov07 = 1
+		setv ov07 0
+		stop
+	endi
+	setv ov07 1
+	inst
+	setv va40 ov06
+	sets va03 ov05
+	setv va02 ov03
+	seta va41 _p1_
+	targ va41
+	part va02
+	pose 1
+	setv va50 posl
+	setv va51 post
+	targ ownr
+	addv va50 ov01
+	addv va51 ov02
+	addv va51 game "holodeck_dropdown_MenuSegmentHeight"
+	setv va20 0
+	enum 1 1 55555
+		kill targ
+		addv va20 1
+	next
+	doif va20 = 0
+		new: comp 1 1 55555 "blnk" 0 0 10
+		seta ov01 va41
+		setv ov06 va40
+		setv OV50 va02
+		sets OV02 ""
+		tick 1
+		imsk 24
+		imsk 60
+		mvto va50 va51
+		sets OV42 va03
+		setv OV43 rean va03
+		setv va99 1
+		reps game "holodeck_dropdown_NumEntriesToDisplay"
+			doif va99 = 1
+				setv VA33 2
+			elif va99 = game "holodeck_dropdown_NumEntriesToDisplay"
+				setv VA33 6
+			else
+				setv VA33 4
+			endi
+			setv va70 va99
+			subv va70 1
+			sets va01 read OV42 va70
+			setv va80 va99
+			subv va80 1
+			mulv va80 game "holodeck_dropdown_PixelsBetweenMenuSegments"
+			pat: fixd va99 "holodeck_dropdown" VA33 0 va80 1 "WhiteOnTransparentChars"
+			part va99
+			ptxt va01
+			addv va99 1
+		repe
+	else
+		part va02
+		pose 0
+	endi
+	buzz 20
+	inst
+	wpau 1
+	enum 1 0 0
+		doif gnus eq 2 and spcs eq 12
+			paus 0
+		else
+			paus 1
+		endi
+	next
+	enum 2 0 0
+		doif gnus eq 1 and spcs eq 1
+			paus 0
+		else
+			paus 1
+		endi
+	next
+	enum 3 0 0
+		paus 1
+	next
+	enum 4 0 0
+		paus 1
+	next
+	enum 1 1 55555
+		paus 0
+	next
+endm

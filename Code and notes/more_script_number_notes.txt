@@ -1,0 +1,51 @@
+Holodeck_CurrentScriptType = "Activate 1", "Activate 2", "Hit", "Eat", "Pickup", "Drop", "Collision", "Timer", 
+
+
+OV00 - Action to perform
+
+OV01 - Action Param 1
+OV02 - Action Param 2
+OV03 - Action Param 3
+OV04 - Action Param 4
+
+OV05 - Anim String (last 2 chars are NumTimesToPlay and FrameDelay)
+OV06 - Play animation BEFORE main action?
+
+OV07 - Sound to play (last 2 chars are SoundPlayMode and SoundDelayBeforePlaying (only works if sound isn't set to follow object))
+
+OV08 - Chemical 1
+OV09 - Chemical 1 Dropdown X
+OV10 - Chemical 1 Dropdown Y
+OV11 - Chemical 1 Dropdown Selection 
+
+OV12 - Chemical 1 Amount
+OV13 - Chemical 1 Amount Slider
+
+
+OV14 - Chemical 2
+OV15 - Chemical 2 Dropdown X
+OV16 - Chemical 2 Dropdown Y
+OV17 - Chemical 2 Dropdown Selection 
+
+OV18 - Chemical 2 Amount
+OV19 - Chemical 2 Amount Slider
+
+
+OV20 - Chemical 3
+OV21 - Chemical 3 Dropdown X
+OV22 - Chemical 3 Dropdown Y
+OV23 - Chemical 3 Dropdown Selection 
+
+OV24 - Chemical 3 Amount
+OV25 - Chemical 3 Amount Slider
+
+
+OV26 - Chemical 4
+OV27 - Chemical 4 Dropdown X
+OV28 - Chemical 4 Dropdown Y
+OV29 - Chemical 4 Dropdown Selection 
+
+OV30 - Chemical 4 Amount
+OV31 - Chemical 4 Amount Slider
+
+OV32 - Stimulus

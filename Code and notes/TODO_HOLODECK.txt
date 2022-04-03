@@ -5,7 +5,14 @@ IMPROVE PAUSE FUNCTION:
 
 
 
-Just found out pat: move exists! don't need a separate agent for sliders!
+
+
+copy sliders 3 times!
+add slider text box scripts!
+
+finish dropdown scripts - it needs to know what number option was picked i think.
+
+make dropdowns all share a click script the same way sliders do!
 
 
 

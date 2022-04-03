@@ -1,0 +1,409 @@
+setv game "Holodeck_slider_Width" 142
+setv game "Holodeck_slider_Height" 23
+
+
+setv game "Holodeck_slider_TextboxXOffset" 148
+setv game "Holodeck_slider_TextboxYOffset" -1
+
+setv game "Holodeck_slider_PlayheadWidth" 10
+
+
+***********************************
+********* OBJECT VARIABLES *********
+***********************************
+
+*todo: put them here. they are in main window creation script.
+
+
+
+
+
+*slider timer script - essentially a 1 tick delayed creation script         VERY OBSOLETE! redo this (if still needed at all)
+
+scrp 1 1 64769 9
+
+	tick 0
+
+	new: simp 1 1 62000 "holodeck_slider" 0 2 5
+
+	seta va99 targ
+
+
+	targ ownr
+
+	inst
+
+*Listen for these events:
+* 8 Raw Mouse Down + 16 Raw Mouse Up
+*imsk 24
+* + 4 Raw Mouse Move
+	imsk 28
+
+
+*va02 - slider width
+	setv va02 142
+
+*va03 - slider height
+	setv va03 23
+
+*store slider head in an easily accessible variable
+	seta ov02 va99
+
+*store initial value of slider
+
+*TODO: DON'T ASSUME IT'S 0.5 WHEN LOADING FROM A FILE?
+
+*	setv ov99 0.5
+
+*	mvto OV97 OV98
+
+*target the slider head and run the function to position the slider
+*targ ov02
+*call 1000 ov99 0
+
+*call 2000 ov99 0
+
+*mvto va00 va01
+
+
+
+
+*target the slider head and run the function to position the slider
+
+	call 2000 ov99 0
+
+	targ ov02
+
+	setv va00 posx
+
+	targ ownr
+
+	part 1
+
+*crappy temp maths
+*gets the right values but very wasteful to calculate all this crapola
+	subv va00 posl
+	subv va00 70
+	mulv va00 2
+	divv va00 wdth
+	ptxt vtos va00
+*	call 1002 vtos va00 1
+	mulv va00 wdth
+	divv va00 2
+	addv va00 70
+	addv va00 posl
+
+*	call 1002 vtos ov99 1
+
+endm
+
+
+
+
+
+
+
+*
+**_P1_ is value to set slider to, used when loading from file or initializing
+*
+*scrp 1 1 62000 1000
+*
+*targ ownr
+*
+*	inst
+*
+*
+**clamp slider to values inside the bar
+*
+*		doif va00 < posl
+*			setv va00 posl
+*		endi
+*
+*
+*		setv va03 posl
+*		addv va03 wdth
+*
+*
+*		doif va00 > va03
+*			setv va00 va03
+*		endi
+*
+**todo: maybe check if the slider head is null and create it here if it is.
+*		targ ov02
+*
+*
+**subtract half the width of the playhead sprite to get the offset correct.
+*		subv va00 5
+*
+*
+*		mvto va00 va02
+*
+*
+*
+*endm
+
+
+
+
+
+
+
+*****************************************
+** MOVE SLIDER HEAD TO CORRECT POSITION *                          (probably also obsolete)
+***************** 2000 ******************
+*****************************************
+*
+**_p1_ is the value to set the slider to
+*
+*
+*scrp 1 1 64769 2000
+*
+**********************************************
+** CONVERT SLIDER POSITION INTO A PERCENTAGE *
+**********************************************
+*
+**Get the position on the slider
+*setv VA00 _P1_
+*mulv VA00 1.0
+*
+**Get the MAXIMUM position on the slider
+*setv VA01 WDTH
+*mulv VA01 1.0
+*
+**Divide (chem amount) by (MAX chem amount)
+*divv VA00 VA01
+*
+**Multiply the result by 100 to get out percentage
+*mulv VA00 100.0
+*
+*endm
+
+
+
+
+
+
+
+
+
+
+
+
+*set textbox text from _P1_ into a number between -1.0 and +1.0 (including the + sign)
+*and then put the result into part number OV01 (editable text part) of OV00 (compound object this slider is attached to).
+
+scrp 1 1 64769 1002
+
+*move _p1_ into va00
+	setv va00 _p1_
+
+*clamp value between -1.0 and 1.0
+	doif va00 < -1.0
+		setv va00 -1.0
+	endi
+
+	doif va00 > 1.0
+		setv va00 1.0
+	endi
+
+*convert it to a float (whole numbers want to be ints)
+	mulv va00 1.0
+
+*add a + or - sign depending if it's positive or negative. if it's between -0.1 and 0.1 just round it to 0.0
+	doif va00 > 0.1
+		sets va01 "+"
+		adds va01 vtos va00
+	elif va00 < -0.1
+		sets va01 vtos va00
+	else
+		sets va01 "0.0"
+	endi
+
+*limit string length to 3 characters max (+0.9 instead of +0.91234 etc)
+	doif strl va01 > 3
+		sets va01 subs va01 1 4
+	endi
+
+*target the editable text part (pat: text) linked to this slider and put the text there!!
+	targ ov00
+	part mv01
+	ptxt va01
+
+endm
+
+
+
+
+
+
+
+
+****************************************
+* MOVE SLIDER HEAD TO CORRECT POSITION *           (this likely doesn't work anymore!!!!!)
+**************** 2000 ******************
+****************************************
+
+*_p1_ is the value to set the slider to
+
+
+scrp 1 1 64769 2000
+
+*********************************************
+* CALCULATE PERCENTAGE *
+*********************************************
+
+	setv va02 post
+
+*Get the value to set the slider to from _P1_
+	setv VA00 _P1_
+	mulv VA00 1.0
+
+*remap slider range from -1.0 to +1.0 space to 0.0 to 1.0 space so it gets set correctly.
+	addv va00 1.0
+	divv va00 2.0
+
+*Divide the result by 100 to get the fraction
+*(THIS IS NOT NEEDED BECAUSE WE ARE STORING VALUES AS FRACTIONS ANYWAY)
+*divv VA00 100.0
+
+*multiply the value by the max value of the slider to get the position to put it in.
+	mulv VA00 wdth
+
+*add the position of the control to the value, so that it appears in the correct place.
+	addv Va00 posl
+
+*put final value in ov98.
+*	setv ov98 va00
+
+
+*	targ ov00
+
+
+
+**todo: maybe check if the slider head is null and create it here if it is.
+	targ ov02
+
+
+**subtract half the width of the playhead sprite to get the offset correct.
+	subv va00 5
+
+
+	mvto va00 va02
+
+endm
+
+
+
+
+
+
+
+*SCRIPT 1000, CALLED FROM EXTERNAL COMPOUND OBJECT
+
+*ov00 is set to 1 when the mouse is pressed down.
+
+scrp 1 1 64769 1000
+
+
+*get us out of any text boxes
+	targ null
+	fcus
+
+	targ ownr
+
+*listen for mouse moves and mouse release
+	imsk 20
+
+*call the Move Slider Head to Pointer Position script
+	call 1001 0 0
+
+endm
+
+
+
+
+*RAW MOUSE UP SCRIPT
+*(only enabled when clicking and holding the pat: butt)
+
+scrp 1 1 64769 77
+
+*disable listening for any further input (mouse moves)
+	imsk 0
+
+endm
+
+
+
+*RAW MOUSE MOVE SCRIPT
+*(only enabled when clicking and holding the pat: butt)
+
+scrp 1 1 64769 75
+
+*call the Move Slider Head to Pointer Position script
+	call 1001 0 0
+
+endm
+
+
+
+
+
+
+
+
+****************************************
+* MOVE SLIDER HEAD TO POINTER POSITION *
+**************** 1001 ******************
+****************************************
+
+scrp 1 1 64769 1001
+
+	inst
+
+*get Hand position
+	targ pntr
+
+	setv va00 posl
+	setv va01 post
+
+*subtract X and Y of compound object (OV00) from Hand position to get the position relative to the compound object.
+	targ mv00
+
+	subv va00 posl
+	subv va01 post
+
+*clamp slider to values inside the bar
+
+	doif va00 < mv97
+		setv va00 mv97
+	endi
+
+	setv va03 mv97
+	addv va03 game "Holodeck_slider_Width"
+
+	doif va00 > va03
+		setv va00 va03
+	endi
+
+**set va02 to a copy of va00 and do some funky maths on it to put it in the -1.0 to +1.0 range
+	setv va02 va00
+	subv va02 mv97
+	subv va02 va05
+	mulv va02 2
+	divv va02 game "Holodeck_slider_Width"
+	subv va02 1
+
+*call function that targets editable text part of this slider, properly formats the number and sets it as the ptxt.
+	call 1002 va02 1
+
+*store slider_PlayheadWidth / 2 in va05
+	setv va05 game "Holodeck_slider_PlayheadWidth"
+	divv va05 2
+
+*subtract it from the position to correctly center the Playhead
+	subv va00 va05
+
+*position slider playhead part (pat: dull).
+	pat: move mv02 va00 mv98
+
+endm

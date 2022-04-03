@@ -1,4 +1,17 @@
+enum 1 1 62000
+	kill targ
+next
+
 enum 1 1 64714
+	kill targ
+next
+
+
+enum 1 1 64769
+	kill targ
+next
+
+enum 1 1 64741
 	kill targ
 next
 
@@ -7,8 +20,19 @@ next
 setv game "Holodeck_MaxImageNameAttempts" 100
 
 
-new: comp 1 1 64714 "holodeck_options" 0 0 1
+new: comp 1 1 64714 "holodeck_options" 0 0 2
 *new: comp 1 1 64714 "holodeck_options_template" 0 0 1
+
+*store the Object Settings Panel in va99
+*(so we can switch back to it after creating separate dropdown objects)
+
+seta va99 targ
+
+
+*title bar drag button
+pat: butt 10 "holodeck_options" 3 0 18 12 1 [] 9000 0
+
+
 
 *OV97 - inital x pos
 *setv OV97 333
@@ -26,9 +50,61 @@ new: comp 1 1 64714 "holodeck_options" 0 0 1
 *pat: text 9000 "holodeck_settings" 3 283 381 1 9000 "whiteontransparentchars"
 * sprite name: 283, 381
 
-pat: butt 9001 "holodeck_settings" 1 0 50 50 1 [] 9001 0
+pat: butt 9001 "holodeck_settings" 1 0 550 550 1 [] 9001 0
 *Make it real:  54, 349
 
+
+
+pat: fixd 8 "holodeck_textboxes" 2 25 53 1 "whiteontransparentchars"
+part 8
+ptxt "Action to perform:"
+
+
+pat: fixd 9 "holodeck_textboxes" 2 25 166 1 "whiteontransparentchars"
+part 9
+ptxt "Chemicals:"
+
+pat: fixd 12 "holodeck_textboxes" 2 25 199 1 "whiteontransparentchars"
+part 12
+ptxt "Adjust the concentrations of these chemicals in the creature which activated this object."
+
+
+pat: fixd 100 "holodeck_textboxes" 3 50 95 1 "whiteontransparentchars"
+part 100
+ptxt "Minimum X Velocity:"
+
+pat: text 101 "holodeck_textboxes" 1 190 95 1 1001 "whiteontransparentchars"
+part 101
+ptxt "-35"
+
+pat: fixd 102 "holodeck_textboxes" 3 250 95 1 "whiteontransparentchars"
+part 102
+ptxt "Maximum X Velocity:"
+
+pat: text 103 "holodeck_textboxes" 1 390 95 1 1001 "whiteontransparentchars"
+part 103
+ptxt "35"
+
+pat: fixd 104 "holodeck_textboxes" 3 50 125 1 "whiteontransparentchars"
+part 104
+ptxt "Minimum Y Velocity:"
+
+pat: text 105 "holodeck_textboxes" 1 190 125 1 1001 "whiteontransparentchars"
+part 105
+ptxt "-45"
+
+pat: fixd 106 "holodeck_textboxes" 3 250 125 1 "whiteontransparentchars"
+part 106
+ptxt "Maximum Y Velocity:"
+
+pat: text 107 "holodeck_textboxes" 1 390 125 1 1001 "whiteontransparentchars"
+part 107
+ptxt "-60"
+
+
+pat: fixd 11 "holodeck_textboxes" 3 25 356 1 "whiteontransparentchars"
+part 11
+ptxt "Animation:"
 
 pat: fixd 1 "holodeck_textboxes" 3 25 390 1 "whiteontransparentchars"
 part 1
@@ -46,6 +122,11 @@ pat: fixd 4 "holodeck_textboxes" 3 25 463 1 "whiteontransparentchars"
 part 4
 ptxt "Number of times to play:"
 
+pat: fixd 23 "holodeck_textboxes" 2 62 519 1 "whiteontransparentchars"
+part 23
+ptxt "Play animation BEFORE main action"
+
+
 pat: text 5 "holodeck_textboxes" 1 206 463 1 1001 "whiteontransparentchars"
 part 5
 ptxt "1"
@@ -59,78 +140,516 @@ pat: text 7 "holodeck_textboxes" 1 206 491 1 1001 "whiteontransparentchars"
 part 7
 ptxt "5"
 
+pat: fixd 13 "holodeck_textboxes" 3 355 520 1 "whiteontransparentchars"
+part 13
+ptxt "Preview"
+
+pat: dull 14 "holodeck_options" 1 31 79 1
+pat: dull 15 "holodeck_options" 1 31 160 1
+pat: dull 16 "holodeck_options" 1 31 193 1
+pat: dull 17 "holodeck_options" 1 31 350 1
+pat: dull 18 "holodeck_options" 1 31 382 1
+pat: dull 19 "holodeck_options" 1 31 545 1
+pat: dull 20 "holodeck_options" 1 31 578 1
+
+pat: dull 21 "holodeck_options" 2 345 389 1
+
+pat: fixd 22 "holodeck_textboxes" 2 25 552 1 "whiteontransparentchars"
+part 22
+ptxt "Sound to play:"
 
 
-mvto 530 90468
+*play button
+pat: butt 30 "holodeck_buttons" 2 0 423 520 1 [] 1001 0
+*pause button
+pat: butt 31 "holodeck_buttons" 4 0 449 520 1 [] 1001 0
+
+*play sound button
+pat: butt 32 "holodeck_buttons" 6 0 249 550 1 [] 1001 0
+
+
+
+****************************************************************************
+*Action To Perform: dropdown
+****************************************************************************
+
+*remember X and Y of dropdown to create list when clicked!
+setv va00 167
+setv va01 54
+
+*remember part numbers so dropdown manager can refer to them
+setv va02 33
+setv va03 34
+
+setv va04 va01
+subv va04 1
+
+*button component of dropdown
+pat: butt va02 "holodeck_dropdown" 0 0 va00 va01 1 [] 1000 1
+*fixed text component of dropdown
+pat: fixd va03 "holodeck_dropdown" 8 va00 va04 1 "whiteontransparentchars"
+
+*dropdown manager for Create Action To Perform dropdown.
+new: simp 1 1 64741 "blnk" 0 0 0
+
+*ov00 - index number in dropdown list
+setv ov00 1
+*ov01 - dropdown X
+setv ov01 va00
+*ov02 - dropdown Y
+setv ov02 va01
+*ov03 - button part (pat: butt) number on compound agent
+setv ov03 va02
+*ov04 - text part (pat: fixd) number on compound agent
+setv ov04 va03
+*ov05 - catalog array associated with dropdown
+sets ov05 "holodeck_actions"
+*ov06 - width of holodeck control. can be 192 or 101 for now.
+setv ov06 192
+*ov07 - state of dropdown - 0 (closed) or 1 (open)
+setv ov07 0
+
+*store dropdown manager object in VA98 for a moment
+seta va98 targ
+
+*target main Object Settings Panel again
+targ va99
+
+*put stored dropdown manager object into OV00 (always put a new dropdown in a new OV!)
+seta ov00 va98
+
+************************************************************************
 
 
 
 
-*enum 1 1 64769
-*	kill targ
-*next
-*
-*enum 1 1 62000
-*	kill targ
-*next
-*
-*
-*
-*
-*
-*		
-*		
-*		
-*		
-*		
-*		
-*		
-*
-*
-**new: comp 1 1 64769 "holodeck_slider" 0 0 4
-*
-*pat: butt 1001 "holodeck_slider" 0 0 VA00 VA01 2 [] 1001 0
-*
-**OV97 - inital x pos
-**setv OV97 53
-**OV98 - initial y pos
-**setv OV98 268
-**OV99 - initial value
-**setv OV99 0.0
-*
-*seta va50 targ
-*
-**new: comp 1 1 64769 "holodeck_slider" 0 0 4
-**OV97 - inital x pos
-*setv OV97 320
-**OV98 - initial y pos
-*setv OV98 268
-**OV99 - initial value
-*setv OV99 0.0
-*
-*seta va51 targ
-*
-*
-*new: comp 1 1 64769 "holodeck_slider" 0 0 4
-**OV97 - inital x pos
-*setv OV97 53
-**OV98 - initial y pos
-*setv OV98 268
-**OV99 - initial value
-*setv OV99 0.0
-*
-*seta va52 targ
-*
-*
-*new: comp 1 1 64769 "holodeck_slider" 0 0 4
-**OV97 - inital x pos
-*setv OV97 799
-**OV98 - initial y pos
-*setv OV98 268
-**OV99 - initial value
-*setv OV99 0.0
-*
-*seta va53 targ
+
+
+
+
+
+
+
+****************************************************************************
+*Sound To Play: dropdown
+****************************************************************************
+
+*remember X and Y of dropdown to create list when clicked!
+setv va00 139
+setv va01 553
+
+*remember part numbers so dropdown manager can refer to them
+setv va02 35
+setv va03 36
+
+setv va04 va01
+subv va04 1
+
+*button component of dropdown
+pat: butt va02 "holodeck_dropdown_short" 0 0 va00 va01 1 [] 2000 1
+*fixed text component of dropdown
+pat: fixd va03 "holodeck_dropdown_short" 8 va00 va04 1 "whiteontransparentchars"
+
+*dropdown manager for Create Action To Perform dropdown.
+new: simp 1 1 64741 "blnk" 0 0 0
+
+*ov00 - index number in dropdown list
+setv ov00 1
+*ov01 - dropdown X
+setv ov01 va00
+*ov02 - dropdown Y
+setv ov02 va01
+*ov03 - button part (pat: butt) number on compound agent
+setv ov03 va02
+*ov04 - text part (pat: fixd) number on compound agent
+setv ov04 va03
+*ov05 - catalog array associated with dropdown
+sets ov05 "holodeck_sounds"
+*ov06 - width of holodeck control. can be 192 or 101 for now.
+setv ov06 101
+*ov07 - state of dropdown - 0 (closed) or 1 (open)
+setv ov07 0
+
+*store dropdown manager object in VA98 for a moment
+seta va98 targ
+
+*target main Object Settings Panel again
+targ va99
+
+*put stored dropdown manager object into OV01 (always put a new dropdown in a new OV!)
+seta ov01 va98
+
+************************************************************************
+
+
+
+
+
+
+
+****************************************************************************
+*Chemical 1 dropdown
+****************************************************************************
+
+*remember X and Y of dropdown to create list when clicked!
+setv va00 49
+setv va01 244
+
+*remember part numbers so dropdown manager can refer to them
+setv va02 37
+setv va03 38
+
+setv va04 va01
+subv va04 1
+
+*button component of dropdown
+pat: butt va02 "holodeck_dropdown" 0 0 va00 va01 1 [] 3001 1
+*fixed text component of dropdown
+pat: fixd va03 "holodeck_dropdown" 8 va00 va04 1 "whiteontransparentchars"
+
+*dropdown manager for Create Action To Perform dropdown.
+new: simp 1 1 64741 "blnk" 0 0 0
+
+*ov00 - index number in dropdown list
+setv ov00 1
+*ov01 - dropdown X
+setv ov01 va00
+*ov02 - dropdown Y
+setv ov02 va01
+*ov03 - button part (pat: butt) number on compound agent
+setv ov03 va02
+*ov04 - text part (pat: fixd) number on compound agent
+setv ov04 va03
+*ov05 - catalog array associated with dropdown
+sets ov05 "holodeck_chemicals"
+*ov06 - width of holodeck control. can be 192 or 101 for now.
+setv ov06 192
+*ov07 - state of dropdown - 0 (closed) or 1 (open)
+setv ov07 0
+
+*store dropdown manager object in VA98 for a moment
+seta va98 targ
+
+*target main Object Settings Panel again
+targ va99
+
+*put stored dropdown manager object into OV02 (always put a new dropdown in a new OV!)
+seta ov02 va98
+
+************************************************************************
+
+
+
+
+
+****************************************************************************
+*Chemical 2 dropdown
+****************************************************************************
+
+*remember X and Y of dropdown to create list when clicked!
+setv va00 265
+setv va01 244
+
+*remember part numbers so dropdown manager can refer to them
+setv va02 39
+setv va03 40
+
+setv va04 va01
+subv va04 1
+
+*button component of dropdown
+pat: butt va02 "holodeck_dropdown" 0 0 va00 va01 1 [] 3002 1
+*fixed text component of dropdown
+pat: fixd va03 "holodeck_dropdown" 8 va00 va04 1 "whiteontransparentchars"
+
+*dropdown manager for Create Action To Perform dropdown.
+new: simp 1 1 64741 "blnk" 0 0 0
+
+*ov00 - index number in dropdown list
+setv ov00 1
+*ov01 - dropdown X
+setv ov01 va00
+*ov02 - dropdown Y
+setv ov02 va01
+*ov03 - button part (pat: butt) number on compound agent
+setv ov03 va02
+*ov04 - text part (pat: fixd) number on compound agent
+setv ov04 va03
+*ov05 - catalog array associated with dropdown
+sets ov05 "holodeck_chemicals"
+*ov06 - width of holodeck control. can be 192 or 101 for now.
+setv ov06 192
+*ov07 - state of dropdown - 0 (closed) or 1 (open)
+setv ov07 0
+
+*store dropdown manager object in VA98 for a moment
+seta va98 targ
+
+*target main Object Settings Panel again
+targ va99
+
+*put stored dropdown manager object into OV03 (always put a new dropdown in a new OV!)
+seta ov03 va98
+
+************************************************************************
+
+
+
+
+
+
+
+
+****************************************************************************
+*Chemical 3 dropdown
+****************************************************************************
+
+*remember X and Y of dropdown to create list when clicked!
+setv va00 49
+setv va01 296
+
+*remember part numbers so dropdown manager can refer to them
+setv va02 41
+setv va03 42
+
+setv va04 va01
+subv va04 1
+
+*button component of dropdown
+pat: butt va02 "holodeck_dropdown" 0 0 va00 va01 1 [] 3003 1
+*fixed text component of dropdown
+pat: fixd va03 "holodeck_dropdown" 8 va00 va04 1 "whiteontransparentchars"
+
+*dropdown manager for Create Action To Perform dropdown.
+new: simp 1 1 64741 "blnk" 0 0 0
+
+*ov00 - index number in dropdown list
+setv ov00 1
+*ov01 - dropdown X
+setv ov01 va00
+*ov02 - dropdown Y
+setv ov02 va01
+*ov03 - button part (pat: butt) number on compound agent
+setv ov03 va02
+*ov04 - text part (pat: fixd) number on compound agent
+setv ov04 va03
+*ov05 - catalog array associated with dropdown
+sets ov05 "holodeck_chemicals"
+*ov06 - width of holodeck control. can be 192 or 101 for now.
+setv ov06 192
+*ov07 - state of dropdown - 0 (closed) or 1 (open)
+setv ov07 0
+
+*store dropdown manager object in VA98 for a moment
+seta va98 targ
+
+*target main Object Settings Panel again
+targ va99
+
+*put stored dropdown manager object into OV04 (always put a new dropdown in a new OV!)
+seta ov04 va98
+
+************************************************************************
+
+
+
+
+
+
+****************************************************************************
+*Chemical 4 dropdown
+****************************************************************************
+
+*remember X and Y of dropdown to create list when clicked!
+setv va00 265
+setv va01 296
+
+*remember part numbers so dropdown manager can refer to them
+setv va02 43
+setv va03 44
+
+setv va04 va01
+subv va04 1
+
+*button component of dropdown
+pat: butt va02 "holodeck_dropdown" 0 0 va00 va01 1 [] 3004 1
+*fixed text component of dropdown
+pat: fixd va03 "holodeck_dropdown" 8 va00 va04 1 "whiteontransparentchars"
+
+*dropdown manager for Create Action To Perform dropdown.
+new: simp 1 1 64741 "blnk" 0 0 0
+
+*ov00 - index number in dropdown list
+setv ov00 1
+*ov01 - dropdown X
+setv ov01 va00
+*ov02 - dropdown Y
+setv ov02 va01
+*ov03 - button part (pat: butt) number on compound agent
+setv ov03 va02
+*ov04 - text part (pat: fixd) number on compound agent
+setv ov04 va03
+*ov05 - catalog array associated with dropdown
+sets ov05 "holodeck_chemicals"
+*ov06 - width of holodeck control. can be 192 or 101 for now.
+setv ov06 192
+*ov07 - state of dropdown - 0 (closed) or 1 (open)
+setv ov07 0
+
+*store dropdown manager object in VA98 for a moment
+seta va98 targ
+
+*target main Object Settings Panel again
+targ va99
+
+*put stored dropdown manager object into OV05 (always put a new dropdown in a new OV!)
+seta ov05 va98
+
+************************************************************************
+
+
+
+
+
+
+
+*****************************************************************************
+**Chemical 1 Amount slider
+*****************************************************************************
+
+
+*remember X and Y of slider so slider head can be correctly constrained!
+setv va00 54
+setv va01 268
+
+*remember part numbers so slider script can refer to them
+setv va02 47
+setv va03 48
+setv va04 49
+
+*X of editable text component of dropdown
+setv va05 va00
+addv va05 game "Holodeck_slider_TextboxXOffset"
+
+*Y of editable text component of dropdown
+setv va06 va01
+addv va06 game "Holodeck_slider_TextboxYOffset"
+
+*button component of slider (backdrop of slider bar, clicking it makes the control active)
+pat: butt va02 "holodeck_slider" 0 0 VA00 VA01 2 [] 3005 0
+*playhead component of slider
+pat: dull va03 "holodeck_slider" 2 va00 va01 5
+*editable text component of slider
+pat: text va04 "holodeck_slider" 3 VA05 VA06 1 3006 "WhiteOnTransparentChars"
+
+*slider manager for Chemical 1 Amount slider.
+new: simp 1 1 64769 "blnk" 0 0 0
+
+*OV00 - compound object this slider is part of
+seta ov00 va99
+*OV01 - editable text part (pat: text) number on compound agent
+setv ov01 va04
+*OV02 - slider head part (pat: dull) number on compound agent
+setv ov02 va03
+
+
+
+*OV97 - initial x position
+setv ov97 va00
+*OV98 - initial y position
+setv ov98 va01
+
+
+*OV99 - button part (pat: butt) number on compound object - used to identify which Slider this Slider Manager is linked to
+setv ov99 va02
+
+*store slider manager object in VA98 for a moment
+seta va98 targ
+
+*target main Object Settings Panel again
+targ va99
+
+*put stored dropdown manager object into OV07 (always put a new slider in a new OV!)
+*seta ov07 va98
+
+
+*************************************************************************
+
+
+
+
+
+
+
+
+*need script 3005 that activates the imsk property of the linked slider, just like the dropdown
+*need script 1002 that checks if text input in slider textbox is valid.
+
+
+
+
+
+
+
+
+
+
+
+
+
+mvto 300 90268
+
+
+
+
+
+
+
+*clicked window title
+scrp 1 1 64714 9000
+
+*get the pointer position
+	targ pntr
+
+	setv va00 posl
+	setv va01 post
+
+*subtract the position of the window to get screen coords
+	targ ownr
+
+	subv va00 posl
+	subv va01 post
+
+*invert the values to get values flto can make use of
+	negv va00
+	negv va01
+
+*set window to float under cursor
+	frel pntr
+
+	flto va00 va01
+
+	attr 32
+
+*listen for mouse up/unpress events
+	imsk 16
+
+endm
+
+
+
+scrp 1 1 64714 77
+
+*if left mouse button is unpressed
+	doif _p1_ = 1
+
+		attr 0
+
+		frel null
+
+	endi
+
+endm
 
 
 
@@ -144,6 +663,133 @@ scrp 1 1 64714 1001
 	fcus
 
 endm
+
+
+
+
+
+
+*********************************************************************************
+****************************** DROPDOWN SCRIPTS *********************************
+*********************************************************************************
+
+scrp 1 1 64714 1000
+
+*call dropdown script for Action to Perform: and send the agent we're part of
+	mesg wrt+ ov00 1000 ownr 0 0
+
+endm
+
+
+
+
+
+scrp 1 1 64714 2000
+
+*call dropdown script for Action to Perform: and send the agent we're part of
+	mesg wrt+ ov01 1000 ownr 0 0
+
+endm
+
+
+
+
+
+
+
+scrp 1 1 64714 3001
+
+*call dropdown script for Action to Perform: and send the agent we're part of
+	mesg wrt+ ov02 1000 ownr 0 0
+
+endm
+
+
+scrp 1 1 64714 3002
+
+*call dropdown script for Action to Perform: and send the agent we're part of
+	mesg wrt+ ov03 1000 ownr 0 0
+
+endm
+
+
+scrp 1 1 64714 3003
+
+*call dropdown script for Action to Perform: and send the agent we're part of
+	mesg wrt+ ov04 1000 ownr 0 0
+
+endm
+
+scrp 1 1 64714 3004
+
+*call dropdown script for Action to Perform: and send the agent we're part of
+	mesg wrt+ ov05 1000 ownr 0 0
+
+endm
+
+
+*for stimulus dropdown.
+
+scrp 1 1 64714 4001
+
+*script number 1000. 
+*dropdown object stored in OV06.
+*load catalog array "holodeck_stimulus". 
+*send message back to text part 4001.
+	mesg wrt+ ov06 1000 "holodeck_stimulus" 4001 0
+
+endm
+
+
+
+
+*********************************************************************************
+
+
+
+
+
+
+
+****************************************************************************************
+******************************* SHARED SLIDER SCRIPT ***********************************
+****************************************9002********************************************
+
+scrp 1 1 64714 9002
+
+	inst
+
+*call slider script for slider manager which is linked to the slider part our mouse is over.
+	enum 1 1 64769
+		doif ov99 = hotp
+			mesg writ targ 1000
+		endi
+	next
+
+
+*call slider script for Chemical 1 Amount and send the agent we're part of
+*	mesg wrt+ ov07 1000 ownr 0 0
+
+endm
+
+
+
+
+scrp 1 1 64714 3006
+
+*call slider textbox enter script for Chemical 1 Amount and send the agent we're part of(???)
+*todo: not set up yet.
+*	mesg wrt+ ov07 1000 ownr 0 0
+
+endm
+
+
+
+
+
+
+
+
 
 
 
@@ -300,6 +946,7 @@ scrp 1 1 64714 9001
 	sets VA16 "dr10"
 
 
+*READ VALUES FROM ANIMATION SECTION AND CONSTRUCT A VALID STRING
 	part 3
 	sets VA17 ptxt
 	adds VA17 "xx"

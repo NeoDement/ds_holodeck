@@ -1,5 +1,4 @@
-
-setv game "holodeck_activate1_SoundIndex" 0
+*tweakable dropdown settings
 
 setv game "holodeck_dropdown_NumEntriesToDisplay" 14
 
@@ -7,21 +6,22 @@ setv game "holodeck_dropdown_MenuSegmentHeight" 21
 
 setv game "holodeck_dropdown_MenuSegmentWidth" 192
 
-*todo: way too many game variables. see how much you can reduce this with some cleanup later.
 
-setv game "holodeck_dropdown_X" 0
 
-setv game "holodeck_dropdown_Y" 0
-
+*ActionToPerform
+*167 53
 
 
 
-setv game "holodeck_dropdown_X" 200
-setv game "holodeck_dropdown_Y" -50
 
-*move this test elsewhere:
-pat: butt 8001 "holodeck_dropdown" 0 0 game "holodeck_dropdown_X" game "holodeck_dropdown_Y" 1 [] 8001 0
+*ov00 - index number in dropdown list
+*ov01 - dropdown X
+*ov02 - dropdown Y
+*ov03 - text part (pat: fixd) number on compound agent
 
+*script number 2000. load catalog array "holodeck_stimulus". send message back to text part 8001.
+mesg wrt+ ov99 2000 "holodeck_stimulus" 8001 0
+*from
 
 *for now, each dropdown button needs to have a text part with an ID 1 higher than the dropdown button.
 *this is so anything that needs to write text to the button can just addv 1 without me having to write another bunch of coordinates down.
@@ -31,17 +31,6 @@ pat: fixd 8002 "holodeck_dropdown" 8 game "holodeck_dropdown_X" game "holodeck_d
 
 *open dropdown menu
 
-
-
-*DROPDOWN TEST SCRIPT
-scrp 1 1 64735 8001
-
-*	call 9990 8001 "holodeck_sounds"
-*	call 9990 8001 "holodeck_actions"
-*	call 9990 8001 "holodeck_chemicals"
-	call 9990 8001 "holodeck_stimulus"
-
-endm
 
 
 

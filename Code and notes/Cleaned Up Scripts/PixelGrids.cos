@@ -1,0 +1,1533 @@
+enum 1 1 64742
+	kill targ
+next
+
+enum 1 1 64743
+	kill targ
+next
+
+
+
+
+*SELECTED FRAME THAT EDITS ARE BEING APPLIED TO
+setv game "Holodeck_SelectedFrame" 0
+
+*NUMBER OF PIXELS ON THE X (horizontal) AXIS
+setv game "Holodeck_NumPixelsX" 18
+
+*NUMBER OF PIXELS ON THE Y (vertical) AXIS
+setv game "Holodeck_NumPixelsY" 18
+
+*PIXEL SIZE (Each pixel is represented by an X*X block)
+setv game "Holodeck_PixelSize" 8
+
+*PIXEL SIZE ON THE REAL SCALE PREVIEW IMAGE (Each pixel is represented by an X*X block)
+setv game "Holodeck_PixelSizeTiny" 2
+
+*DEFAULT BRUSH SIZE IS 1x1 //todo: this is defined in multiple places
+sets game "Holodeck_BrushSize" "X,"
+
+
+
+
+
+
+
+
+
+
+
+
+
+new: comp 1 1 64742 "holodeck_pixelgrid" 0 0 2
+
+
+*Listen for these events:
+* 8 Raw Mouse Down + 16 Raw Mouse Up
+*imsk 24
+* + 4 Raw Mouse Move
+imsk 28
+
+
+*part number variable starts at 1 because 0 is the background
+setv va00 1
+
+*offset by 1px in each direction so it doesn't sit in the corner weirdly
+*?????? this feels like it's going to be obsolete soon and start at 0 instead.
+setv va01 1
+setv va02 1
+
+reps game "Holodeck_NumPixelsY"
+
+	reps game "Holodeck_NumPixelsX"
+
+		pat: dull va00 "holodeck_pixelgrid" 1 va01 va02 1
+
+		addv va00 1
+
+		addv va01 game "Holodeck_PixelSize"
+
+	repe
+
+	setv va01 1
+
+	addv va02 game "Holodeck_PixelSize"
+
+repe
+
+mvto 64 90483
+
+
+*store main grid in a global variable so we can access it later
+seta game "Holodeck_PixelGrid" targ
+
+
+cmrt 0
+
+
+
+*create 10 tiny pixel grids, one for each frame.
+
+*setv va50 312
+*setv va51 90267
+
+setv va50 27
+setv va51 68
+
+*set this to 0 and use it to count loop iterations.
+setv va03 0
+
+*reps 10
+*10 anim frames, 1 clipboard, 1 anim preview window and 1 Transformation Buffer.
+reps 13
+
+	new: comp 1 1 64743 "holodeck_pixelgrid_tiny" 0 0 1
+
+*part number variable starts at 1 because 0 is the background
+	setv va00 1
+	setv va01 0
+	setv va02 0
+
+	reps game "Holodeck_NumPixelsY"
+*reps 18
+
+		reps game "Holodeck_NumPixelsX"
+*	reps 18
+
+			pat: dull va00 "holodeck_pixelgrid_tiny" 1 va01 va02 1
+
+			addv va00 1
+
+			addv va01 game "Holodeck_PixelSizeTiny"
+
+		repe
+
+		setv va01 0
+
+		addv va02 game "Holodeck_PixelSizeTiny"
+
+	repe
+
+*	doif va50 = 982
+	doif va50 = 697
+		addv va51 150
+		setv va50 27
+	endi
+
+*	mvto va50 va51
+
+
+	seta va52 game "holodeck_animationpanel"
+
+	frel va52
+	flto va50 va51
+	attr 32
+
+	addv va50 134
+
+*store each frame in an object variable
+* OV50 - OV59
+	addv va03 1
+
+	doif va03 = 1
+		seta game "Holodeck_AnimFrame_0" targ
+
+*game "Holodeck_AnimFrame_Selected" is currently selected frame. Initialized as Frame 0.
+		seta game "Holodeck_AnimFrame_Selected" targ
+
+	elif va03 = 2
+		seta game "Holodeck_AnimFrame_1" targ
+	elif va03 = 3
+		seta game "Holodeck_AnimFrame_2" targ
+	elif va03 = 4
+		seta game "Holodeck_AnimFrame_3" targ
+	elif va03 = 5
+		seta game "Holodeck_AnimFrame_4" targ
+	elif va03 = 6
+		seta game "Holodeck_AnimFrame_5" targ
+	elif va03 = 7
+		seta game "Holodeck_AnimFrame_6" targ
+	elif va03 = 8
+		seta game "Holodeck_AnimFrame_7" targ
+	elif va03 = 9
+		seta game "Holodeck_AnimFrame_8" targ
+	elif va03 = 10
+		seta game "Holodeck_AnimFrame_9" targ
+
+*Special case for the clipboard frame
+	elif va03 = 11
+		seta game "Holodeck_AnimFrame_Clipboard" targ
+		mvto -50 -50
+
+*Special case for the animation preview frame
+	elif va03 = 12
+		seta game "Holodeck_AnimPreview" targ
+		mvto -50 -50
+
+*Special case for the Transformation Buffer frame
+	elif va03 = 13
+		seta game "Holodeck_TransformationBuffer" targ
+		mvto -50 -50
+	endi
+
+repe
+
+
+
+
+*TODO: IT SHOULD BE CHECKING IF IT'S IN THE BOUNDS OF THE CANVAS HERE TOO!
+
+*RAW MOUSE DOWN SCRIPT
+
+*ov00 is set to 1 when the mouse is pressed down.
+
+scrp 1 1 64742 76
+
+
+*1 - left mouse button
+	doif _p1_ = 1
+
+*set ov00 to 1 so the mouse move script knows to keep drawing when the mouse moves.
+		setv ov00 1
+
+		inst
+
+*get pointer coords
+		targ pntr
+
+		setv va00 posl
+		setv va01 post
+
+		targ ownr
+
+*CHECK IF THE POINTER IS OVER THE DRAWING SURFACE (OV03 STORES IF WE'RE OVER THE DRAWING SURFACE OR NOT)
+		call 9007 va00 va01
+		doif OV03 = 1
+
+*DRAW AT X/Y WITH CURRENTLY SELECTED BRUSH
+			call 9010 va00 va01
+
+		endi
+	endi
+endm
+
+
+
+
+*RAW MOUSE UP SCRIPT
+
+*ov00 is set to 0 when the mouse is NOT pressed down.
+
+scrp 1 1 64742 77
+
+	setv ov00 0
+
+*right mouse button (currently disabled)
+	doif _p1_ = 2
+
+
+		inst
+*		enum 1 1 64732
+*			kill targ
+*		next
+
+	endi
+
+endm
+
+
+
+
+
+*RAW MOUSE MOVE SCRIPT
+
+scrp 1 1 64742 75
+
+
+
+*get pointer coords
+	targ pntr
+
+	setv va00 posl
+	setv va01 post
+
+	targ ownr
+
+	inst
+
+*CHECK IF THE POINTER IS OVER THE DRAWING SURFACE (OV03 STORES IF WE'RE OVER THE DRAWING SURFACE OR NOT)
+	call 9007 va00 va01
+	doif OV03 = 1
+
+*PAUSE the game when drawing on the canvas and change tickrate to 20ms. this allows much smoother update rate for guis and drawing surfaces.
+		call 9999 ownr 0
+
+
+*inst
+
+
+*target the real Hand and make it invisible. TODO: have an external manager object that restores visibility if any errors happen
+		targ pntr
+
+		show 0
+
+*target fake cursor object and set it to the current Tool.
+		rtar 1 1 66650
+
+		pose game "Holodeck_CursorMode"
+
+*HOLODECK CURSOR MODES!
+*0 - none, default Pointer?
+*1 - Brush Tool
+*2 - Eraser Tool
+*3 - Fill Can (unimplemented)
+*4 - Colour Picker
+
+
+*attach the fake cursor to the real cursor.
+
+		frel pntr
+
+		flto 0 -26
+
+******************* END OF SET CURSOR BLOCK ***********************
+
+		targ ownr
+
+*DRAW AT X/Y WITH CURRENTLY SELECTED BRUSH IF OV00 IS SET TO 1 (mouse down, set in event 76!)
+		doif ov00 = 1
+			call 9010 va00 va01
+		endi
+
+*HAND IS OUTSIDE THE PIXEL GRID!
+*todo: account for c2tods custom cusor!
+	else
+
+
+
+
+
+
+*UNPAUSE/RESUME the game when done drawing on the canvas.
+
+		call 9998 0 0
+
+
+
+
+*target the real Hand and make it visible again.
+
+		targ pntr
+
+		show 1
+
+
+*target fake cursor object and set it to No Tool.
+		enum 1 1 66650
+
+*HOLODECK CURSOR MODES!
+*0 - none, default Hand
+*1 - Pencil Tool
+*2 - Colour Picker (unimplemented)
+*3 - Fill Can (unimplemented)
+
+
+*pose game "Holodeck_CursorMode"
+
+*detach the fake cursor from the real cursor.
+
+			frel null
+
+			flto -50 -50
+
+		next
+
+
+
+
+
+	endi
+
+endm
+
+
+
+
+
+
+
+
+
+
+
+
+*****************************************************************************************************
+*****************************************************************************************************
+**  CHECK IF THE POINTER IS OVER THE DRAWING PANEL (_P1_ should be mouseX, _P2_ should be mouseY_) **
+***********************(9007)************************************************************************
+*****************************************************************************************************
+
+************************************************
+* RETURNS 1 (TRUE) TO OV03 IF WE ARE IN BOUNDS *
+************************************************
+
+scrp 1 1 64742 9007
+
+*get canvas bounds and store them in va00, va01, va02 and va03
+
+	inst
+
+	setv va00 posl
+	setv va01 post
+
+	setv va02 va00
+	setv va03 va01
+
+*grab the Number Of Pixels on each axis and multiply it by how big a pixel is to get the canvas width/height
+
+	setv va06 game "Holodeck_NumPixelsX"
+	mulv va06 game "Holodeck_PixelSize"
+
+	setv va07 game "Holodeck_NumPixelsY"
+	mulv va07 game "Holodeck_PixelSize"
+
+	addv va02 va06
+	addv va03 va07
+*	addv va02 144
+*	addv va03 144
+
+
+	setv va04 _p1_
+	setv va05 _p2_
+
+*	inst
+
+
+*if the mouse cursor is inside the pixel grid bounds
+	doif va04 > va00 and va04 < va02 and va05 > va01 and va05 < va03
+
+		setv OV03 1
+
+	else
+
+		setv OV03 0
+
+	endi
+
+endm
+
+
+
+
+
+
+
+
+*******************************************************************************************
+*******************************************************************************************
+**  CONVERT XY COORDINATE TO PART NUMBER (NOT MULTIPLIED!!!!) (_P1_ should be mouseX, _P2_ should be mouseY_) **
+***********************(9009)**************************************************************
+*******************************************************************************************
+
+******************************
+* RETURNS PART NUMBER TO ov70 *
+******************************
+
+*todo: maybe add an option to only let it pick parts on a given agent?
+
+scrp 1 1 64742 9009
+
+
+*VA98 - X AXIS POS from input _P1_
+	setv va98 _p1_
+*VA99 - Y AXIS POS from input _P2_
+	setv va99 _p2_
+
+*subtract the position of the canvas itself from the pointer position
+*(this leaves us with values starting at 0 instead of 99452 or whatever)
+*	subv va98 va00
+*	subv va99 va01
+
+	subv va98 posl
+	subv va99 post
+
+*divide by Holodeck_PixelSize (a pixel is X pixels wide and tall)
+	divv va98 game "Holodeck_PixelSize"
+	divv va99 game "Holodeck_PixelSize"
+
+*round to the nearest int (cant control if it rounds up or down)
+	setv va98 ftoi va98
+	setv va99 ftoi va99
+
+
+
+*no longer needed but keeping it here just in case/as reference
+
+**round them DOWN to the nearest int. by cutting off everything after the decimal point.		
+*	sets va98 vtos va98
+*	sets va99 vtos va99
+*
+*
+**find the decimal point
+*	setv va50 sins va98 1 "."
+*	setv va51 sins va99 1 "."
+*
+*	subv va50 1
+*	subv va51 1
+*
+**cut off everything else
+*	sets va98 subs va98 1 va50
+*	sets va99 subs va99 1 va51
+*
+**convert the strings back to integers
+*	setv va98 stoi va98
+*	setv va99 stoi va99
+
+
+
+
+
+
+*if either of the values exceed their bounds, CLAMP them to the max
+*this is because the pointer x/y values update a bit too late when you drag it or something.
+
+
+*subtract 1 from the number of pixels on both axes first (because of the 0th row/column)
+	setv va50 game "Holodeck_NumPixelsX"
+	subv va50 1
+
+	setv va51 game "Holodeck_NumPixelsY"
+	subv va51 1
+
+
+	doif va98 > va50
+		setv va98 va50
+	endi
+
+	doif va99 > va51
+		setv va99 va51
+	endi
+
+	doif va98 < 0
+		setv va98 0
+	endi
+
+	doif va99 < 0
+		setv va99 0
+	endi
+*end of clamp operation
+
+
+*add 1 to every value so we start at 1 instead of 0 and break some calculations.
+*		addv va98 1
+*		addv va99 1
+
+
+* 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18
+
+* 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+
+
+*multiply va99 (Y coordinate in tiny pixels) by the number of X (horizontal) pixels
+
+*		mulv va99 18
+*	mulv va99 game "Holodeck_NumPixelsX"
+
+
+
+	addv va98 va99
+
+*add 1 to the final value so we're base 1 instead of base 0
+*	addv va98 1
+
+
+	targ ownr
+
+	setv ov70 va98
+*	setv va98 ov69
+*
+*	targ norn
+*
+*	sezz vtos va98
+*
+*	targ ownr
+
+
+* 001 002 003 004 005 006 007 008 009 010 011 012 013 014 015 016 017 018
+
+* 018 036 054 072 090 108 126 144 162 180 198 216 234 252 270 288 306 324
+
+*mulv va98 va99
+
+*this makes the current norn say which grid pixel ID we are hovering over.
+
+*		targ norn
+
+*		sezz vtos va98
+
+*		targ ownr
+
+endm
+
+
+
+
+
+
+
+
+
+
+*******************************************************************************************
+*******************************************************************************************
+**  CONVERT XY COORDINATE TO PART NUMBER (_P1_ should be mouseX, _P2_ should be mouseY_) **
+***********************(9008)**************************************************************
+*******************************************************************************************
+
+******************************
+* RETURNS PART NUMBER TO ov69 *
+******************************
+
+*todo: maybe add an option to only let it pick parts on a given agent?
+
+scrp 1 1 64742 9008
+
+
+*VA98 - X AXIS POS from input _P1_
+	setv va98 _p1_
+*VA99 - Y AXIS POS from input _P2_
+	setv va99 _p2_
+
+*subtract the position of the canvas itself from the pointer position
+*(this leaves us with values starting at 0 instead of 99452 or whatever)
+*	subv va98 va00
+*	subv va99 va01
+
+	subv va98 posl
+	subv va99 post
+
+*divide by Holodeck_PixelSize (a pixel is X pixels wide and tall)
+	divv va98 game "Holodeck_PixelSize"
+	divv va99 game "Holodeck_PixelSize"
+
+**round to the nearest int (cant control if it rounds up or down)
+*	setv va98 ftoi va98
+*	setv va99 ftoi va99
+
+
+
+*no longer needed but keeping it here just in case/as reference
+
+*round them DOWN to the nearest int. by cutting off everything after the decimal point.		
+	sets va98 vtos va98
+	sets va99 vtos va99
+
+
+*find the decimal point
+	setv va50 sins va98 1 "."
+	setv va51 sins va99 1 "."
+
+	subv va50 1
+	subv va51 1
+
+*cut off everything else
+	sets va98 subs va98 1 va50
+	sets va99 subs va99 1 va51
+
+*convert the strings back to integers
+	setv va98 stoi va98
+	setv va99 stoi va99
+
+
+
+
+
+
+*if either of the values exceed their bounds, CLAMP them to the max
+*this is because the pointer x/y values update a bit too late when you drag it or something.
+
+
+*subtract 1 from the number of pixels on both axes first (because of the 0th row/column)
+	setv va50 game "Holodeck_NumPixelsX"
+	subv va50 1
+
+	setv va51 game "Holodeck_NumPixelsY"
+	subv va51 1
+
+
+	doif va98 > va50
+		setv va98 va50
+	endi
+
+	doif va99 > va51
+		setv va99 va51
+	endi
+
+	doif va98 < 0
+		setv va98 0
+	endi
+
+	doif va99 < 0
+		setv va99 0
+	endi
+*end of clamp operation
+
+
+*add 1 to every value so we start at 1 instead of 0 and break some calculations.
+*		addv va98 1
+*		addv va99 1
+
+
+* 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18
+
+* 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+
+
+*multiply va99 (Y coordinate in tiny pixels) by the number of X (horizontal) pixels
+
+*		mulv va99 18
+	mulv va99 game "Holodeck_NumPixelsX"
+
+
+
+	addv va98 va99
+
+*add 1 to the final value so we're base 1 instead of base 0
+	addv va98 1
+
+
+	targ ownr
+
+	setv ov69 va98
+*	setv va98 ov69
+*
+*	targ norn
+*
+*	sezz vtos va98
+*
+*	targ ownr
+
+
+* 001 002 003 004 005 006 007 008 009 010 011 012 013 014 015 016 017 018
+
+* 018 036 054 072 090 108 126 144 162 180 198 216 234 252 270 288 306 324
+
+*mulv va98 va99
+
+*this makes the current norn say which grid pixel ID we are hovering over.
+
+*		targ norn
+
+*		sezz vtos va98
+
+*		targ ownr
+
+endm
+
+
+
+
+
+
+
+**
+**
+**
+***really early wip of CONVERT PART NUMBER TO X/Y. not sure what params it will need to work but hoping it can just reverse the math of the other function
+**
+*********************************************************************************************
+*********************************************************************************************
+****  CONVERT XY COORDINATE TO PART NUMBER (_P1_ should be mouseX, _P2_ should be mouseY_) **
+*************************(9008)**************************************************************
+*********************************************************************************************
+**
+********************************
+*** RETURNS PART NUMBER TO ov69 *
+********************************
+**
+***todo: maybe add an option to only let it pick parts on a given agent?
+**
+**scrp 1 1 64742 9008
+**
+**
+***VA98 - X AXIS POS from input _P1_
+**	setv va98 _p1_
+***VA99 - Y AXIS POS from input _P2_
+**	setv va99 _p2_
+**
+***subtract the position of the canvas itself from the pointer position
+***(this leaves us with values starting at 0 instead of 99452 or whatever)
+***	subv va98 va00
+***	subv va99 va01
+**
+**	subv va98 posl
+**	subv va99 post
+**
+***divide by Holodeck_PixelSize (a pixel is X pixels wide and tall)
+**	divv va98 game "Holodeck_PixelSize"
+**	divv va99 game "Holodeck_PixelSize"
+**
+***round to the nearest int (cant control if it rounds up or down)
+**	setv va98 ftoi va98
+**	setv va99 ftoi va99
+**
+**
+**
+***no longer needed but keeping it here just in case/as reference
+**
+****round them DOWN to the nearest int. by cutting off everything after the decimal point.		
+***	sets va98 vtos va98
+***	sets va99 vtos va99
+***
+***
+****find the decimal point
+***	setv va50 sins va98 1 "."
+***	setv va51 sins va99 1 "."
+***
+***	subv va50 1
+***	subv va51 1
+***
+****cut off everything else
+***	sets va98 subs va98 1 va50
+***	sets va99 subs va99 1 va51
+***
+****convert the strings back to integers
+***	setv va98 stoi va98
+***	setv va99 stoi va99
+**
+*
+*
+*
+*
+*
+**if either of the values exceed their bounds, CLAMP them to the max
+**this is because the pointer x/y values update a bit too late when you drag it or something.
+*
+*
+**subtract 1 from the number of pixels on both axes first (because of the 0th row/column)
+*setv va50 game "Holodeck_NumPixelsX"
+*subv va50 1
+*
+*setv va51 game "Holodeck_NumPixelsY"
+*subv va51 1
+*
+*
+*doif va98 > va50
+*setv va98 va50
+*endi
+*
+*doif va99 > va51
+*setv va99 va51
+*endi
+**end of clamp operation
+*
+*
+**add 1 to every value so we start at 1 instead of 0 and break some calculations.
+**		addv va98 1
+**		addv va99 1
+*
+*
+** 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18
+*
+** 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36
+*
+*
+**multiply va99 (Y coordinate in tiny pixels) by the number of X (horizontal) pixels
+*
+**		mulv va99 18
+*mulv va99 game "Holodeck_NumPixelsX"
+*
+*
+*
+*addv va98 va99
+*
+**add 1 to the final value so we're base 1 instead of base 0
+*addv va98 1
+*
+*
+*targ ownr
+*
+*setv ov69 va98
+*
+*endm
+*
+*
+*
+**part number
+*setv va00 ov69
+*
+**subtract 1, because it's offset by 1 at the end of the conversion process from x/y
+*subv va00 1
+
+
+
+
+
+
+******************************************************************
+* DRAW AT X/Y WITH SELECTED BRUSH - _p1_ _p2_ mouse cursor again *
+******************************************************************
+
+scrp 1 1 64742 9010
+
+*OV01 = SELECTED COLOUR
+*VA50 = SELECTED COLOUR+1
+*temporarily? adding 1 to ov01 to line up with the new c16 file
+	setv va50 ov01
+	addv va50 1
+
+
+
+
+	inst
+
+*todo: might be more efficient to target the cursor and return the pose
+
+*BRUSH TOOL
+	doif game "Holodeck_CursorMode" = 1
+
+
+
+
+
+**convert X/Y to part number
+*		call 9008 _p1_ _p2_
+*
+**select part number of main pixel grid
+*		part ov69
+*
+*		pose va50
+*
+*		setv va10 ov69
+*
+**target the smaller pixel grid and add the same brush stroke
+**		rtar 1 1 64743
+*		enum 1 1 64743
+*			part va10
+*			pose va50
+*		next
+
+*		inst
+
+
+* -----> OV09 STORES CURRENT BRUSH <-----
+
+*		sets OV09 " X ,"
+*		adds OV09 "XXX,"
+*		adds OV09 " X ,"
+
+
+		sets va70 game "Holodeck_BrushSize"
+
+*third column is ignored
+*2nd column is ignored
+
+*		inst
+
+*warning: these comments have errors in them, but it does work...
+
+*load in the brush to VA70
+*		sets va70 ov09
+
+*position of comma is how many entries to skip in the string to get to the next line: 4	
+		setv va25 sins va70 1 ","
+
+		setv va26 va25
+		divv va26 2.0
+		subv va26 1
+		mulv va26 game "Holodeck_PixelSize"
+
+
+
+
+**round to the nearest int (problem: cant control if it rounds up or down)
+*		setv va26 ftoi va26
+*		setv va99 ftoi va99
+
+*round them DOWN to the nearest int. by cutting off everything after the decimal point.		
+		sets va26 vtos va26
+
+
+*find the decimal point
+		setv va27 sins va26 1 "."
+
+		subv va27 1
+
+*cut off everything else
+		sets va26 subs va26 1 va27
+
+*convert the strings back to integers
+		setv va26 stoi va26
+
+
+
+
+
+
+
+		subv _p1_ va26
+		subv _p2_ va26
+
+*position of comma-1 is brush hw/ in pixels: 3	
+		setv va24 va25
+		subv va24 1
+
+
+*store initial position of mouse cursor in VA02
+		setv VA02 _p1_
+
+*VA40 tracks the index in the brush string. string indexes start at 1.
+		setv VA40 1
+
+*run the loop VA24 (3) times in the Y axis.
+		reps va24
+
+*BEFORE START OF NEW ROW, PREPARE STRING...
+
+*Store the position of the first "," in the 
+*			setv va60 sins va70 va40 ","
+
+
+*store VA40 (1) + VA24 (3) in VA41 (4). Subtract 1 to skip the "," after each line.
+			setv va41 va40
+			addv va41 va25
+*			subv va41 1
+
+*store the string from VA40 (1) to VA41 (4) in VA65
+			sets va65 subs va70 va40 va24
+
+
+
+			addv va40 va25
+
+
+
+*			subv va60 1
+
+*			addv va65 va24
+
+*			sets va70 subs va70 va40 va65
+
+*			addv va60 1
+
+*			setv va40 va60
+
+
+*loop iteration
+			setv va05 1
+
+			reps va24
+
+*		START OF NEW ROW
+				sets va49 subs va65 va05 1
+
+				doif va49 <> " "
+
+** 			CONVERT XY COORDINATE TO PART NUMBER **
+*NOT MULTIPLIED By PIXELSIZE ANYMORE!
+					call 9008 _p1_ _p2_
+
+*			addv _p1_ game "Holodeck_PixelSize"
+
+
+*				pose va50
+
+					setv va10 ov69
+
+					part va10
+					pose va50
+
+*target the currently selected smaller pixel grid and add the same brush stroke
+*todo: sanity check here?
+					targ game "Holodeck_AnimFrame_Selected"
+					part va10
+					pose va50
+
+				endi
+
+				targ ownr
+
+
+				addv va05 1
+
+*	add pixel size to cursor _X_ position
+				addv _p1_ game "Holodeck_PixelSize"
+			repe
+
+			setv _p1_ va02
+			addv _p2_ game "Holodeck_PixelSize"
+
+		repe
+
+
+
+*		targ norn
+*		sezz va70
+*		targ ownr
+
+*		targ norn
+*		sezz va49
+*		sezz vtos va40
+		targ ownr
+
+*		call 9008 _p1_ _p2_
+
+
+
+
+
+
+*		reps 2
+*
+*			reps 2
+*
+*				addv va00 1
+*
+*				part va00
+*
+*				pose 5
+*				addv va01 game "Holodeck_PixelSize"
+*
+*				setv va01 1
+*
+*			repe
+*
+*
+*
+*			addv va02 game "Holodeck_PixelSize"
+*
+*		repe
+
+
+
+
+
+
+*FILL TOOL - todo: CURRENTLY NOT CONTIGUOUS!
+
+	elif game "Holodeck_CursorMode" = 2
+
+
+
+*convert X/Y to part number
+		call 9008 _p1_ _p2_
+
+*select that part
+		part ov69
+
+
+		setv va04 pose
+
+
+*add 1 to the palette index to get the correct pose (for now)	
+		setv va05 OV01
+		addv va05 1
+
+
+*		setv OV01 va00
+
+
+*		targ norn
+*		sezz vtos va00
+
+
+		inst
+
+*pixel grid is 18x18
+		setv va00 game "Holodeck_NumPixelsX"
+		mulv va00 game "Holodeck_NumPixelsY"
+
+
+		setv va01 0
+
+		reps va00
+
+			addv va01 1
+
+*target main canvas and set pose
+			enum 1 1 64742
+				part va01
+				doif pose = va04
+					pose va05
+				endi
+			next
+
+*		rtar 1 1 64743
+*		enum 1 1 64743
+
+*do the same changes on the currently selected anim frame/pixel grid.
+			targ game "Holodeck_AnimFrame_Selected"
+			doif pose = va04
+				part va01
+				pose va05
+			endi
+*next
+
+		repe
+
+*	enum 1 1 64732
+*		kill targ
+*	next
+
+
+
+
+
+
+
+*ERASER TOOL
+	elif game "Holodeck_CursorMode" = 3
+
+*convert X/Y to part number
+		call 9008 _p1_ _p2_
+
+*select part number of main pixel grid
+		part ov69
+
+		pose 0
+
+		setv va10 ov69
+
+*target the currently selected smaller pixel grid and add the same brush stroke
+*		rtar 1 1 64743
+*		enum 1 1 64743
+		targ game "Holodeck_AnimFrame_Selected"
+		part va10
+		pose 0
+*		next
+
+
+
+*PICKER TOOL
+	elif game "Holodeck_CursorMode" = 4
+
+*convert X/Y to part number
+		call 9008 _p1_ _p2_
+
+		part ov69
+
+*subtract 1 from the pose to get the correct palette index (for now)		
+		setv va00 pose
+		subv va00 1
+
+		setv OV01 va00
+
+	endi
+
+
+
+endm
+
+
+
+
+
+
+
+******************************************************
+******************************************************
+**  PAUSE - _P1 is object to skip, set it to OWNR)  **
+***********************(9999)*************************
+******************************************************
+
+scrp 1 1 64742 9999
+
+	doif game "Holodeck_Paused" = 0
+
+		setv game "Holodeck_Paused" 1
+
+*change tickrate, set ideal interval in milliseconds between each tick. 
+*this allows much smoother update rate for guis and drawing surfaces.
+		buzz 20
+
+*PAUSE the game when drawing on the canvas, hovering over the dropdown menus, etc
+*so that norn brains don't have to attempt to tick at the new faster BUZZ rate.
+
+
+		inst
+		wpau 1
+		enum 1 0 0
+			doif gnus eq 2 and spcs eq 12
+				paus 0
+			else
+				paus 1
+			endi
+		next
+		enum 2 0 0
+			doif gnus eq 1 and spcs eq 1
+				paus 0
+			else
+				paus 1
+			endi
+		next
+		enum 3 0 0
+*			doif gnus ne 3 and spcs ne 103
+			paus 1
+*			endi
+		next
+		enum 4 0 0
+			paus 1
+		next
+
+*yep, we even pause the pause gui
+*enum 1 2 6
+*	paus 0
+*next
+
+*check if there was any object you were told NOT to pause
+		setv va00 type _P1_
+		doif va00 >= 3 and va00 <= 7
+
+*DON'T pause the object which called this pause
+			targ _P1_
+			paus 0
+		endi
+
+	endi
+
+endm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*********************
+*********************
+**  UNPAUSE/RESUME **
+********(9998)*******
+*********************
+
+scrp 1 1 64742 9998
+
+	doif game "Holodeck_Paused" <> 0
+
+		setv game "Holodeck_Paused" 0
+
+*change tickrate, set ideal interval in milliseconds between each tick. 
+*slow it back down to default when the cursor is off the pixelgrid for normal performance.
+*TODO: store this variable in memory instead of assuming it was 50 before you touched the grid.
+		buzz 50
+
+		inst
+		wpau 0
+		enum 1 0 0
+			paus 0
+		next
+		enum 2 0 0
+			paus 0
+		next
+		enum 3 0 0
+			paus 0
+		next
+		enum 4 0 0
+			paus 0
+		next
+
+	endi
+
+endm
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*****************************************************************
+*****************************************************************
+**  MAIN PIXELGRID "EAT" SCRIPT IS USED TO CLEAR CURRENT FRAME **
+******************************( 12 )*****************************
+*****************************************************************
+
+scrp 1 1 64742 12
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target stored canvas and store pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		pose 0
+
+*target main canvas and apply stored pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		pose 0
+
+
+	repe
+
+endm
+
+
+
+****************************************************************
+****************************************************************
+**  MAIN PIXELGRID "HIT" SCRIPT IS USED TO LOAD CURRENT FRAME **
+******************************( 3 )*****************************
+****************************************************************
+
+scrp 1 1 64742 3
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target stored canvas and store pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		setv va03 pose
+
+*target main canvas and apply stored pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		pose va03
+
+
+	repe
+
+endm
+
+
+
+
+***********************************************************************
+***********************************************************************
+**  MAIN PIXELGRID "ACTIVATE 2" SCRIPT IS USED TO SAVE CURRENT FRAME **
+******************************( 2 )************************************
+***********************************************************************
+
+scrp 1 1 64742 2
+	targ norn
+	sezz "bumba"
+	targ ownr
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and store pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		setv va03 pose
+
+*target stored canvas and apply stored pose for each pixel
+		targ game "Holodeck_AnimFrame_Selected"
+		part va01
+		pose va03
+
+
+	repe
+
+endm
+
+
+
+
+
+
+*****************************************************************************************
+*****************************************************************************************
+**  MAIN PIXELGRID "ACTIVATE 1" SCRIPT IS USED TO STORE CURRENT FRAME IN THE CLIPBOARD **
+*************************************( 1 )***********************************************
+*****************************************************************************************
+
+scrp 1 1 64742 1
+
+	inst
+
+*pixel grid is 18x18
+	setv va00 game "Holodeck_NumPixelsX"
+	mulv va00 game "Holodeck_NumPixelsY"
+
+
+	setv va01 0
+
+	reps va00
+
+		addv va01 1
+
+*target main canvas and store pose for each pixel
+		targ game "Holodeck_PixelGrid"
+		part va01
+		setv va03 pose
+
+*target clipboard and apply stored pose for each pixel
+		targ game "Holodeck_AnimFrame_Clipboard"
+		part va01
+		pose va03
+
+
+	repe
+endm
