@@ -190,7 +190,7 @@ endm
 
 
 *set textbox text from _P1_ into a number between -1.0 and +1.0 (including the + sign)
-*and then put the result into part number OV01 (editable text part) of OV00 (compound object this slider is attached to).
+*and then put the result into part number OV05 (editable text part) of OV00 (compound object this slider is attached to).
 
 scrp 1 1 64769 1002
 
@@ -226,7 +226,7 @@ scrp 1 1 64769 1002
 
 *target the editable text part (pat: text) linked to this slider and put the text there!!
 	targ ov00
-	part mv01
+	part mv05
 	ptxt va01
 
 endm
@@ -372,22 +372,25 @@ scrp 1 1 64769 1001
 	subv va00 posl
 	subv va01 post
 
-*clamp slider to values inside the bar
+*clamp slider to values inside the bar (MV01 is slider X offset)
 
-	doif va00 < mv97
-		setv va00 mv97
+	doif va00 < mv01
+		setv va00 mv01
 	endi
 
-	setv va03 mv97
+	setv va03 mv01
 	addv va03 game "Holodeck_slider_Width"
 
 	doif va00 > va03
 		setv va00 va03
 	endi
 
+
+
 **set va02 to a copy of va00 and do some funky maths on it to put it in the -1.0 to +1.0 range
 	setv va02 va00
-	subv va02 mv97
+
+	subv va02 mv01
 	subv va02 va05
 	mulv va02 2
 	divv va02 game "Holodeck_slider_Width"
@@ -404,6 +407,6 @@ scrp 1 1 64769 1001
 	subv va00 va05
 
 *position slider playhead part (pat: dull).
-	pat: move mv02 va00 mv98
+	pat: move mv04 va00 mv02
 
 endm

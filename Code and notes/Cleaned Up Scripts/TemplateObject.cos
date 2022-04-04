@@ -31,6 +31,7 @@ scrp 1 1 64730 1
 	inst
 	call 9000 1 0
 
+	wait 1
 
 
 *	sets ov01 "Anim"
@@ -67,11 +68,11 @@ scrp 1 1 64730 1
 *play sound
 	call 9002 from 0
 
-*play anim test todo:
-	call 9001 1 0
-
 *inject relevant chemicals
 	call 9003 from 0
+
+*play anim test todo:
+	call 9001 1 0
 
 
 
@@ -513,7 +514,7 @@ endm
 
 **********************************************
 
-scrp 1 1 4 9002
+scrp 1 1 64730 9002
 
 *todo: add support for sndc and sndl
 	snde OV06
@@ -536,10 +537,16 @@ endm
 
 scrp 1 1 64730 9003
 
+	inst
+	lock
+*	targ norn
+*	sezz mv05
+*	targ ownr
+
 *get the 8 values out of the string
 
 
-*va01 is the loop number/iteration (starting at 1 because of string indexes)
+*va00 is the loop number/iteration (starting at 1 because of string indexes)
 	setv va00 1
 
 *Loop for every character in the chemicals string divided by 2 (8/2=4)
@@ -552,29 +559,57 @@ scrp 1 1 64730 9003
 *VA02 is the CHEMICAL NUMBER
 		setv va02 char ov05 va00
 
+
+*for some reason when retrieving a char from a string, it needs 256 added to it if it's less than 0
+*Something seems to go wrong when storing/retrieving it I guess? But this fixes it.
+		doif va02 < 0
+			addv va02 256
+		endi
+
 *VA03 is the CHEMICAL AMOUNT
 		setv va03 char ov05 va01
+
+
+*same strange fix as above!!
+		doif va03 < 0
+			addv va03 256
+		endi
+
 
 *VA03 is stored as a single byte, so needs some conversion:
 *IMPORTANT: When dividing by a number and needing the result to be a FLOAT, need .0 after the number or result is an INT!!
 		subv va03 128.0
 		divv va03 128.0
 
+
+*todo: this results in numbers like 0.992188 instead of 1.0 for some reason, possibly needs to be 127 instead of 128.
+
+
+*_P1_ = from = the creature that activated this
+		targ _p1_
+
 *Inject the CHEMICAL (VA02) with the AMOUNT (VA03)
 		chem VA02 VA03
 
 *increase loop number
-		addv va00 1
+		addv va00 2
 
+
+*		sets va99 "chem: "
+*		adds va99 vtos VA02
+*		adds va99 " amount: "
+*		adds va99 vtos VA03
+*
+*		targ norn
+*		sezz va99
+*
+*		wait 30
+
+		targ ownr
+*
 	repe
 
-	sets va99 "chem: "
-	adds va99 vtos VA02
-	adds va99 " amount: "
-	adds va99 vtos VA03
 
-	targ norn
-	sezz va99
 
 
 endm

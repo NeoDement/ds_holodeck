@@ -1,3 +1,7 @@
+setv game "Holodeck_AnimFramesPanel_FrameSize_X" 128
+setv game "Holodeck_AnimFramesPanel_FrameSize_Y" 128
+
+
 enum 1 1 31234
 	kill targ
 next
@@ -122,6 +126,7 @@ endm
 
 scrp 1 1 31234 1001
 
+	inst
 	call 1000 1001 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_0"
@@ -131,6 +136,7 @@ endm
 
 scrp 1 1 31234 1002
 
+	inst
 	call 1000 1002 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_1"
@@ -140,6 +146,7 @@ endm
 
 scrp 1 1 31234 1003
 
+	inst
 	call 1000 1003 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_2"
@@ -149,6 +156,7 @@ endm
 
 scrp 1 1 31234 1004
 
+	inst
 	call 1000 1004 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_3"
@@ -158,6 +166,7 @@ endm
 
 scrp 1 1 31234 1005
 
+	inst
 	call 1000 1005 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_4"
@@ -167,6 +176,7 @@ endm
 
 scrp 1 1 31234 1006
 
+	inst
 	call 1000 1006 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_5"
@@ -176,6 +186,7 @@ endm
 
 scrp 1 1 31234 1007
 
+	inst
 	call 1000 1007 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_6"
@@ -185,6 +196,7 @@ endm
 
 scrp 1 1 31234 1008
 
+	inst
 	call 1000 1008 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_7"
@@ -194,6 +206,7 @@ endm
 
 scrp 1 1 31234 1009
 
+	inst
 	call 1000 1009 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_8"
@@ -203,6 +216,7 @@ endm
 
 scrp 1 1 31234 1010
 
+	inst
 	call 1000 1010 0
 
 	seta game "Holodeck_AnimFrame_Selected" game "Holodeck_AnimFrame_9"

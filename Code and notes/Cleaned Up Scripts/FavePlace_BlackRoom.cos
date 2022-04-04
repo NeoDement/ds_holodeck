@@ -1,0 +1,6 @@
+*create fave place icon
+new: simp 1 3 64729 "holodeck_black_fav_place" 1 0 1
+attr 272
+mvto 130 89766
+tick 10
+cmrt 0

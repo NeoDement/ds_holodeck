@@ -28,10 +28,13 @@ setv game "Holodeck_PixelSizeTiny" 2
 sets game "Holodeck_BrushSize" "X,"
 
 
+*LOCATION OF BUFFER FRAME (used for some transform operations and for taking photos for the sprites!)  (coordinates are the centre of the room)
+setv game "Holodeck_Buffer_X" 128
+
+setv game "Holodeck_Buffer_Y" 89780
 
 
-
-
+*todo: there are a ton of magic numbers here... 
 
 
 
@@ -91,8 +94,65 @@ cmrt 0
 *setv va50 312
 *setv va51 90267
 
+
+*X
 setv va50 27
+
+*Y
+
 setv va51 68
+
+
+
+*va53 is 50% of pixelgrid size X. va54 is 50% of pixelgrid size Y.
+setv va53 game "Holodeck_NumPixelsX"
+setv va54 game "Holodeck_NumPixelsY"
+
+mulv va53 game "Holodeck_PixelSizeTiny"
+mulv va54 game "Holodeck_PixelSizeTiny"
+
+divv va53 2
+divv va54 2
+
+
+
+*va55 is 50% of Anim Frames Panel Frame Size X, va56 is 50% of Anim Frames Panel Frame Size Y.
+*var set in "AnimFramesPanel.cos"
+setv va55 game "Holodeck_AnimFramesPanel_FrameSize_X"
+setv va56 game "Holodeck_AnimFramesPanel_FrameSize_Y"
+
+divv va55 2
+divv va56 2
+
+
+
+*add half of Anim Frames Panel Frame Size to the coords to get coords of center of frame.
+addv va50 va55
+addv va51 va56
+
+*subtract half of pixel grid size X to the coords to center the offset instead of having it in the top left.
+subv va50 va53
+subv va51 va54
+
+
+*also remember the initial value of X in VA59 so you can start the second row in the correct place.
+setv va59 va50
+
+
+*multiply the first frame position by 5 to get the X coord required to start drawing on the next row. (because there are 10 frames)
+setv va57 va50
+
+*amount to add to X offset every loop itereration value multplied by 5
+setv va58 134
+mulv va58 5
+
+addv va57 va58
+
+
+*targ norn
+*sezz vtos va57
+*targ game "Holodeck_PixelGrid"
+
 
 *set this to 0 and use it to count loop iterations.
 setv va03 0
@@ -129,9 +189,10 @@ reps 13
 	repe
 
 *	doif va50 = 982
-	doif va50 = 697
+*	doif va50 = 697
+	doif va50 = va57
 		addv va51 150
-		setv va50 27
+		setv va50 va59
 	endi
 
 *	mvto va50 va51
@@ -139,9 +200,14 @@ reps 13
 
 	seta va52 game "holodeck_animationpanel"
 
-	frel va52
-	flto va50 va51
-	attr 32
+*only the frames on the anim panel should float with it!
+	doif va03 <= 10
+		frel va52
+
+		flto va50 va51
+		attr 32
+	endi
+
 
 	addv va50 134
 
@@ -184,10 +250,25 @@ reps 13
 		seta game "Holodeck_AnimPreview" targ
 		mvto -50 -50
 
-*Special case for the Transformation Buffer frame
+*Special case for the Buffer frame
 	elif va03 = 13
-		seta game "Holodeck_TransformationBuffer" targ
-		mvto -50 -50
+		seta game "Holodeck_Buffer" targ
+
+
+*X
+		setv va61 game "Holodeck_Buffer_X"
+
+*Y
+
+		setv va62 game "Holodeck_Buffer_Y"
+
+
+*subtract half of pixel grid size X to the coords to center the offset instead of having it in the top left.
+		subv va61 va53
+		subv va62 va54
+
+		mvto va61 va62
+
 	endi
 
 repe

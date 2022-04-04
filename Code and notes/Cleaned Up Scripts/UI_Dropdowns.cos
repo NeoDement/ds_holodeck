@@ -2,45 +2,24 @@
 
 setv game "Holodeck_dropdown_NumEntriesToDisplay" 14
 
-setv game "Holodeck_dropdown_MenuSegmentHeight" 21
 
+
+setv game "Holodeck_dropdown_TextboxYOffset" -1
+
+setv game "Holodeck_dropdown_MenuSegmentHeight" 21
+setv game "Holodeck_dropdown_Width_Standard" 192
+setv game "Holodeck_dropdown_Width_Short" 102
+
+*obsolete variable
 *setv game "Holodeck_dropdown_MenuSegmentWidth" 192
 
-
-
-*ActionToPerform
-*167 53
 
 
 
 *important variables that all dropdown managers need to know!
 
-*ov00 - index number in dropdown list (always starts at 1)
+*paste these here again TODO:!
 
-*ov01 - dropdown X
-
-*ov02 - dropdown Y
-
-*ov03 - button part (pat: butt) number on compound agent
-
-*ov04 - text part (pat: fixd) number on compound agent
-
-*ov05 - catalog array associated with dropdown
-
-*ov06 - width of holodeck control. can be 192 or 101 for now.
-
-
-
-
-
-
-*for now, each dropdown button needs to have a text part with an ID 1 higher than the dropdown button.
-*this is so anything that needs to write text to the button can just addv 1 without me having to write another bunch of coordinates down.
-*it also needs a blank backround (sprite frame 8)
-*pat: fixd 8002 "holodeck_dropdown" 8 game "holodeck_dropdown_X" game "holodeck_dropdown_Y" 2 "whiteontransparentchars"
-
-
-*open dropdown menu
 
 
 
@@ -65,7 +44,7 @@ scrp 1 1 64741 1000
 
 	inst
 
-*get width and store it for later (in the dropdown itself)
+*get width of dropdown - can be 0 (standard) or 1 (short), and store it for later (in the dropdown itself)
 	setv va40 ov06
 
 *get catalogue array name (ov05) and store it for later (in the dropdown itself)
@@ -74,9 +53,13 @@ scrp 1 1 64741 1000
 *target part that called you (ov03) and store it for later (in the dropdown itself)
 	setv va02 ov03
 
-	seta va41 _p1_
+*ov00 is agent the dropdown button is attached to
+	seta va41 ov00
 
-*_p1_ is agent the dropdown button is attached to
+*remember width of dropdown - can be 0 (standard) or 1 (short)
+
+	setv va52 ov06
+
 	targ va41
 
 
@@ -89,8 +72,10 @@ scrp 1 1 64741 1000
 *	clac -1
 
 
+
 	setv va50 posl
 	setv va51 post
+
 
 
 
@@ -118,13 +103,18 @@ scrp 1 1 64741 1000
 *only create a new popup if you didn't have to destroy any popups just now.
 	doif va20 = 0
 
+		seta va76 targ
+
 		new: comp 1 1 55555 "blnk" 0 0 10
+
+*store the dropdown manager in OV00 so we can put values back in it when deleting the dropdown.
+		seta ov00 va76
 
 *store what compound object the dropdown is a part of
 		seta ov01 va41
 
 
-*store width in dropdowns ov06 variable so we can access it later
+*store  width of dropdown - can be 0 (standard) or 1 (short), in dropdowns ov06 variable so we can access it later
 		setv ov06 va40
 
 
@@ -203,7 +193,7 @@ scrp 1 1 64741 1000
 *multiply the loop iteration by the height of the back-piece (-1) to get the position for the next one
 			setv va80 va99
 			subv va80 1
-*todo: must be a variable!!
+
 			mulv va80 game "Holodeck_dropdown_MenuSegmentHeight"
 
 
@@ -211,7 +201,13 @@ scrp 1 1 64741 1000
 *The first one has a shadow on the top, the last one has a highlight on the bottom.
 
 *create the next item in the list
-			pat: fixd va99 "holodeck_dropdown" VA33 0 va80 1 "WhiteOnTransparentChars"
+
+*check ov06 - width of dropdown - can be 0 (standard) or 1 (short), and then use the correct sprite file
+			doif va52 = 0
+				pat: fixd va99 "holodeck_dropdown" VA33 0 va80 1 "WhiteOnTransparentChars"
+			elif va52 = 1
+				pat: fixd va99 "holodeck_dropdown_short" VA33 0 va80 1 "WhiteOnTransparentChars"
+			endi
 
 			part va99
 
@@ -288,44 +284,6 @@ endm
 
 
 
-
-
-
-***OLD UNFINISHED SNIPPET TO DELETE ALL LIST ENTRIES INDIVIDUALLY.
-
-*scrp
-*
-**delete all dropdown entries
-**	reps game "holodeck_dropdown_NumEntriesToDisplay"
-*
-**loop
-*
-**destroy the current part
-*pat: kill va00
-*
-**add 1 to loop iteration
-*addv va00 1
-*
-**keep looping until there is no Next Part!
-*untl pnxt va00 = 0
-*
-*endm
-
-
-
-
-*sets va00 vtos va00
-
-*adds va00 " sounds. first one is "
-*adds va00 va01
-
-*targ norn
-
-
-
-
-
-
 ******CODE DOWN HERE IS FOR DROPDOWNS*****
 
 
@@ -336,8 +294,6 @@ endm
 *TODO: IT SHOULD BE CHECKING IF IT'S IN THE BOUNDS OF THE CANVAS HERE TOO! (should it?)
 
 *RAW MOUSE DOWN SCRIPT
-
-*ov00 is set to 1 when the mouse is pressed down.
 
 scrp 1 1 55555 76
 
@@ -362,8 +318,20 @@ scrp 1 1 55555 76
 		part va00
 
 *MV02 (OV02 of ownr, the open dropdown) is being used to store which string we'd set if the cursor was released. todo: can add more conds here to make it more/less responsive/accurate
+*oops. should probably restore the lines that set it to "" elsewhere in the code that i just accidentally removed and lost in the undo history.
 		doif mv02 <> ""
 			ptxt mv02
+
+*add part number (1-14) to index offset (0-241) to get index of list entry we just  clicked (1-255)
+			setv va77 mv33
+*TODO: hotp probably isn't a very consistent way of knowing this value.
+			addv va77 hotp
+
+*target dropdown manager that summoned you.
+			targ mv00
+*set OV09 to list entry number.
+			setv ov09 va77
+
 
 *sound test
 *			snde mv02
@@ -413,35 +381,11 @@ scrp 1 1 55555 76
 		next
 
 
-
-*
-*
 	endi
 
 
 endm
 
-*RAW MOUSE UP SCRIPT
-
-*ov00 is set to 0 when the mouse is NOT pressed down.
-*^ old comment!
-
-scrp 1 1 55555 77
-
-*	setv ov00 0
-
-*right mouse button (currently disabled)
-	doif _p1_ = 2
-
-
-		inst
-*		enum 1 1 64732
-*			kill targ
-*		next
-
-	endi
-
-endm
 
 
 
@@ -517,16 +461,6 @@ scrp 1 1 55555 78
 
 
 
-*	inst
-
-*	part 5
-*	ptxt vtos ov33
-*	ptxt vtos _p1_
-
-
-
-*endi
-
 endm
 
 
@@ -561,7 +495,18 @@ scrp 1 1 55555 9
 *	setv va22 wdth
 	setv va22 ov06
 
-	addv va22 va20
+
+*check ov06 - width of dropdown - can be 0 (standard) or 1 (short), and then use the correct width
+	doif va22 = 0
+		setv va24 game "Holodeck_dropdown_Width_Standard"
+	elif va22 = 1
+		setv va24 game "Holodeck_dropdown_Width_Short"
+	endi
+
+
+
+	addv va24 va20
+
 
 *so 15 * 21 = 630 pixels tall for example
 	setv va23 game "Holodeck_dropdown_NumEntriesToDisplay"
@@ -569,15 +514,13 @@ scrp 1 1 55555 9
 	addv va23 va21
 
 
-* game "holodeck_"
-
 
 *set all parts to OFF and then set the correct part back to ON, all in 1 frame
 	inst
 
 
 *if the mouse cursor is inside the dropdown menu bounds
-	doif VA44 > va20 and VA44 < va22 and VA45 > va21 and VA45 < va23
+	doif VA44 > va20 and VA44 < va24 and VA45 > va21 and VA45 < va23
 
 
 
@@ -615,11 +558,6 @@ scrp 1 1 55555 9
 *OV02 holds the text of the part we most recently hovered over.
 			sets OV02 ptxt
 
-*ELSE we aren't hovering over a valid part of the dropdown menu
-		else
-*set the text of the part to nothing
-			sets OV02 ""
-
 		endi
 
 	else
@@ -628,7 +566,7 @@ scrp 1 1 55555 9
 *TODO: all this code is here twice? write a subr?
 
 *set the text of the part to nothing
-		sets OV02 ""
+*		sets OV02 ""
 
 
 *set all parts to OFF and then set the correct part back to ON, all in 1 frame

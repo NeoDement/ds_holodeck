@@ -980,7 +980,7 @@ scrp 1 1 64736 2009
 		setv va03 pose
 
 *target Transformation Buffer and apply stored pose for each pixel
-		targ game "Holodeck_TransformationBuffer"
+		targ game "Holodeck_Buffer"
 		part va02
 		pose va03
 
@@ -996,7 +996,7 @@ scrp 1 1 64736 2009
 		addv va01 1
 
 *target main canvas and store pose for each pixel
-		targ game "Holodeck_TransformationBuffer"
+		targ game "Holodeck_Buffer"
 		part va01
 		setv va03 pose
 
