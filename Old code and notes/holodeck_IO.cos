@@ -18,6 +18,6 @@ untl inok = 0
 file iclo
 
 
-file oope 1 "testfile2.txt" 0
+file oope 1 "testSprite.holoimage" 0
 outs va00
 file oclo

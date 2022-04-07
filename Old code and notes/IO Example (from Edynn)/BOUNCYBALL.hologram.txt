@@ -1,0 +1,72 @@
+<name>
+Super Bouncy Ball
+</name>
+
+<description>
+This rubber ball is very bouncy! It should keep your creatures happy for a while, although chasing after it can be tiring.
+</description>
+
+<attributes>
+carryable: 0
+mouseable: 0
+activateable: 0
+greedy cabin: 0
+invisible: 0
+floatable: 0
+sufferCollisions: 0
+sufferPhysics: 0
+cameraShy: 0
+openAirCabin: 0
+rotatable: 0
+presence: 0
+</attributes>
+
+<creaturePermissions>
+activate1: 0
+activate2: 0
+deactivate: 0
+hit: 0
+eat: 0
+pickUp: 0
+</creaturePermissions>
+
+<havok>
+accg: 0
+admp: 0
+aero: 0
+elas: 0
+fdmp: 0
+fric: 0
+perm: 0 //idea, wouldn't it be cool if we applied the current perm and other physics settings to a test object with a generic sprite, trapped in a small window on the settings panel?
+sdmp: 0
+</havok>
+
+<frames>
+width: 18
+height: 18
+frame0: 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0  0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0
+frame1: 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0 0 0 0 0 6 10 8 1 128 12 1 0 0
+</frames>
+
+<activate1>
+action: 1
+actionParam1: -35
+actionParam2: 35
+actionParam3: -45
+actionParam4: -60
+chemical1: 1
+chemical1Amount: 128
+chemical2: 1
+chemical2Amount: 128
+chemical3: 1
+chemical3Amount: 128
+chemical4: 1
+chemical4Amount: 128
+animString: 0123456789 //you should reset objects to pose after animating maybe?
+animNumTimesToPlay: 1
+animFrameDelay: 3
+animPlayBeforeAction: 0
+sound: argh
+soundDelay: 0
+soundFollowsObject: 0
+</activate1>

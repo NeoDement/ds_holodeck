@@ -133,6 +133,18 @@ pat: butt 4011 "holodeck_frame" 34 0 60 220 3 [] 4011 0
 pat: butt 4012 "holodeck_frame" 34 0 80 220 3 [] 4012 0
 
 
+
+
+***************************
+* SAVE/LOAD IMAGE BUTTONS *
+***************************
+
+*SAVE IMAGE
+pat: butt 5001 "holodeck_frame" 38 0 0 420 3 [] 5001 0
+
+*LOAD IMAGE (not implemented)
+pat: butt 5002 "holodeck_frame" 40 0 40 420 3 [] 5002 0
+
 mvto 101 90227
 
 
@@ -1169,5 +1181,607 @@ scrp 1 1 64736 2010
 	wait 2
 	part 2010
 	pose 0
+
+endm
+
+
+
+
+*SAVE BUTTON (WIP)
+scrp 1 1 64736 5001
+
+*target and animate button (pre-action)
+	part 5001
+	pose 1
+
+
+	inst
+
+*setup fake header for now
+	sets va69 "<name>"
+	adds va69 "\n"
+	adds va69 "Super Bouncy Ball"
+	adds va69 "\n"
+	adds va69 "</name>"
+	adds va69 "\n"
+	adds va69 "\n"
+	adds va69 "<description>"
+	adds va69 "\n"
+	adds va69 "This rubber ball is very bouncy! It should keep your creatures happy for a while, although chasing after it can be tiring."
+	adds va69 "\n"
+	adds va69 "</description>"
+	adds va69 "\n"
+	adds va69 "\n"
+	adds va69 "<frames>"
+	adds va69 "\n"
+
+
+*newline char
+	sets va99 "\n"
+
+
+*init width string
+	sets va97 "width:"
+
+*store current width
+	adds va97 vtos game "Holodeck_NumPixelsX"
+
+*init height string
+	sets va98 "height:"
+
+*store current height
+	adds va98 vtos game "Holodeck_NumPixelsY"
+
+*init image string
+	sets va02 "frame0:"
+
+	seta va55 game "Holodeck_AnimFrame_0"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame1:"
+
+	seta va55 game "Holodeck_AnimFrame_1"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame2:"
+
+	seta va55 game "Holodeck_AnimFrame_2"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame3:"
+
+	seta va55 game "Holodeck_AnimFrame_3"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame4:"
+
+	seta va55 game "Holodeck_AnimFrame_4"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame5:"
+
+	seta va55 game "Holodeck_AnimFrame_5"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame6:"
+
+	seta va55 game "Holodeck_AnimFrame_6"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame7:"
+
+	seta va55 game "Holodeck_AnimFrame_7"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame8:"
+
+	seta va55 game "Holodeck_AnimFrame_8"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+	adds va02 "frame9:"
+
+	seta va55 game "Holodeck_AnimFrame_9"
+	gsub write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+	adds va02 va56
+	adds va02 "\n"
+
+
+
+	targ ownr
+
+
+
+	file oope 1 "testSprite.holoimage" 0
+
+*add temporary fake header
+	outs va69
+
+	outs va97
+	outs va99
+	outs va98
+	outs va99
+	outs va02
+	outs "\n"
+	outs "</frames>"
+	file oclo
+
+
+
+*target and animate button (post-action)
+	wait 2
+	part 5001
+	pose 0
+
+
+
+
+
+
+	subr write_pixels_from_agent(PixelGrid)_va55_to_string_va56
+
+		wait 1
+
+		inst
+
+*init string
+		sets va56 ""
+
+
+*pixel grid is 18x18
+		setv va00 game "Holodeck_NumPixelsX"
+		mulv va00 game "Holodeck_NumPixelsY"
+
+
+
+		setv va01 0
+
+		reps va00
+
+			addv va01 1
+
+*target main canvas and store pose for each pixel
+			targ va55
+			part va01
+			setv va03 pose
+
+*add the stored pose for each pixel to the string we're gonna write.
+			adds va56 vtos va03
+			adds va56 ","
+		repe
+
+
+
+
+*cut off the last character (a comma)
+		setv va04 strl va56
+		subv va04 1
+
+*todo: CURRENTLY NOT CUTTING OFF THE LAST CHAR AS A TEMP FIX TO THE LAST PIXEL BEING CORRUPTED
+*		sets va56 subs va56 1 va04
+
+*		targ ownr
+
+	retn
+
+
+
+endm
+
+
+
+
+
+
+
+
+*LOAD BUTTON (WIP)
+scrp 1 1 64736 5002
+
+*target and animate button (pre-action)
+	part 5002
+	pose 1
+
+
+	inst
+
+
+*hide all frames before slowly loading in their properties
+	enum 1 1 64743
+		show 0
+	next
+
+
+
+	file iope 1 "testSprite.holoimage"
+
+
+
+
+	loop
+		sets va00 innl
+		sets va00 lowa va00
+
+
+	untl va00 = "<name>"
+
+*init Name string
+	sets va01 ""
+
+	loop
+		sets va00 innl
+
+		sets va02 lowa va00
+
+		doif sins va02 1 "</name>" = -1
+			adds va01 va00
+		endi
+
+	untl va02 = "</name>"
+
+
+
+
+
+
+	loop
+		sets va00 innl
+		sets va00 lowa va00
+
+
+	untl va00 = "<description>"
+
+*init Description string
+	sets va01 ""
+
+	loop
+		sets va00 innl
+
+		sets va02 lowa va00
+
+		doif sins va02 1 "</description>" = -1
+			adds va01 va00
+		endi
+
+	untl va02 = "</description>"
+
+
+
+
+
+
+
+	loop
+		sets va00 innl
+		sets va00 lowa va00
+
+
+	untl va00 = "<frames>"
+
+*load in all the frames, 0-9
+	sets va35 "frame0:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+*(also load frame 0 into the pixelgrid)
+	seta va34 game "Holodeck_PixelGrid"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+
+*todo: may also have to set Selected Frame to 0 here
+
+	seta va34 game "Holodeck_AnimFrame_0"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame1:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_1"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame2:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_2"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame3:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_3"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame4:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_4"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame5:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_5"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame6:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_6"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame7:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_7"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame8:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_8"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+	sets va35 "frame9:"
+	gsub load_value_from_key_named_va35_into_string_va30
+
+	seta va34 game "Holodeck_AnimFrame_9"
+	gsub load_string_of_poses_va30_into_compound_agent_va34
+
+
+
+
+
+
+
+*init Name string
+	sets va01 ""
+
+	loop
+		sets va00 innl
+
+		sets va02 lowa va00
+
+		doif sins va02 1 "</frames>" = -1
+			adds va01 va00
+		endi
+
+	untl va02 = "</frames>"
+
+
+
+
+
+
+
+
+	file iclo
+
+*	targ norn
+*	sezz va99
+
+
+
+
+	inst
+
+*unhide all frames now you're done loading
+	enum 1 1 64743
+		show 1
+	next
+
+
+
+
+
+
+	targ ownr
+
+*target and animate button (post-action)
+	wait 2
+	part 5002
+	pose 0
+
+
+
+
+
+
+
+
+	subr load_string_of_poses_va30_into_compound_agent_va34
+
+*todo: if any key you're trying to load from doesn't exist, throw a general error that stops the loading process
+
+		wait 1
+		inst
+
+*target the compound object (pixelgrid)
+		targ va34
+
+		sets va31 ","
+		gsub set_va32_to_number_of_substrings_in_string_va30_delimited_by_string_va31
+		setv name "counting" 0
+
+*the value returned by the subroutine is off by 1 (323 instead of 324)
+*NOTE: currently not true. attempting to fix this by not cutting off the bracket at the end of the string... for now
+*		addv va32 1
+
+		setv name "max_count" va32
+
+*		inst
+
+		loop
+*			wait 1
+*			inst
+			addv name "counting" 1
+
+
+*todo: somewhere around here you could put the fix for the last pixel not reading properly from the string unless the string ends with a , comma ,
+
+			setv va32 name "counting"
+			gsub set_va33_to_string_at_index_va32_from_string_va30_with_delimiter_va31
+
+*			doif va33 = ""
+*				sets va33 "error loading byte "
+*				adds va33 vtos va32
+*				dbg: outs va33
+*			endi
+
+*			doif va34 = game "Holodeck_AnimFrame_7"
+*				dbg: outs va33
+*			endi
+
+*convert pixel colour ID string to number
+			setv va05 stoi va33
+
+*select part number corresponding with the pixel number we're reading...
+
+*todo: for some reason the top left (1st) and bottom right (Last) pixel are being cut off
+			part name "counting"
+			doif base <> -1
+				pose va05
+			endi
+
+		untl name "max_count" eq name "counting"
+
+	retn
+
+
+
+
+
+
+	subr load_value_from_key_named_va35_into_string_va30
+
+*init frame0: string
+		sets va01 ""
+
+		loop
+			sets va00 innl
+
+			sets va02 lowa va00
+
+			doif sins va02 1 va35 = -1
+				adds va01 va00
+			endi
+
+		untl sins va02 1 va35 <> -1
+
+
+*	setv va03 strl va02
+*	subv va03 sins va02 1 "frame0: "
+
+*	sets va99 subs va02 sins va02 1 "frame0: " va03
+
+
+*read from position 7 (length of string "frame0:") (VA03) to the END OF STRING. calculated by subtracting VA03 from the length of the current string (VA02).
+		setv va03 strl va35
+*this way off by 1 and we were reading the first pixel with as ":10" instead of "10"
+		addv va03 1
+		setv va04 strl va02
+		subv va04 va03
+*  	      vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+		sets va30 subs va02 va03 va04
+*  	      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+	retn
+
+
+
+
+
+
+
+*subroutines "borrowed" from C2toDS-Refresh (https://github.com/Creatures-Developer-Network/C2toDS-Refresh)
+*thanks Amaikokonut!
+
+
+	subr set_va32_to_number_of_substrings_in_string_va30_delimited_by_string_va31
+
+		wait 1
+
+		inst
+
+*in string va30, where the splitting character is va31, va32 is the number of
+*words/items in said string.
+		setv va32 0
+		setv va39 1
+		loop
+*if the first character is the delimiter, skip it 
+			doif sins va30 va39 va31 ne -1
+				doif subs va30 1 1 eq va31 and va39 eq 1
+					addv va39 1
+				endi
+				setv va38 sins va30 va39 va31
+				subv va38 va39
+				sets va37 subs va30 va39 va38
+			else
+				sets va37 subs va30 va39 -1
+				setv va39 -99
+			endi
+			doif va37 ne ""
+*             vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+				addv va32 1
+*             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+			endi
+			addv va39 va38
+			addv va39 1
+		untl va39 lt 1
+	retn
+
+
+
+	subr set_va33_to_string_at_index_va32_from_string_va30_with_delimiter_va31
+*in string va30, where the splitting charater is va31 and va32 is the index 
+* (indicies start at 1) of the thing you want, va33 is the item, or "" if it
+* doesn't exist
+		setv va39 1
+		setv va36 0
+		sets va33 ""
+		loop
+*if the first character is the delimiter, skip it 
+			doif sins va30 va39 va31 ne -1
+				doif subs va30 1 1 eq va31 and va39 eq 1
+					addv va39 1
+				endi
+				setv va38 sins va30 va39 va31
+				subv va38 va39
+				sets va37 subs va30 va39 va38
+			else
+				sets va37 subs va30 va39 -1
+				setv va39 -999999
+			endi
+			doif va37 ne ""
+				addv va36 1
+				doif va36 eq va32
+*                     vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+					sets va33 va37
+*                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+					setv va39 -999999
+				endi
+			endi
+			addv va39 va38
+			addv va39 1
+		untl va39 lt 1
+	retn
+
+
 
 endm
