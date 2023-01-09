@@ -398,7 +398,7 @@ endm
 
 scrp 1 1 64736 4000
 
-	inst
+*	inst
 
 	setv va00 4001
 
@@ -421,6 +421,8 @@ endm
 
 scrp 1 1 64736 4001
 
+inst
+
 	sets game "Holodeck_BrushSize" "X,"
 
 	call 4000 4001 0
@@ -428,6 +430,8 @@ scrp 1 1 64736 4001
 endm
 
 scrp 1 1 64736 4002
+
+inst
 
 	sets game "Holodeck_BrushSize" "XX,"
 	adds game "Holodeck_BrushSize" "XX,"
@@ -437,6 +441,8 @@ scrp 1 1 64736 4002
 endm
 
 scrp 1 1 64736 4003
+
+inst
 
 	sets game "Holodeck_BrushSize" " X ,"
 	adds game "Holodeck_BrushSize" "XXX,"
@@ -448,6 +454,8 @@ endm
 
 scrp 1 1 64736 4004
 
+inst
+
 	sets game "Holodeck_BrushSize" "XXX,"
 	adds game "Holodeck_BrushSize" "XXX,"
 	adds game "Holodeck_BrushSize" "XXX,"
@@ -457,6 +465,8 @@ scrp 1 1 64736 4004
 endm
 
 scrp 1 1 64736 4005
+
+inst
 
 	sets game "Holodeck_BrushSize" " XX ,"
 	adds game "Holodeck_BrushSize" "XXXX,"
@@ -468,6 +478,8 @@ scrp 1 1 64736 4005
 endm
 
 scrp 1 1 64736 4006
+
+inst
 
 	sets game "Holodeck_BrushSize" " XXX ,"
 	adds game "Holodeck_BrushSize" "XXXXX,"
@@ -481,6 +493,8 @@ endm
 
 scrp 1 1 64736 4007
 
+inst
+
 	sets game "Holodeck_BrushSize" " XXXX ,"
 	adds game "Holodeck_BrushSize" "XXXXXX,"
 	adds game "Holodeck_BrushSize" "XXXXXX,"
@@ -493,6 +507,8 @@ scrp 1 1 64736 4007
 endm
 
 scrp 1 1 64736 4008
+
+inst
 
 	sets game "Holodeck_BrushSize" "  XXX  ,"
 	adds game "Holodeck_BrushSize" " XXXXX ,"
@@ -508,6 +524,8 @@ endm
 
 scrp 1 1 64736 4009
 
+inst
+
 	sets game "Holodeck_BrushSize" "  XXXX  ,"
 	adds game "Holodeck_BrushSize" " XXXXXX ,"
 	adds game "Holodeck_BrushSize" "XXXXXXXX,"
@@ -522,6 +540,8 @@ scrp 1 1 64736 4009
 endm
 
 scrp 1 1 64736 4010
+
+inst
 
 	sets game "Holodeck_BrushSize" "  XXXXX  ,"
 	adds game "Holodeck_BrushSize" " XXXXXXX ,"
@@ -539,6 +559,8 @@ endm
 
 scrp 1 1 64736 4011
 
+inst
+
 	sets game "Holodeck_BrushSize" "   XXXX   ,"
 	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
 	adds game "Holodeck_BrushSize" " XXXXXXXX ,"
@@ -555,6 +577,8 @@ scrp 1 1 64736 4011
 endm
 
 scrp 1 1 64736 4012
+
+inst
 
 	sets game "Holodeck_BrushSize" "     XXXXX     ,"
 	adds game "Holodeck_BrushSize" "   XXXXXXXXX   ,"
@@ -577,9 +601,10 @@ scrp 1 1 64736 4012
 endm
 
 
-
 *CLEAR BUTTON
 scrp 1 1 64736 2001
+
+lock
 
 *target and animate button (pre-action)
 	part 2001
@@ -599,6 +624,8 @@ endm
 
 *CLEAR ALL BUTTON
 scrp 1 1 64736 2011
+
+lock
 
 *target and animate button (pre-action)
 	part 2011
@@ -645,6 +672,8 @@ endm
 *COPY BUTTON (WIP)
 scrp 1 1 64736 2002
 
+lock
+
 *target and animate button (pre-action)
 	part 2002
 	pose 1
@@ -663,6 +692,8 @@ endm
 
 *CUT BUTTON (WIP)
 scrp 1 1 64736 2003
+
+lock
 
 *target and animate button (pre-action)
 	part 2003
@@ -686,6 +717,8 @@ endm
 
 *PASTE BUTTON
 scrp 1 1 64736 2004
+
+lock
 
 *target and animate button (pre-action)
 	part 2004
@@ -738,6 +771,8 @@ endm
 *FLIP X BUTTON (WIP)
 scrp 1 1 64736 2005
 
+lock
+
 *target and animate button (pre-action)
 	part 2005
 	pose 1
@@ -781,6 +816,8 @@ endm
 
 *FLIP Y BUTTON (WIP)
 scrp 1 1 64736 2006
+
+lock
 
 *target and animate button (pre-action)
 	part 2006
@@ -826,6 +863,8 @@ endm
 *ROTATE 90 CLOCKWISE BUTTON (WIP)
 scrp 1 1 64736 2007
 
+lock
+
 *target and animate button (pre-action)
 	part 2007
 	pose 1
@@ -869,6 +908,8 @@ endm
 
 *ROTATE 90 COUNTER-CLOCKWISE BUTTON (WIP)
 scrp 1 1 64736 2008
+
+lock
 
 *target and animate button (pre-action)
 	part 2008
@@ -961,6 +1002,8 @@ endm
 
 *ROTATE 180 DEGREES BUTTON (WIP)
 scrp 1 1 64736 2009
+
+lock
 
 *target and animate button (pre-action)
 	part 2009
@@ -1071,6 +1114,8 @@ endm
 
 *INVERT COLOURS BUTTON (WIP)
 scrp 1 1 64736 2010
+
+lock
 
 *target and animate button (pre-action)
 	part 2010
@@ -1189,6 +1234,8 @@ endm
 
 *SAVE BUTTON (WIP)
 scrp 1 1 64736 5001
+
+lock
 
 *target and animate button (pre-action)
 	part 5001
@@ -1395,6 +1442,8 @@ endm
 
 *LOAD BUTTON (WIP)
 scrp 1 1 64736 5002
+
+lock
 
 *target and animate button (pre-action)
 	part 5002

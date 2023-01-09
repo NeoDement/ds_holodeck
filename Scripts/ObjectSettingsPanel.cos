@@ -29,6 +29,7 @@ new: comp 1 1 64714 "holodeck_options" 0 0 2
 seta va99 targ
 
 
+*todo: might be more reliable to move this to a mouse down event actually.
 *title bar drag button
 pat: butt 10 "holodeck_options" 3 0 18 12 1 [] 9000 0
 
